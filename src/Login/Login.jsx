@@ -14,15 +14,20 @@ import IconButton from '@material-ui/core/IconButton';
 import FormControl from '@material-ui/core/FormControl';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import clsx from 'clsx';
+import Logo from '../Images/logoOffGrandeBlanco.png'
 
 const useStyles = makeStyles(theme =>({
     root: {
       minWidth: 275,
       margin:"auto",
       float:"inherit",
-      width:"27%",
-      [theme.breakpoints.up('sm')]: {
-        width:"auto",
+      width:"32% !important",
+      marginTop:"6vh",
+      [theme.breakpoints.down(990)]: {
+        width:"60% !important",
+      },
+      [theme.breakpoints.between(1000,1300)]: {
+        width:"52% !important",
       },
     },
     margin: {
@@ -33,6 +38,17 @@ const useStyles = makeStyles(theme =>({
     withoutLabel: {
       marginTop: theme.spacing(3),
     },
+    image:{
+      margin:"auto",
+      float:"inherit",
+      marginTop:"10vh",
+      [theme.breakpoints.down(900)]: {
+        width:"60% !important",
+      },
+      [theme.breakpoints.between(901,1300)]: {
+        width:"40% !important",
+      },
+    }
   }));
 export default function Login(){
     const [values, setValues] = useState({
@@ -54,17 +70,18 @@ export default function Login(){
       };
       const handleSubmit = e => {
         e.preventDefault();
-        console.log(values);
+        console.log(values)
       }
     return(
-        <div style={{height:"100vh",margin:"auto",float:"inherit",backgroundColor:"#003764",display:"flex",justifyContent:"center",alignItems:"center"}}>
+        <div style={{height:"100vh",margin:"auto",float:"inherit",backgroundColor:"#003764",display:"block",textAlign:"center"}}>
+          <img src={Logo} alt="logo" width="20% " className={classes.image}/>
              <Card className={classes.root}>
                 <CardContent>
                 <Typography  gutterBottom style={{textAlign:"center"}}>
                     ¡Bienvenido al sistema "CUFRI"! <br/>
                     A continuación ingrese su usuario y contraseña para poder ingresar
                 </Typography>
-                <form style={{width:"70%",margin:"auto",float:"inherit",marginTop:"5%"}} onSubmit={handleSubmit}>
+                <form style={{width:"70%",margin:"auto",float:"inherit",marginTop:"5%"}} onSubmit={handleSubmit} id="login">
                     <TextField
                         style={{margin:"auto",width:"100%"}}
                         id="filled-helperText"
@@ -96,7 +113,7 @@ export default function Login(){
                     <FormHelperText id="standard-weight-helper-text">Ingresa la contraseña</FormHelperText>
                   </FormControl>
                 </form>
-                <Button type="submit" variant="contained" style={{backgroundColor:"#FFB700",color:"white",marginTop:"3%",float:"right",padding:"2%",marginBottom:"3%"}}>
+                <Button type="submit" form="login" variant="contained" style={{backgroundColor:"#FFB700",color:"white",marginTop:"3%",float:"right",padding:"2%",marginBottom:"3%"}}>
                   Iniciar sesión
                 </Button>
                 </CardContent>
