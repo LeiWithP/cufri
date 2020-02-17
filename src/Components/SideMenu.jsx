@@ -49,23 +49,23 @@ export default function SideMenu(props){
             </Typography>
             <Divider />
             <List style={{fontWeight:"bold"}}>
-                <ListItem button key="Citas" >
-                    <ListItemIcon><DateRangeIcon/></ListItemIcon>
+                <ListItem button key="Citas" style={props.select==="citas"? {backgroundColor:"#61B4E4",color:"white"}:{}} onClick={e=> history.push("/Dates")}>
+                    <ListItemIcon ><DateRangeIcon  style={props.select==="citas"? {color:"white"}:{}}/></ListItemIcon>
                     <ListItemText primary="Citas" />
                 </ListItem>
-                <ListItem button key="Pacientes" >
-                    <ListItemIcon><PeopleAltIcon/></ListItemIcon>
+                <ListItem button key="Pacientes" style={props.select==="pacientes"? {backgroundColor:"#61B4E4",color:"white"}:{}} onClick={e=> history.push("/Patients")} >
+                    <ListItemIcon><PeopleAltIcon style={props.select==="pacientes"? {color:"white"}:{}}/></ListItemIcon>
                     <ListItemText primary="Pacientes" />
                 </ListItem>
-                <ListItem button key="Usuarios" >
-                    <ListItemIcon><PersonIcon/></ListItemIcon>
+                <ListItem button key="Usuarios" style={props.select==="usuarios"? {backgroundColor:"#61B4E4",color:"white"}:{}} onClick={e=> history.push("/Users")} >
+                    <ListItemIcon><PersonIcon style={props.select==="usuarios"? {color:"white"}:{}}/></ListItemIcon>
                     <ListItemText primary="Usuarios" />
                 </ListItem>
-                <ListItem button key="Estadísticas" >
-                    <ListItemIcon><ShowChartIcon/></ListItemIcon>
+                <ListItem button key="Estadísticas" style={props.select==="estadisticas"? {backgroundColor:"#61B4E4",color:"white"}:{}} onClick={e=> history.push("/Stats")}>
+                    <ListItemIcon><ShowChartIcon style={props.select==="estadisticas"? {color:"white"}:{}}/></ListItemIcon>
                     <ListItemText primary="Estadisticas" />
                 </ListItem>
-                <ListItem button key="Cerrar Sesión" onClick={e => history.push("/ ") }>
+                <ListItem button key="Cerrar Sesión" onClick={e => history.push("/") }>
                     <ListItemIcon><ExitToAppIcon/></ListItemIcon>
                     <ListItemText primary="Cerrar Sesión" />
                 </ListItem>
