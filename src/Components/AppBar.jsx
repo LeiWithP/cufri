@@ -17,6 +17,7 @@ const useStyles = makeStyles(theme => ({
   title: {
     flexGrow: 1,
   },
+  
 }));
 export default function ButtonAppBar(props) {
   const [open,setOpen] = useState(true);
@@ -32,10 +33,10 @@ export default function ButtonAppBar(props) {
     console.log(open);
   }
   return (
-    <div className={classes.root} >
+    <div className={classes.root}>
       <AppBar position="static" style={{backgroundColor:"#0071CE"}}>
         <Toolbar>
-          <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu" onClick={open===false ? handleOpen:handleClose}>
+          <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu" onClick={open===true ? handleClose:handleOpen}>
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" className={classes.title}>
