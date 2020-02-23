@@ -1,8 +1,8 @@
 import React from 'react';
 import AppBar from '../Components/AppBar';
 import SideMenu from '../Components/SideMenu';
-import MaterialTable from '../Components/material-table';
-/*
+//import MaterialTable from '../Components/material-table';
+
 export default function Patients(){
     return(
         <div style={{height:"100vh",display:"flex",flexDirection:"column",flexWrap:"nowrap"}}>
@@ -16,7 +16,8 @@ export default function Patients(){
         </div>
     );
 }
-*/
+
+/*
 export default function MaterialTableDemo() {
     const [state, setState] = React.useState({
       columns: [
@@ -85,3 +86,4 @@ export default function MaterialTableDemo() {
       />
     );
   }
+  */
