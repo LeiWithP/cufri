@@ -77,7 +77,7 @@ const columns = [
     },
     container: {
       maxHeight: 587,
-      minHeight: 587,
+      
     },
     menuButton: {
       marginRight: theme.spacing(2),
@@ -135,58 +135,58 @@ export default function Dates(){
                     />
                     </MuiPickersUtilsProvider>
                 </div>
-                <Paper className={classes.root}>
-      <TableContainer className={classes.container}>
-        <Table stickyHeader aria-label="sticky table">
-          <TableHead>
-            <TableRow>
-              {columns.map(column => (
-                <TableCell
-                  key={column.id}
-                  align={column.align}
-                  style={{ minWidth: column.minWidth,fontWeight: 'bold'}}
-                >
-                  {column.label}
-                </TableCell>
-              ))}
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(row => {
-              return (
-                <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
-                  <TableCell>Gustavo García Sanchez</TableCell>
-                  <TableCell>Masculino</TableCell>
-                  <TableCell>22 años</TableCell>
-                  <TableCell>443-166-3698</TableCell>
-                  <TableCell>10:00-11:00</TableCell>
-                  <TableCell>
-                    <IconButton color="inherit" aria-label="edit" style={{padding:0,marginRight:"10%"}} >
-                      <CheckCircleRoundedIcon/>
-                    </IconButton>
-                    <IconButton color="inherit" aria-label="edit" style={{padding:0,marginRight:"10%"}} >
-                      <EditIcon/>
-                    </IconButton>
-                    <IconButton color="inherit" aria-label="edit" style={{padding:0,marginRight:"10%"}} >
-                      <CancelRoundedIcon/>
-                    </IconButton>
-                  </TableCell>
-                </TableRow>
-              );
-            })}
-          </TableBody>
-        </Table>
-      </TableContainer>
-      <TablePagination
-         rowsPerPageOptions={[10,5,  { label: 'All', value: -1 }]}
-        component="div"
-        count={rows.length}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        onChangePage={handleChangePage}
-        onChangeRowsPerPage={handleChangeRowsPerPage}
-      />
-    </Paper>
+              <Paper className={classes.root}>
+                <TableContainer className={classes.container}>
+                  <Table stickyHeader aria-label="sticky table">
+                    <TableHead>
+                      <TableRow>
+                        {columns.map(column => (
+                          <TableCell
+                            key={column.id}
+                            align={column.align}
+                            style={{ minWidth: column.minWidth,fontWeight: 'bold'}}
+                          >
+                            {column.label}
+                          </TableCell>
+                        ))}
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(row => {
+                        return (
+                          <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
+                            <TableCell>Gustavo García Sanchez</TableCell>
+                            <TableCell>Masculino</TableCell>
+                            <TableCell>22 años</TableCell>
+                            <TableCell>443-166-3698</TableCell>
+                            <TableCell>10:00-11:00</TableCell>
+                            <TableCell>
+                              <IconButton color="inherit" aria-label="edit" style={{padding:0,marginRight:"13%"}} >
+                                <CheckCircleRoundedIcon/>
+                              </IconButton>
+                              <IconButton color="inherit" aria-label="edit" style={{padding:0,marginRight:"13%"}} >
+                                <EditIcon/>
+                              </IconButton>
+                              <IconButton color="inherit" aria-label="edit" style={{padding:0,marginRight:"13%"}} >
+                                <CancelRoundedIcon/>
+                              </IconButton>
+                            </TableCell>
+                          </TableRow>
+                        );
+                      })}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+                <TablePagination
+                  rowsPerPageOptions={[10,5,  { label: 'All', value: -1 }]}
+                  component="div"
+                  count={rows.length}
+                  rowsPerPage={rowsPerPage}
+                  page={page}
+                  onChangePage={handleChangePage}
+                  onChangeRowsPerPage={handleChangeRowsPerPage}
+                />
+              </Paper>
     <Fab color="primary" aria-label="add" style={{alignSelf:"flex-end",backgroundColor:"#FFB700",marginRight:"1%",marginTop:"3%"}} >
         <AddIcon />
     </Fab>
