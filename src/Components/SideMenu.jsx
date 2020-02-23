@@ -1,7 +1,5 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-//import Drawer from '@material-ui/core/Drawer';
-//import Button from '@material-ui/core/Button';
 import List from '@material-ui/core/List';
 import Divider from '@material-ui/core/Divider';
 import ListItem from '@material-ui/core/ListItem';
@@ -22,7 +20,7 @@ const useStyles = makeStyles(theme=>({
       boxShadow:"2px 0 5px -2px #888;",
       overflow:"hidden",
       zIndex:"1",
-      [theme.breakpoints.down(750)]:{
+      [theme.breakpoints.down(850)]:{
           transition:"0.7s",
           width:"0px",   
       }

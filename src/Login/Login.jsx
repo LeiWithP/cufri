@@ -1,5 +1,6 @@
 import React,{useState} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
+import {useHistory} from 'react-router-dom';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
@@ -56,6 +57,7 @@ export default function Login(){
         username:'',
         showPassword: false,
       });
+      const history= useHistory();
       const classes = useStyles();
       const handleChange = prop => event => {
         setValues({ ...values, [prop]: event.target.value });
@@ -113,7 +115,7 @@ export default function Login(){
                     <FormHelperText id="standard-weight-helper-text">Ingresa la contraseña</FormHelperText>
                   </FormControl>
                 </form>
-                <Button type="submit" form="login" variant="contained" style={{backgroundColor:"#FFB700",color:"white",marginTop:"3%",float:"right",padding:"2%",marginBottom:"3%"}}>
+                <Button type="submit" form="login" variant="contained" style={{backgroundColor:"#FFB700",color:"white",marginTop:"3%",float:"right",padding:"2%",marginBottom:"3%"}} onClick={e=>{history.push("/Home")}}>
                   Iniciar sesión
                 </Button>
                 </CardContent>
