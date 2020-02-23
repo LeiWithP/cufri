@@ -20,7 +20,7 @@ const useStyles = makeStyles(theme=>({
       boxShadow:"2px 0 5px -2px #888;",
       overflow:"hidden",
       zIndex:"1",
-      [theme.breakpoints.down(750)]:{
+      [theme.breakpoints.down(850)]:{
           transition:"0.7s",
           width:"0px",   
       }

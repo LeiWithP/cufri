@@ -8,6 +8,9 @@ export default function Patients(){
             <AppBar nombre="Pacientes"/>
             <div style={{display:"flex",flexDirection:"row",flexWrap:"nowrap",width:"100%",height:"100%"}}>
             <SideMenu select="pacientes" />
+            <div style={{width:"100%",backgroundColor:"#F4F4F4",display:"flex",flexDirection:"column",justifyContent:"center" }}>
+                
+            </div>
             </div>
         </div>
     );

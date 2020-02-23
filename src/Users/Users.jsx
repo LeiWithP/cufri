@@ -75,7 +75,6 @@ export default function Users(){
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
     const handleSearch = event =>{
         event.preventDefault();
-        console.log(search);
         setSearch(event.target.value);
         
     }
@@ -88,6 +87,7 @@ export default function Users(){
         setPage(0);
       };
       const handleClear= e=>{
+        console.log(search);
         setSearch("");
       }
     
