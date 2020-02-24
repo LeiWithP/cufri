@@ -1,197 +1,429 @@
-import React from 'react';
-import AppBar from '../Components/AppBar';
-import SideMenu from '../Components/SideMenu';
-import Typography from '@material-ui/core/Typography';
-import Paper from '@material-ui/core/Paper';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TablePagination from '@material-ui/core/TablePagination';
-import TableRow from '@material-ui/core/TableRow';
-import IconButton from '@material-ui/core/IconButton';
-import EditIcon from '@material-ui/icons/Edit';
-import Fab from '@material-ui/core/Fab';
-import AddIcon from '@material-ui/icons/Add';
-import CheckCircleRoundedIcon from '@material-ui/icons/CheckCircleRounded';
-import CancelRoundedIcon from '@material-ui/icons/CancelRounded';
-import {KeyboardDatePicker, MuiPickersUtilsProvider} from '@material-ui/pickers';
-import DateFnsUtils from '@date-io/date-fns';
-import { makeStyles } from '@material-ui/core/styles';
+import React from "react";
+import AppBar from "../Components/AppBar";
+import SideMenu from "../Components/SideMenu";
+import Typography from "@material-ui/core/Typography";
+import Button from "@material-ui/core/Button";
+import Card from "@material-ui/core/Card";
+import CardActions from "@material-ui/core/CardActions";
+import CardContent from "@material-ui/core/CardContent";
+import Calendar from "react-calendar";
+import {
+  KeyboardDatePicker,
+  KeyboardTimePicker,
+  MuiPickersUtilsProvider
+} from "@material-ui/pickers";
+import Dialog from "@material-ui/core/Dialog";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import Stepper from "@material-ui/core/Stepper";
+import Step from "@material-ui/core/Step";
+import AddIcon from "@material-ui/icons/Add";
+import StepLabel from "@material-ui/core/StepLabel";
+import DateFnsUtils from "@date-io/date-fns";
+import Grid from "@material-ui/core/Grid";
+import { makeStyles } from "@material-ui/core/styles";
 
-const columns = [
-    { id: 'Nombre', label: 'Nombre', minWidth: 170,align: 'left' },
-    { id: 'Sexo', label: 'Sexo', minWidth: 170 ,align: 'left'},
-    {
-      id: 'Edad',
-      label: 'Edad',
-      minWidth: 170,
-      align: 'left',
-      format: value => value.toLocaleString(),
-    },
-    {
-      id: 'Telefono',
-      label: 'Telefono',
-      minWidth: 170,
-      align: 'left',
-      format: value => value.toLocaleString(),
-    },
-    {
-        id: 'Hora',
-        label: 'Hora',
-        minWidth: 170,
-        align: 'left',
-        format: value => value.toLocaleString(),
-      },
-      {
-        id: 'Acción',
-        label: 'Acción',
-        minWidth: 170,
-        align: 'left',
-        format: value => value.toLocaleString(),
-      },
-   
+function getSteps() {
+  return [
+    "Seleccionar una fecha",
+    "Seleccionar hora disponible",
+    "Seleccionar paciente"
   ];
-  
-  function createData(Nombre, Sexo, Edad, Telefono, Hora, Accion) {
-    return {Nombre, Sexo, Edad, Telefono, Hora, Accion};
+}
+const useStyles = makeStyles(theme => ({
+  root: {
+    width: "97%",
+    alignSelf: "center"
+  },
+  container: {
+    maxHeight: 587
+  },
+  menuButton: {
+    marginRight: theme.spacing(2)
+  },
+  title: {
+    flexGrow: 1
+  },
+  Icon: {
+    color: "#FFB700 !important"
+  },
+  calendar: {
+    boxShadow: "10px 1px 60px -15px #111",
+    border: "none",
+    width: "100%",
+    height: ""
+  },
+  tarjeta: {
+    width: "auto",
+    marginTop: "5%"
+  },
+  left: {
+    marginLeft: "3%",
+    marginTop: "2%",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-between",
+    width: "30%"
   }
+}));
+
+export default function Dates() {
+  const classes = useStyles();
+  const [values, setValues] = React.useState({
+    fecha: new Date(),
+    time: new Date(),
+    name:""
+  });
+  const [calendarDate, setCalendardate] = React.useState(new Date());
+  const [activeStep, setActiveStep] = React.useState(0);
+  const steps = getSteps();
+  const [open, setOpen] = React.useState(false);
+
+  const handleNext = () => {
+    setActiveStep(prevActiveStep => prevActiveStep + 1);
+  };
+
+  const handleBack = () => {
+    setActiveStep(prevActiveStep => prevActiveStep - 1);
+  };
+  const handleDateChange = date => {
+   setValues({fecha:date});
+  };
   
-  const rows = [
-    createData("Gustavo García Sánchez", 'Masculino', '22 años', '443-166-3698',"10:00-11:00",<IconButton color="inherit" aria-label="edit" ><EditIcon/></IconButton>),
-    createData("Gustavo García Sánchez", 'Masculino', '22 años', '443-166-3698',"10:00-11:00",<IconButton color="inherit" aria-label="edit" ><EditIcon/></IconButton>),
-    createData("Gustavo García Sánchez", 'Masculino', '22 años', '443-166-3698',"10:00-11:00",<IconButton color="inherit" aria-label="edit" ><EditIcon/></IconButton>),
-    createData("Gustavo García Sánchez", 'Masculino', '22 años', '443-166-3698',"10:00-11:00",<IconButton color="inherit" aria-label="edit" ><EditIcon/></IconButton>),
-    createData("Gustavo García Sánchez", 'Masculino', '22 años', '443-166-3698',"10:00-11:00",<IconButton color="inherit" aria-label="edit" ><EditIcon/></IconButton>),
-    createData("Gustavo García Sánchez", 'Masculino', '22 años', '443-166-3698',"10:00-11:00",<IconButton color="inherit" aria-label="edit" ><EditIcon/></IconButton>),
-    createData("Gustavo García Sánchez", 'Masculino', '22 años', '443-166-3698',"10:00-11:00",<IconButton color="inherit" aria-label="edit" ><EditIcon/></IconButton>),
-    createData("Gustavo García Sánchez", 'Masculino', '22 años', '443-166-3698',"10:00-11:00",<IconButton color="inherit" aria-label="edit" ><EditIcon/></IconButton>),
-    createData("Gustavo García Sánchez", 'Masculino', '22 años', '443-166-3698',"10:00-11:00",<IconButton color="inherit" aria-label="edit" ><EditIcon/></IconButton>),
-    createData("Gustavo García Sánchez", 'Masculino', '22 años', '443-166-3698',"10:00-11:00",<IconButton color="inherit" aria-label="edit" ><EditIcon/></IconButton>),
-  ];
-  const useStyles = makeStyles(theme =>({
-    root: {
-      width: '97%',
-      alignSelf:"center",
-    },
-    container: {
-      maxHeight: 587,
-      
-    },
-    menuButton: {
-      marginRight: theme.spacing(2),
-    },
-    title: {
-      flexGrow: 1,
-    },
-  }));
-  
-export default function Dates(){
-    const classes= useStyles();
-    const [selectedDate, setSelectedDate] = React.useState(new Date());
-    const [page, setPage] = React.useState(0);
-    const [rowsPerPage, setRowsPerPage] = React.useState(10);
-    const handleChangePage = (event, newPage) => {
-        setPage(newPage);
-      };
-    
-      const handleChangeRowsPerPage = event => {
-        setRowsPerPage(+event.target.value);
-        setPage(0);
-      };
-    
-    const handleDateChange = date => {
-      setSelectedDate(date);
-    };
-    return(
-        <div style={{height:"100vh",display:"flex",flexDirection:"column",flexWrap:"nowrap"}}>
-            <AppBar nombre="Citas"/>
-            <div style={{display:"flex",flexDirection:"row",flexWrap:"nowrap",width:"100%",height:"100%"}}>
-            <SideMenu select="citas" />
-            <div style={{width:"100%",backgroundColor:"#F4F4F4",display:"flex",flexDirection:"column" }}>
-                <div style={{width:"100%",display:"flex",flexDirection:"row",justifyContent:"space-between" }}>
-                    <Typography style={{fontSize:"25px",fontWeight:"bolder",fontFamily:"Roboto",margin:"3%"}}>
-                        Citas Agendadas
-                    </Typography>
-                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                    <KeyboardDatePicker
-                        disableToolbar
-                        variant="inline"
-                        format="dd/MM/yyyy"
-                        margin="normal"
-                        id="date-picker-inline"
-                        label="Fecha"
-                        value={selectedDate}
-                        onChange={handleDateChange}
-                        KeyboardButtonProps={{
-                            'aria-label': 'change date',
-                        }}
-                        style={{
-                            marginRight:"3%",
-                            alignSelf:"center"
-                        }}
-                        disablePast="true"
-                    />
-                    </MuiPickersUtilsProvider>
-                </div>
-              <Paper className={classes.root}>
-                <TableContainer className={classes.container}>
-                  <Table stickyHeader aria-label="sticky table">
-                    <TableHead>
-                      <TableRow>
-                        {columns.map(column => (
-                          <TableCell
-                            key={column.id}
-                            align={column.align}
-                            style={{ minWidth: column.minWidth,fontWeight: 'bold'}}
-                          >
-                            {column.label}
-                          </TableCell>
-                        ))}
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(row => {
-                        return (
-                          <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
-                            <TableCell>Gustavo García Sanchez</TableCell>
-                            <TableCell>Masculino</TableCell>
-                            <TableCell>22 años</TableCell>
-                            <TableCell>443-166-3698</TableCell>
-                            <TableCell>10:00-11:00</TableCell>
-                            <TableCell>
-                              <IconButton color="inherit" aria-label="edit" style={{padding:0,marginRight:"13%"}} >
-                                <CheckCircleRoundedIcon/>
-                              </IconButton>
-                              <IconButton color="inherit" aria-label="edit" style={{padding:0,marginRight:"13%"}} >
-                                <EditIcon/>
-                              </IconButton>
-                              <IconButton color="inherit" aria-label="edit" style={{padding:0,marginRight:"13%"}} >
-                                <CancelRoundedIcon/>
-                              </IconButton>
-                            </TableCell>
-                          </TableRow>
-                        );
-                      })}
-                    </TableBody>
-                  </Table>
-                </TableContainer>
-                <TablePagination
-                  rowsPerPageOptions={[10,5,  { label: 'All', value: -1 }]}
-                  component="div"
-                  count={rows.length}
-                  rowsPerPage={rowsPerPage}
-                  page={page}
-                  onChangePage={handleChangePage}
-                  onChangeRowsPerPage={handleChangeRowsPerPage}
+  const handleClose = () => {
+    setOpen(false);
+    setActiveStep(0);
+  };
+  const handleDate = e => {
+    setCalendardate(e);
+    console.log(calendarDate);
+  };
+  return (
+    <div
+      style={{
+        height: "100vh",
+        display: "flex",
+        flexDirection: "column",
+        flexWrap: "nowrap"
+      }}
+    >
+      <AppBar nombre="Citas" />
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          flexWrap: "nowrap",
+          width: "100%",
+          height: "100%"
+        }}
+      >
+        <SideMenu select="citas" />
+        <div
+          style={{
+            width: "100%",
+            backgroundColor: "#F4F4F4",
+            display: "flex",
+            flexDirection: "row"
+          }}
+        >
+          <Card className={classes.left}>
+            <CardContent style={{ padding: "0" }}>
+              <Calendar
+                onChange={handleDate}
+                value={calendarDate}
+                minDate={new Date()}
+                className={classes.calendar}
+                minDetail="month"
+              />
+            </CardContent>
+            <CardActions>
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  width: "100%"
+                }}
+              >
+                <Typography style={{ fontSize: "small", fontWeight: "bold" }}>
+                  Añadir una nueva cita
+                </Typography>
+                <AddIcon
+                  style={{ cursor: "pointer" }}
+                  onClick={e => {
+                    setOpen(true);
+                  }}
                 />
-              </Paper>
-    <Fab color="primary" aria-label="add" style={{alignSelf:"flex-end",backgroundColor:"#FFB700",marginRight:"1%",marginTop:"3%"}} >
-        <AddIcon />
-    </Fab>
+              </div>
+            </CardActions>
+          </Card>
+          <Card
+            style={{
+              marginLeft: "1%",
+              marginTop: "2%",
+              display: "flex",
+              flexDirection: "column",
+              width: "65%"
+            }}
+          >
+            <Typography
+              style={{
+                fontSize: "20px",
+                fontWeight: "bold",
+                fontFamily: "Roboto",
+                margin: "2%"
+              }}
+            >
+              Citas de hoy
+            </Typography>
+            <Grid container spacing={3} style={{ padding: "2%" }}>
+              <Grid item xs={6}>
+                <Card className={classes.tarjeta}>
+                  <CardContent
+                    style={{ backgroundColor: "#61B4E4" }}
+                  >
+                    <Typography style={{color:"white",fontSize:"Large",fontWeight:"bolder"}}>
+                      Gustavo García Sánchez
+                    </Typography>
+                    <Grid container spacing={3} style={{ padding: "0%" }}>
+                    <Grid item xs={2}>
+                    <Typography style={{color:"white"}}>
+                      22años
+                    </Typography>
+                    </Grid>
+                    <Grid item xs={4}>
+                    <Typography style={{color:"white"}}>
+                      443-165-3698
+                    </Typography>
+                    </Grid>
+                    </Grid>
+                    <Typography style={{color:"white",fontSize:"small"}}>
+                      Condición: Esguince de rodilla
+                    </Typography>
+                  </CardContent>
+                  <CardActions
+                    style={{ backgroundColor: "#003764" }}
+                  ></CardActions>
+                </Card>
+              </Grid>
+              <Grid item xs={6}>
+                <Card className={classes.tarjeta}>
+                  <CardContent
+                    style={{ backgroundColor: "#61B4E4" }}
+                  >
+                    <Typography style={{color:"white",fontSize:"Large",fontWeight:"bolder"}}>
+                      Gustavo García Sánchez
+                    </Typography>
+                    <Grid container spacing={3} style={{ padding: "0%" }}>
+                    <Grid item xs={2}>
+                    <Typography style={{color:"white"}}>
+                      22años
+                    </Typography>
+                    </Grid>
+                    <Grid item xs={4}>
+                    <Typography style={{color:"white"}}>
+                      443-165-3698
+                    </Typography>
+                    </Grid>
+                    </Grid>
+                    <Typography style={{color:"white",fontSize:"small"}}>
+                      Condición: Esguince de rodilla
+                    </Typography>
+                  </CardContent>
+                  <CardActions
+                    style={{ backgroundColor: "#003764" }}
+                  ></CardActions>
+                </Card>
+              </Grid>
+              <Grid item xs={6}>
+                <Card className={classes.tarjeta}>
+                  <CardContent
+                    style={{ backgroundColor: "#61B4E4" }}
+                  >
+                    <Typography style={{color:"white",fontSize:"Large",fontWeight:"bolder"}}>
+                      Gustavo García Sánchez
+                    </Typography>
+                    <Grid container spacing={3} style={{ padding: "0%" }}>
+                    <Grid item xs={2}>
+                    <Typography style={{color:"white"}}>
+                      22años
+                    </Typography>
+                    </Grid>
+                    <Grid item xs={4}>
+                    <Typography style={{color:"white"}}>
+                      443-165-3698
+                    </Typography>
+                    </Grid>
+                    </Grid>
+                    <Typography style={{color:"white",fontSize:"small"}}>
+                      Condición: Esguince de rodilla
+                    </Typography>
+                  </CardContent>
+                  <CardActions
+                    style={{ backgroundColor: "#003764" }}
+                  ></CardActions>
+                </Card>
+              </Grid>
+            </Grid>
+          </Card>
+          <Dialog
+            open={open}
+            onClose={handleClose}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+          >
+            <DialogTitle
+              id="form-dialog-title"
+              style={{
+                fontSize: "25px",
+                fontWeight: "bolder",
+                fontFamily: "Roboto",
+                textAlign: "center"
+              }}
+            >
+              Agendar Cita
+            </DialogTitle>
+            <DialogContent>
+              <Stepper activeStep={activeStep} alternativeLabel>
+                {steps.map(label => (
+                  <Step key={label}>
+                    <StepLabel
+                      StepIconProps={{
+                        classes: {
+                          completed: classes.Icon,
+                          active: classes.Icon
+                        }
+                      }}
+                    >
+                      {label}
+                    </StepLabel>
+                  </Step>
+                ))}
+              </Stepper>
+              <div>
+                <div>
+                  {(() => {
+                    switch (activeStep) {
+                      case 0:
+                        return (
+                          <div
+                            style={{ display: "flex", flexDirection: "column" }}
+                          >
+                            <Typography
+                              style={{
+                                fontSize: "20px",
+                                fontWeight: "bold",
+                                fontFamily: "Roboto",
+                                margin: "3%"
+                              }}
+                            >
+                              Fecha
+                            </Typography>
+                            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                              <KeyboardDatePicker
+                                disableToolbar
+                                variant="inline"
+                                format="dd/MM/yyyy"
+                                margin="normal"
+                                id="date-picker-inline"
+                                label="Fecha"
+                                value={values.fecha}
+                                onChange={handleDateChange}
+                                KeyboardButtonProps={{
+                                  "aria-label": "change date"
+                                }}
+                                style={{
+                                  marginLeft: "6%",
+                                  marginBottom: "6%",
+                                  alignSelf: "center",
+                                  width: "100%"
+                                }}
+                                disablePast="true"
+                              />
+                            </MuiPickersUtilsProvider>
+                          </div>
+                        );
+                      case 1:
+                        return (
+                          <div
+                            style={{ display: "flex", flexDirection: "column" }}
+                          >
+                            <Typography
+                              style={{
+                                fontSize: "20px",
+                                fontWeight: "bold",
+                                fontFamily: "Roboto",
+                                margin: "3%"
+                              }}
+                            >
+                              Horas disponibles
+                            </Typography>
+                            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                              <KeyboardTimePicker
+                                margin="normal"
+                                id="time-picker"
+                                label="Time picker"
+                                value={values.time}
+                                onChange={e=>{setValues({time:e})}}
+                                KeyboardButtonProps={{
+                                  "aria-label": "change time"
+                                }}
+                                style={{
+                                  marginLeft: "6%",
+                                  marginBottom: "6%",
+                                  alignSelf: "center",
+                                  width: "100%"
+                                }}
+                              />
+                            </MuiPickersUtilsProvider>
+                          </div>
+                        );
+                      case 2:
+                        return (
+                          <Typography
+                            style={{
+                              fontSize: "20px",
+                              fontWeight: "bold",
+                              fontFamily: "Roboto",
+                              margin: "3%"
+                            }}
+                          >
+                            Buscar paciente
+                          </Typography>
+                        );
+                      default:
+                        return "Unknown stepIndex";
+                    }
+                  })()}
+                  <div>
+                    <Button
+                      disabled={activeStep === 0}
+                      onClick={handleBack}
+                      className={classes.backButton}
+                      style={{ color: "gray" }}
+                    >
+                      Atras
+                    </Button>
+                    <Button
+                      variant="contained"
+                      onClick={
+                        activeStep === steps.length - 1
+                          ? handleClose
+                          : handleNext
+                      }
+                      style={{ backgroundColor: "#FFB700", color: "white" }}
+                    >
+                      {activeStep === steps.length - 1
+                        ? "Agendar"
+                        : "Siguiente"}
+                    </Button>
+                  </div>
                 </div>
-            </div>
+              </div>
+            </DialogContent>
+          </Dialog>
         </div>
-    );
+      </div>
+    </div>
+  );
 }
