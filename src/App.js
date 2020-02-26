@@ -5,6 +5,7 @@ import Dates from './Dates/Dates';
 import Patients from './Patients/Patients';
 import Usuers from './Users/Users';
 import Stats from './Statistics/Statistics';
+import Videos from './Videos/Videos';
 import { Route, BrowserRouter as Router, Switch  } from 'react-router-dom';
 
 export default function App() {
@@ -28,6 +29,9 @@ export default function App() {
               </Route>
               <Route exact path="/Stats">
                   <Stats/>
+              </Route>
+              <Route exact path="/Videos">
+                  <Videos/>
               </Route>
               <Route render={() => <h1>404 Error</h1>} />
           </Switch>

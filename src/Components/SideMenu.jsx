@@ -11,6 +11,7 @@ import PeopleAltIcon from '@material-ui/icons/PeopleAlt';
 import PersonIcon from '@material-ui/icons/Person';
 import ShowChartIcon from '@material-ui/icons/ShowChart';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import YouTubeIcon from '@material-ui/icons/YouTube';
 import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles(theme=>({
@@ -62,6 +63,10 @@ export default function SideMenu(props){
                 <ListItem button key="Estadísticas" style={props.select==="estadisticas"? {backgroundColor:"#61B4E4",color:"white"}:{}} onClick={e=> history.push("/Stats")}>
                     <ListItemIcon><ShowChartIcon style={props.select==="estadisticas"? {color:"white"}:{}}/></ListItemIcon>
                     <ListItemText primary="Estadisticas" />
+                </ListItem>
+                <ListItem button key="Videos" style={props.select==="videos"? {backgroundColor:"#61B4E4",color:"white"}:{}} onClick={e=> history.push("/Videos")}>
+                    <ListItemIcon><YouTubeIcon style={props.select==="videos"? {color:"white"}:{}}/></ListItemIcon>
+                    <ListItemText primary="Videos" />
                 </ListItem>
                 <ListItem button key="Cerrar Sesión" onClick={e => history.push("/") }>
                     <ListItemIcon><ExitToAppIcon/></ListItemIcon>
