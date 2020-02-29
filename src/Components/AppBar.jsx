@@ -1,4 +1,4 @@
-import React,{useState} from 'react';
+import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -20,23 +20,12 @@ const useStyles = makeStyles(theme => ({
   
 }));
 export default function ButtonAppBar(props) {
-  const [open,setOpen] = useState(true);
   const classes = useStyles();
-  const handleOpen= e=> {
-    e.preventDefault();
-    setOpen(true);
-    console.log(open);
-  }
-  const handleClose= e=> {
-    e.preventDefault();
-    setOpen(false);
-    console.log(open);
-  }
   return (
     <div className={classes.root}>
       <AppBar position="static" style={{backgroundColor:"#0071CE"}}>
         <Toolbar>
-          <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu" onClick={open===true ? handleClose:handleOpen}>
+          <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu" onClick={props.handleMenu}>
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" className={classes.title}>

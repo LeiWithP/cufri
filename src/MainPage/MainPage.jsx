@@ -1,8 +1,7 @@
 import React from 'react';
-import AppBar from '../Components/AppBar';
-import SideMenu from '../Components/SideMenu';
 import Logo from '../Images/Maristas.png'
 import { makeStyles } from '@material-ui/core/styles';
+import Content from '../Components/Content';
 
 const useStyles = makeStyles(theme => ({
     image:{
@@ -18,12 +17,8 @@ const useStyles = makeStyles(theme => ({
 export default function Main(){
     const classes =useStyles();
     return(
-        <div style={{height:"100vh",display:"flex",flexDirection:"column",flexWrap:"nowrap"}}>
-            <AppBar nombre="Home"/>
-            <div style={{display:"flex",flexDirection:"row",flexWrap:"nowrap",width:"100%",height:"100%"}}>
-            <SideMenu />
+        <Content nombre="Home">
             <img src={Logo} alt="" width="30%" className={classes.image}/>
-            </div>
-        </div>
+        </Content>
     );
 }

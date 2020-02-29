@@ -20,12 +20,11 @@ const useStyles = makeStyles(theme=>({
       height:"100%",
       boxShadow:"2px 0 5px -2px #888;",
       overflow:"hidden",
-      zIndex:"1",
-      [theme.breakpoints.down(850)]:{
-          transition:"0.7s",
-          width:"0px",   
-      }
-      
+      zIndex:"1", 
+    },
+    menuHide:{
+        transition:"0.7s",
+        width:"0px", 
     },
     fullList: {
       width: 'auto',
@@ -37,7 +36,7 @@ export default function SideMenu(props){
     const history=useHistory();
     return(
         <div
-        className={classes.list}
+        className={`${classes.list} ${props.visible ? '':classes.menuHide}`}
         role="presentation"
         >
             <Typography style={{fontSize:"larger",fontWeight:"bold",marginTop:"1vh",marginLeft:"6%"}}>

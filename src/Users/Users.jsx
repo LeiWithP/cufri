@@ -1,6 +1,4 @@
 import React from "react";
-import AppBar from "../Components/AppBar";
-import SideMenu from "../Components/SideMenu";
 import Typography from "@material-ui/core/Typography";
 import Dialog from "@material-ui/core/Dialog";
 import DialogContent from "@material-ui/core/DialogContent";
@@ -29,6 +27,7 @@ import SearchIcon from "@material-ui/icons/Search";
 import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
 import Fab from "@material-ui/core/Fab";
 import AddIcon from "@material-ui/icons/Add";
+import Content from '../Components/Content';
 import ClearIcon from "@material-ui/icons/Clear";
 import { makeStyles } from "@material-ui/core/styles";
 import { TextField, InputAdornment } from "@material-ui/core";
@@ -91,7 +90,7 @@ const useStyles = makeStyles(theme => ({
     alignSelf: "center",
 }
 }));
-export default function Users() {
+export default function Users() { 
   const classes = useStyles();
   const [values, setValues] = React.useState({
     nombre_usuario:"",
@@ -146,25 +145,7 @@ export default function Users() {
   }
 
   return (
-    <div
-      style={{
-        height: "100vh",
-        display: "flex",
-        flexDirection: "column",
-        flexWrap: "nowrap"
-      }}
-    >
-      <AppBar nombre="Usuarios" />
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          flexWrap: "nowrap",
-          width: "100%",
-          height: "100%"
-        }}
-      >
-        <SideMenu select="usuarios" />
+    <Content nombre="Usuarios">
         <div
           style={{
             width: "100%",
@@ -542,7 +523,6 @@ export default function Users() {
             </DialogContent>
           </Dialog>
         </div>
-      </div>
-    </div>
+        </Content>
   );
 }

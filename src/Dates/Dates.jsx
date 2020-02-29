@@ -1,6 +1,5 @@
 import React from "react";
-import AppBar from "../Components/AppBar";
-import SideMenu from "../Components/SideMenu";
+import Content from '../Components/Content';
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import Card from "@material-ui/core/Card";
@@ -196,25 +195,7 @@ export default function Dates() {
     console.log(calendarDate);
   };
   return (
-    <div
-      style={{
-        height: "100vh",
-        display: "flex",
-        flexDirection: "column",
-        flexWrap: "nowrap"
-      }}
-    >
-      <AppBar nombre="Citas" />
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          flexWrap: "nowrap",
-          width: "100%",
-          height: "100%"
-        }}
-      >
-        <SideMenu select="citas" />
+    <Content nombre="Citas">
         <div
           style={{
             width: "100%",
@@ -825,7 +806,6 @@ export default function Dates() {
             </DialogContent>
           </Dialog>
         </div>
-      </div>
-    </div>
+      </Content>
   );
 }
