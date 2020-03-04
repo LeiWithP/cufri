@@ -72,6 +72,7 @@ export default function Login() {
   };
   const handleSubmit = e => {
     e.preventDefault();
+    history.push("/Home");
     console.log(values);
   };
   return (
@@ -106,15 +107,17 @@ export default function Login() {
               style={{ margin: "auto", width: "100%" }}
               id="filled-helperText"
               label="Username"
-              helperText="Ingresa el username"
+              helperText={"Ingresa el username"}
               variant="filled"
+              required
               onChange={handleChange("username")}
+              error={values.username===''}
             />
             <FormControl
               className={clsx(classes.margin, classes.textField)}
               variant="filled"
             >
-              <InputLabel htmlFor="filled-adornment-password">
+              <InputLabel htmlFor="filled-adornment-password"  error={values.password===''}>
                 Password
               </InputLabel>
               <FilledInput
@@ -122,6 +125,8 @@ export default function Login() {
                 type={values.showPassword ? "text" : "password"}
                 value={values.password}
                 onChange={handleChange("password")}
+                required={true}
+                error={values.password===''}
                 endAdornment={
                   <InputAdornment position="end">
                     <IconButton
@@ -135,7 +140,7 @@ export default function Login() {
                   </InputAdornment>
                 }
               />
-              <FormHelperText id="standard-weight-helper-text">
+              <FormHelperText id="standard-weight-helper-text" error={values.password===''}>
                 Ingresa la contraseña
               </FormHelperText>
             </FormControl>
@@ -151,9 +156,6 @@ export default function Login() {
               float: "right",
               padding: "2%",
               marginBottom: "3%"
-            }}
-            onClick={e => {
-              history.push("/Home");
             }}
           >
             Iniciar sesión

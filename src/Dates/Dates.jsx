@@ -1,5 +1,5 @@
 import React from "react";
-import Content from '../Components/Content';
+import Content from "../Components/Content";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import Card from "@material-ui/core/Card";
@@ -15,6 +15,11 @@ import TableHead from "@material-ui/core/TableHead";
 import TablePagination from "@material-ui/core/TablePagination";
 import TableRow from "@material-ui/core/TableRow";
 import Radio from "@material-ui/core/Radio";
+import FormControl from "@material-ui/core/FormControl";
+import FormHelperText from "@material-ui/core/FormHelperText";
+import InputLabel from "@material-ui/core/InputLabel";
+import MenuItem from "@material-ui/core/MenuItem";
+import Select from "@material-ui/core/Select";
 import {
   KeyboardDatePicker,
   KeyboardTimePicker,
@@ -122,7 +127,7 @@ export default function Dates() {
     fecha: new Date(),
     time: new Date(),
     id: null,
-    padecimiento: ""
+    tipoconsulta: ''
   });
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
@@ -131,6 +136,9 @@ export default function Dates() {
   const [search, setSearch] = React.useState("");
   const steps = getSteps();
   const [open, setOpen] = React.useState(false);
+  const handleChange = prop => event => {
+    setValues({ ...values, [prop]: event.target.value });
+  };
   /**
    *handles para el siguiente paso y el paso anterior en el dialog
    */
@@ -182,7 +190,7 @@ export default function Dates() {
    */
   const handleClose = () => {
     setOpen(false);
-    setActiveStep(0);
+    setActiveStep(0)
     console.log(values);
   };
   /**
@@ -195,576 +203,414 @@ export default function Dates() {
     console.log(calendarDate);
   };
   return (
-    <Content nombre="Citas">
-        <div
+    <Content nombre="Citas" select="citas">
+      <div
+        style={{
+          width: "100%",
+          backgroundColor: "#F4F4F4",
+          display: "flex",
+          flexDirection: "row"
+        }}
+      >
+        {/**
+         * contenido de la parte izquierdas
+         */}
+        <Card className={classes.left}>
+          <CardContent style={{ padding: "0" }}>
+            <Calendar
+              onChange={handleDate}
+              value={calendarDate}
+              className={classes.calendar}
+              minDetail="month"
+            />
+          </CardContent>
+          <CardActions>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "space-between",
+                width: "100%"
+              }}
+            >
+              <Typography style={{ fontSize: "small", fontWeight: "bold" }}>
+                Añadir una nueva cita
+              </Typography>
+              <AddIcon
+                style={{ cursor: "pointer" }}
+                onClick={() => {
+                  setOpen(true);
+                }}
+              />
+            </div>
+          </CardActions>
+        </Card>
+        {/**
+         * contenido de la parte derecha
+         */}
+        <Card
           style={{
-            width: "100%",
-            backgroundColor: "#F4F4F4",
+            marginLeft: "1%",
+            marginTop: "2%",
             display: "flex",
-            flexDirection: "row"
+            flexDirection: "column",
+            width: "65%"
           }}
         >
-          {/**
-           * contenido de la parte izquierdas
-           */}
-          <Card className={classes.left}>
-            <CardContent style={{ padding: "0" }}>
-              <Calendar
-                onChange={handleDate}
-                value={calendarDate}
-                minDate={new Date()}
-                className={classes.calendar}
-                minDetail="month"
-              />
-            </CardContent>
-            <CardActions>
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                  width: "100%"
-                }}
-              >
-                <Typography style={{ fontSize: "small", fontWeight: "bold" }}>
-                  Añadir una nueva cita
-                </Typography>
-                <AddIcon
-                  style={{ cursor: "pointer" }}
-                  onClick={() => {
-                    setOpen(true);
-                  }}
-                />
-              </div>
-            </CardActions>
-          </Card>
-          {/**
-           * contenido de la parte derecha
-           */}
-          <Card
+          <Typography
             style={{
-              marginLeft: "1%",
-              marginTop: "2%",
-              display: "flex",
-              flexDirection: "column",
-              width: "65%"
+              fontSize: "20px",
+              fontWeight: "bold",
+              fontFamily: "Roboto",
+              margin: "2%"
             }}
           >
-            <Typography
-              style={{
-                fontSize: "20px",
-                fontWeight: "bold",
-                fontFamily: "Roboto",
-                margin: "2%"
-              }}
-            >
-              Citas de hoy
-            </Typography>
-            <Grid container spacing={3} style={{ padding: "2%" }}>
-              <Grid item xs={6}>
-                <Card className={classes.tarjeta}>
-                  <CardContent style={{ backgroundColor: "#61B4E4" }}>
+            Citas de hoy
+          </Typography>
+          <Grid container spacing={3} style={{ padding: "2%" }}>
+            <Grid item xs={6}>
+              <Card className={classes.tarjeta}>
+                <CardContent style={{ backgroundColor: "#61B4E4" }}>
+                  <Typography
+                    style={{
+                      color: "white",
+                      fontSize: "Large",
+                      fontWeight: "bolder"
+                    }}
+                  >
+                    Gustavo García Sánchez
+                  </Typography>
+                  <div style={{ display: "flex" }}>
+                    <Typography style={{ color: "white", marginRight: "5%" }}>
+                      22años
+                    </Typography>
+                    <Typography style={{ color: "white" }}>
+                      443-165-3698
+                    </Typography>
+                  </div>
+                  <Typography style={{ color: "white", fontSize: "small" }}>
+                    Tipo de Consulta: Fisioterapia
+                  </Typography>
+                </CardContent>
+                <CardActions
+                  style={{
+                    backgroundColor: "#003764",
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "space-between"
+                  }}
+                >
+                  <div style={{ display: "flex", width: "50%" }}>
+                    <AccessTimeIcon style={{ color: "white" }} />
                     <Typography
                       style={{
                         color: "white",
-                        fontSize: "Large",
-                        fontWeight: "bolder"
+                        fontSize: "small",
+                        alignSelf: "center",
+                        marginLeft: "3%"
                       }}
                     >
-                      Gustavo García Sánchez
+                      08:00-09:00
                     </Typography>
-                    <div style={{ display: "flex" }}>
-                      <Typography style={{ color: "white", marginRight: "5%" }}>
-                        22años
-                      </Typography>
-                      <Typography style={{ color: "white" }}>
-                        443-165-3698
-                      </Typography>
-                    </div>
-                    <Typography style={{ color: "white", fontSize: "small" }}>
-                      Condición: Esguince de rodilla
-                    </Typography>
-                  </CardContent>
-                  <CardActions
+                  </div>
+                  <div
                     style={{
-                      backgroundColor: "#003764",
                       display: "flex",
-                      flexDirection: "row",
-                      justifyContent: "space-between"
+                      width: "40%",
+                      justifyContent: "flex-end"
                     }}
                   >
-                    <div style={{ display: "flex", width: "50%" }}>
-                      <AccessTimeIcon style={{ color: "white" }} />
-                      <Typography
-                        style={{
-                          color: "white",
-                          fontSize: "small",
-                          alignSelf: "center",
-                          marginLeft: "3%"
-                        }}
-                      >
-                        08:00-09:00
-                      </Typography>
-                    </div>
-                    <div
-                      style={{
-                        display: "flex",
-                        width: "40%",
-                        justifyContent: "flex-end"
-                      }}
-                    >
-                      <CheckCircleIcon
-                        style={{
-                          color: "white",
-                          paddingRight: "5%",
-                          cursor: "pointer"
-                        }}
-                      />
-                      <EditIcon
-                        style={{
-                          color: "white",
-                          paddingRight: "5%",
-                          cursor: "pointer"
-                        }}
-                      />
-                      <CancelIcon
-                        style={{
-                          color: "white",
-                          paddingRight: "5%",
-                          cursor: "pointer"
-                        }}
-                      />
-                    </div>
-                  </CardActions>
-                </Card>
-              </Grid>
-              <Grid item xs={6}>
-                <Card className={classes.tarjeta}>
-                  <CardContent style={{ backgroundColor: "#61B4E4" }}>
-                    <Typography
+                    <CheckCircleIcon
                       style={{
                         color: "white",
-                        fontSize: "Large",
-                        fontWeight: "bolder"
+                        paddingRight: "5%",
+                        cursor: "pointer"
                       }}
-                    >
-                      Gustavo García Sánchez
-                    </Typography>
-                    <div style={{ display: "flex" }}>
-                      <Typography style={{ color: "white", marginRight: "5%" }}>
-                        22años
-                      </Typography>
-                      <Typography style={{ color: "white" }}>
-                        443-165-3698
-                      </Typography>
-                    </div>
-                    <Typography style={{ color: "white", fontSize: "small" }}>
-                      Condición: Esguince de rodilla
-                    </Typography>
-                  </CardContent>
-                  <CardActions
-                    style={{
-                      backgroundColor: "#003764",
-                      display: "flex",
-                      flexDirection: "row",
-                      justifyContent: "space-between"
-                    }}
-                  >
-                    <div style={{ display: "flex", width: "50%" }}>
-                      <AccessTimeIcon style={{ color: "white" }} />
-                      <Typography
-                        style={{
-                          color: "white",
-                          fontSize: "small",
-                          alignSelf: "center",
-                          marginLeft: "3%"
-                        }}
-                      >
-                        08:00-09:00
-                      </Typography>
-                    </div>
-                    <div
-                      style={{
-                        display: "flex",
-                        width: "40%",
-                        justifyContent: "flex-end"
-                      }}
-                    >
-                      <CheckCircleIcon
-                        style={{
-                          color: "white",
-                          paddingRight: "5%",
-                          cursor: "pointer"
-                        }}
-                      />
-                      <EditIcon
-                        style={{
-                          color: "white",
-                          paddingRight: "5%",
-                          cursor: "pointer"
-                        }}
-                      />
-                      <CancelIcon
-                        style={{
-                          color: "white",
-                          paddingRight: "5%",
-                          cursor: "pointer"
-                        }}
-                      />
-                    </div>
-                  </CardActions>
-                </Card>
-              </Grid>
-              <Grid item xs={6}>
-                <Card className={classes.tarjeta}>
-                  <CardContent style={{ backgroundColor: "#61B4E4" }}>
-                    <Typography
+                    />
+                    <EditIcon
                       style={{
                         color: "white",
-                        fontSize: "Large",
-                        fontWeight: "bolder"
+                        paddingRight: "5%",
+                        cursor: "pointer"
                       }}
-                    >
-                      Gustavo García Sánchez
-                    </Typography>
-                    <div style={{ display: "flex" }}>
-                      <Typography style={{ color: "white", marginRight: "5%" }}>
-                        22años
-                      </Typography>
-                      <Typography style={{ color: "white" }}>
-                        443-165-3698
-                      </Typography>
-                    </div>
-                    <Typography style={{ color: "white", fontSize: "small" }}>
-                      Condición: Esguince de rodilla
-                    </Typography>
-                  </CardContent>
-                  <CardActions
-                    style={{
-                      backgroundColor: "#003764",
-                      display: "flex",
-                      flexDirection: "row",
-                      justifyContent: "space-between"
-                    }}
-                  >
-                    <div style={{ display: "flex", width: "50%" }}>
-                      <AccessTimeIcon style={{ color: "white" }} />
-                      <Typography
-                        style={{
-                          color: "white",
-                          fontSize: "small",
-                          alignSelf: "center",
-                          marginLeft: "3%"
-                        }}
-                      >
-                        08:00-09:00
-                      </Typography>
-                    </div>
-                    <div
+                    />
+                    <CancelIcon
                       style={{
-                        display: "flex",
-                        width: "40%",
-                        justifyContent: "flex-end"
+                        color: "white",
+                        paddingRight: "5%",
+                        cursor: "pointer"
                       }}
-                    >
-                      <CheckCircleIcon
-                        style={{
-                          color: "white",
-                          paddingRight: "5%",
-                          cursor: "pointer"
-                        }}
-                      />
-                      <EditIcon
-                        style={{
-                          color: "white",
-                          paddingRight: "5%",
-                          cursor: "pointer"
-                        }}
-                      />
-                      <CancelIcon
-                        style={{
-                          color: "white",
-                          paddingRight: "5%",
-                          cursor: "pointer"
-                        }}
-                      />
-                    </div>
-                  </CardActions>
-                </Card>
-              </Grid>
+                    />
+                  </div>
+                </CardActions>
+              </Card>
             </Grid>
-          </Card>
-          {/**
-           * Dialog donde se agregan las citas
-           */}
-          <Dialog
-            open={open}
-            onClose={handleClose}
-            aria-labelledby="alert-dialog-title"
-            aria-describedby="alert-dialog-description"
-          >
-            <DialogTitle
-              id="form-dialog-title"
-              style={{
-                fontSize: "25px",
-                fontWeight: "bolder",
-                fontFamily: "Roboto",
-                textAlign: "center"
-              }}
-            >
-              Agendar Cita
-            </DialogTitle>
-            <DialogContent>
-              <Stepper activeStep={activeStep} alternativeLabel>
-                {steps.map(label => (
-                  <Step key={label}>
-                    <StepLabel
-                      StepIconProps={{
-                        classes: {
-                          completed: classes.Icon,
-                          active: classes.Icon
-                        }
+            <Grid item xs={6}>
+              <Card className={classes.tarjeta}>
+                <CardContent style={{ backgroundColor: "#61B4E4" }}>
+                  <Typography
+                    style={{
+                      color: "white",
+                      fontSize: "Large",
+                      fontWeight: "bolder"
+                    }}
+                  >
+                    Gustavo García Sánchez
+                  </Typography>
+                  <div style={{ display: "flex" }}>
+                    <Typography style={{ color: "white", marginRight: "5%" }}>
+                      22años
+                    </Typography>
+                    <Typography style={{ color: "white" }}>
+                      443-165-3698
+                    </Typography>
+                  </div>
+                  <Typography style={{ color: "white", fontSize: "small" }}>
+                    Tipo de Consulta: Fisioterapia
+                  </Typography>
+                </CardContent>
+                <CardActions
+                  style={{
+                    backgroundColor: "#003764",
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "space-between"
+                  }}
+                >
+                  <div style={{ display: "flex", width: "50%" }}>
+                    <AccessTimeIcon style={{ color: "white" }} />
+                    <Typography
+                      style={{
+                        color: "white",
+                        fontSize: "small",
+                        alignSelf: "center",
+                        marginLeft: "3%"
                       }}
                     >
-                      {label}
-                    </StepLabel>
-                  </Step>
-                ))}
-              </Stepper>
+                      08:00-09:00
+                    </Typography>
+                  </div>
+                  <div
+                    style={{
+                      display: "flex",
+                      width: "40%",
+                      justifyContent: "flex-end"
+                    }}
+                  >
+                    <CheckCircleIcon
+                      style={{
+                        color: "white",
+                        paddingRight: "5%",
+                        cursor: "pointer"
+                      }}
+                    />
+                    <EditIcon
+                      style={{
+                        color: "white",
+                        paddingRight: "5%",
+                        cursor: "pointer"
+                      }}
+                    />
+                    <CancelIcon
+                      style={{
+                        color: "white",
+                        paddingRight: "5%",
+                        cursor: "pointer"
+                      }}
+                    />
+                  </div>
+                </CardActions>
+              </Card>
+            </Grid>
+            <Grid item xs={6}>
+              <Card className={classes.tarjeta}>
+                <CardContent style={{ backgroundColor: "#61B4E4" }}>
+                  <Typography
+                    style={{
+                      color: "white",
+                      fontSize: "Large",
+                      fontWeight: "bolder"
+                    }}
+                  >
+                    Gustavo García Sánchez
+                  </Typography>
+                  <div style={{ display: "flex" }}>
+                    <Typography style={{ color: "white", marginRight: "5%" }}>
+                      22años
+                    </Typography>
+                    <Typography style={{ color: "white" }}>
+                      443-165-3698
+                    </Typography>
+                  </div>
+                  <Typography style={{ color: "white", fontSize: "small" }}>
+                    Tipo de Consulta: Fisioterapia
+                  </Typography>
+                </CardContent>
+                <CardActions
+                  style={{
+                    backgroundColor: "#003764",
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "space-between"
+                  }}
+                >
+                  <div style={{ display: "flex", width: "50%" }}>
+                    <AccessTimeIcon style={{ color: "white" }} />
+                    <Typography
+                      style={{
+                        color: "white",
+                        fontSize: "small",
+                        alignSelf: "center",
+                        marginLeft: "3%"
+                      }}
+                    >
+                      08:00-09:00
+                    </Typography>
+                  </div>
+                  <div
+                    style={{
+                      display: "flex",
+                      width: "40%",
+                      justifyContent: "flex-end"
+                    }}
+                  >
+                    <CheckCircleIcon
+                      style={{
+                        color: "white",
+                        paddingRight: "5%",
+                        cursor: "pointer"
+                      }}
+                    />
+                    <EditIcon
+                      style={{
+                        color: "white",
+                        paddingRight: "5%",
+                        cursor: "pointer"
+                      }}
+                    />
+                    <CancelIcon
+                      style={{
+                        color: "white",
+                        paddingRight: "5%",
+                        cursor: "pointer"
+                      }}
+                    />
+                  </div>
+                </CardActions>
+              </Card>
+            </Grid>
+          </Grid>
+        </Card>
+        {/**
+         * Dialog donde se agregan las citas
+         */}
+        <Dialog
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogTitle
+            id="form-dialog-title"
+            style={{
+              fontSize: "25px",
+              fontWeight: "bolder",
+              fontFamily: "Roboto",
+              textAlign: "center"
+            }}
+          >
+            Agendar Cita
+          </DialogTitle>
+          <DialogContent>
+            <Stepper activeStep={activeStep} alternativeLabel>
+              {steps.map(label => (
+                <Step key={label}>
+                  <StepLabel
+                    StepIconProps={{
+                      classes: {
+                        completed: classes.Icon,
+                        active: classes.Icon
+                      }
+                    }}
+                  >
+                    {label}
+                  </StepLabel>
+                </Step>
+              ))}
+            </Stepper>
+            <div>
               <div>
-                <div>
-                  {/**
-                   * Switch case donde aparecen los componentes de cada step
-                   */}
-                  {(() => {
-                    switch (activeStep) {
-                      case 0:
-                        return (
-                          <div
-                            style={{ display: "flex", flexDirection: "column" }}
+                {/**
+                 * Switch case donde aparecen los componentes de cada step
+                 */}
+                {(() => {
+                  switch (activeStep) {
+                    case 0:
+                      return (
+                        <div
+                          style={{ display: "flex", flexDirection: "column" }}
+                        >
+                          <Typography
+                            style={{
+                              fontSize: "20px",
+                              fontWeight: "bold",
+                              fontFamily: "Roboto",
+                              margin: "3%"
+                            }}
                           >
-                            <Typography
-                              style={{
-                                fontSize: "20px",
-                                fontWeight: "bold",
-                                fontFamily: "Roboto",
-                                margin: "3%"
+                            Fecha
+                          </Typography>
+                          <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                            <KeyboardDatePicker
+                              disableToolbar
+                              variant="inline"
+                              format="dd/MM/yyyy"
+                              margin="normal"
+                              id="date-picker-inline"
+                              label="Fecha"
+                              value={values.fecha}
+                              onChange={handleDateChange}
+                              KeyboardButtonProps={{
+                                "aria-label": "change date"
                               }}
-                            >
-                              Fecha
-                            </Typography>
-                            <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                              <KeyboardDatePicker
-                                disableToolbar
-                                variant="inline"
-                                format="dd/MM/yyyy"
-                                margin="normal"
-                                id="date-picker-inline"
-                                label="Fecha"
-                                value={values.fecha}
-                                onChange={handleDateChange}
-                                KeyboardButtonProps={{
-                                  "aria-label": "change date"
-                                }}
-                                style={{
-                                  marginLeft: "6%",
-                                  marginBottom: "6%",
-                                  alignSelf: "center",
-                                  width: "100%"
-                                }}
-                                disablePast="true"
-                              />
-                            </MuiPickersUtilsProvider>
-                          </div>
-                        );
-                      case 1:
-                        return (
-                          <div
-                            style={{ display: "flex", flexDirection: "column" }}
+                              style={{
+                                marginLeft: "6%",
+                                marginBottom: "6%",
+                                alignSelf: "center",
+                                width: "100%"
+                              }}
+                              disablePast="true"
+                            />
+                          </MuiPickersUtilsProvider>
+                        </div>
+                      );
+                    case 1:
+                      return (
+                        <div
+                          style={{ display: "flex", flexDirection: "column" }}
+                        >
+                          <Typography
+                            style={{
+                              fontSize: "20px",
+                              fontWeight: "bold",
+                              fontFamily: "Roboto",
+                              margin: "3%"
+                            }}
                           >
-                            <Typography
-                              style={{
-                                fontSize: "20px",
-                                fontWeight: "bold",
-                                fontFamily: "Roboto",
-                                margin: "3%"
+                            Horas disponibles
+                          </Typography>
+                          <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                            <KeyboardTimePicker
+                              margin="normal"
+                              id="time-picker"
+                              label="Time picker"
+                              value={values.time}
+                              onChange={e => {
+                                setValues({ time: e });
                               }}
-                            >
-                              Horas disponibles
-                            </Typography>
-                            <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                              <KeyboardTimePicker
-                                margin="normal"
-                                id="time-picker"
-                                label="Time picker"
-                                value={values.time}
-                                onChange={e => {
-                                  setValues({ time: e });
-                                }}
-                                KeyboardButtonProps={{
-                                  "aria-label": "change time"
-                                }}
-                                style={{
-                                  marginLeft: "6%",
-                                  marginBottom: "6%",
-                                  alignSelf: "center",
-                                  width: "100%"
-                                }}
-                              />
-                            </MuiPickersUtilsProvider>
-                          </div>
-                        );
-                      case 2:
-                        return (
-                          <div>
-                            <Typography
-                              style={{
-                                fontSize: "20px",
-                                fontWeight: "bold",
-                                fontFamily: "Roboto",
-                                margin: "3%"
+                              KeyboardButtonProps={{
+                                "aria-label": "change time"
                               }}
-                            >
-                              Buscar paciente
-                            </Typography>
-                            <Paper className={classes.root}>
-                              <span
-                                style={{
-                                  width: "100%",
-                                  display: "flex",
-                                  flexDirection: "row",
-                                  justifyContent: "space-between"
-                                }}
-                              >
-                                <Typography
-                                  style={{
-                                    fontSize: "25px",
-                                    fontWeight: "bolder",
-                                    fontFamily: "Roboto",
-                                    margin: "3%"
-                                  }}
-                                >
-                                  Pacientes
-                                </Typography>
-                                <TextField
-                                  id="standard-bare"
-                                  margin="normal"
-                                  placeholder="Buscar"
-                                  value={search}
-                                  onChange={handleSearch}
-                                  InputProps={{
-                                    startAdornment: (
-                                      <InputAdornment position="end">
-                                        <SearchIcon />
-                                      </InputAdornment>
-                                    ),
-                                    endAdornment: (
-                                      <InputAdornment
-                                        position="end"
-                                        style={{ cursor: "pointer" }}
-                                        onClick={handleClear}
-                                      >
-                                        <ClearIcon />
-                                      </InputAdornment>
-                                    )
-                                  }}
-                                  style={{
-                                    color: "#e0e0e0",
-                                    alignSelf: "center",
-                                    marginRight: "3%",
-                                    width: "35%"
-                                  }}
-                                />
-                              </span>
-                              <TableContainer className={classes.container}>
-                                <Table stickyHeader aria-label="sticky table">
-                                  <TableHead>
-                                    <TableRow>
-                                      {columns.map(column => (
-                                        <TableCell
-                                          key={column.id}
-                                          align={column.align}
-                                          style={{
-                                            minWidth: column.minWidth,
-                                            fontWeight: "bold"
-                                          }}
-                                        >
-                                          {column.label}
-                                        </TableCell>
-                                      ))}
-                                    </TableRow>
-                                  </TableHead>
-                                  <TableBody>
-                                    {rows
-                                      .slice(
-                                        page * rowsPerPage,
-                                        page * rowsPerPage + rowsPerPage
-                                      )
-                                      .map(row => {
-                                        return (
-                                          <TableRow
-                                            hover
-                                            role="checkbox"
-                                            tabIndex={-1}
-                                            key={row.code}
-                                          >
-                                            <TableCell>
-                                              <Radio
-                                                onChange={e => {
-                                                  setValues({
-                                                    id: e.target.value
-                                                  });
-                                                }}
-                                                color={"primary"}
-                                              />
-                                            </TableCell>
-                                            <TableCell>
-                                              Gustavo García Sánchez
-                                            </TableCell>
-                                            <TableCell>443-188-6353</TableCell>
-                                          </TableRow>
-                                        );
-                                      })}
-                                  </TableBody>
-                                </Table>
-                              </TableContainer>
-                              <TablePagination
-                                rowsPerPageOptions={[
-                                  5,
-                                  { label: "All", value: -1 }
-                                ]}
-                                component="div"
-                                count={rows.length}
-                                rowsPerPage={rowsPerPage}
-                                page={page}
-                                onChangePage={handleChangePage}
-                                onChangeRowsPerPage={handleChangeRowsPerPage}
-                              />
-                            </Paper>
-                          </div>
-                        );
-                      case 3:
-                        return (
-                          <div
-                            style={{ display: "flex", flexDirection: "column" }}
-                          >
-                            <Typography
-                              style={{
-                                fontSize: "20px",
-                                fontWeight: "bold",
-                                fontFamily: "Roboto",
-                                margin: "3%"
-                              }}
-                            >
-                              Definir padecimiento
-                            </Typography>
-                            <TextField
-                              id="standard-multiline-flexible"
-                              label="Padecimiento"
-                              multiline
-                              rowsMax="2"
-                              value={values.padecimiento}
-                              onChange={e=>{setValues({padecimiento:e.target.value})}}
                               style={{
                                 marginLeft: "6%",
                                 marginBottom: "6%",
@@ -772,40 +618,208 @@ export default function Dates() {
                                 width: "100%"
                               }}
                             />
-                          </div>
-                        );
-                      default:
-                        return "Unknown stepIndex";
+                          </MuiPickersUtilsProvider>
+                        </div>
+                      );
+                    case 2:
+                      return (
+                        <div>
+                          <Typography
+                            style={{
+                              fontSize: "20px",
+                              fontWeight: "bold",
+                              fontFamily: "Roboto",
+                              margin: "3%"
+                            }}
+                          >
+                            Buscar paciente
+                          </Typography>
+                          <Paper className={classes.root}>
+                            <span
+                              style={{
+                                width: "100%",
+                                display: "flex",
+                                flexDirection: "row",
+                                justifyContent: "space-between"
+                              }}
+                            >
+                              <Typography
+                                style={{
+                                  fontSize: "25px",
+                                  fontWeight: "bolder",
+                                  fontFamily: "Roboto",
+                                  margin: "3%"
+                                }}
+                              >
+                                Pacientes
+                              </Typography>
+                              <TextField
+                                id="standard-bare"
+                                margin="normal"
+                                placeholder="Buscar"
+                                value={search}
+                                onChange={handleSearch}
+                                InputProps={{
+                                  startAdornment: (
+                                    <InputAdornment position="end">
+                                      <SearchIcon />
+                                    </InputAdornment>
+                                  ),
+                                  endAdornment: (
+                                    <InputAdornment
+                                      position="end"
+                                      style={{ cursor: "pointer" }}
+                                      onClick={handleClear}
+                                    >
+                                      <ClearIcon />
+                                    </InputAdornment>
+                                  )
+                                }}
+                                style={{
+                                  color: "#e0e0e0",
+                                  alignSelf: "center",
+                                  marginRight: "3%",
+                                  width: "35%"
+                                }}
+                              />
+                            </span>
+                            <TableContainer className={classes.container}>
+                              <Table stickyHeader aria-label="sticky table">
+                                <TableHead>
+                                  <TableRow>
+                                    {columns.map(column => (
+                                      <TableCell
+                                        key={column.id}
+                                        align={column.align}
+                                        style={{
+                                          minWidth: column.minWidth,
+                                          fontWeight: "bold"
+                                        }}
+                                      >
+                                        {column.label}
+                                      </TableCell>
+                                    ))}
+                                  </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                  {rows
+                                    .slice(
+                                      page * rowsPerPage,
+                                      page * rowsPerPage + rowsPerPage
+                                    )
+                                    .map(row => {
+                                      return (
+                                        <TableRow
+                                          hover
+                                          role="checkbox"
+                                          tabIndex={-1}
+                                          key={row.code}
+                                        >
+                                          <TableCell>
+                                            <Radio
+                                              onChange={e => {
+                                                setValues({
+                                                  id: e.target.value
+                                                });
+                                              }}
+                                              color={"primary"}
+                                            />
+                                          </TableCell>
+                                          <TableCell>
+                                            Gustavo García Sánchez
+                                          </TableCell>
+                                          <TableCell>443-188-6353</TableCell>
+                                        </TableRow>
+                                      );
+                                    })}
+                                </TableBody>
+                              </Table>
+                            </TableContainer>
+                            <TablePagination
+                              rowsPerPageOptions={[
+                                5,
+                                { label: "All", value: -1 }
+                              ]}
+                              component="div"
+                              count={rows.length}
+                              rowsPerPage={rowsPerPage}
+                              page={page}
+                              onChangePage={handleChangePage}
+                              onChangeRowsPerPage={handleChangeRowsPerPage}
+                            />
+                          </Paper>
+                        </div>
+                      );
+                    case 3:
+                      return (
+                        <div
+                          style={{ display: "flex", flexDirection: "column" }}
+                        >
+                          <Typography
+                            style={{
+                              fontSize: "20px",
+                              fontWeight: "bold",
+                              fontFamily: "Roboto",
+                              margin: "3%"
+                            }}
+                          >
+                            Definir padecimiento
+                          </Typography>
+                          <FormControl
+                            variant="filled"
+                            className={classes.formControl}
+                            style={{ marginBottom: "2%" }}
+                          >
+                            <InputLabel id="demo-simple-select-filled-label">
+                              Tipo de Consulta
+                            </InputLabel>
+                            <Select
+                              labelId="demo-simple-select-filled-label"
+                              id="demo-simple-select-filled"
+                              value={values.tipoconsulta}
+                              onChange={handleChange("tipoconsulta")}
+                            >
+                              <MenuItem value="">
+                                <em>None</em>
+                              </MenuItem>
+                              <MenuItem value={"Primera vez"}>Primera vez</MenuItem>
+                              <MenuItem value={"Fisioterapia"}>Fisioterapia</MenuItem>
+                              <MenuItem value={"Hidroterapia"}>Hidroterapia</MenuItem>
+                            </Select>
+                            <FormHelperText id="standard-weight-helper-text">
+                              Seleccione el tipo de consulta
+                            </FormHelperText>
+                          </FormControl>
+                        </div>
+                      );
+                    default:
+                      return "Unknown stepIndex";
+                  }
+                })()}
+                <div style={{ marginTop: "2%" }}>
+                  <Button
+                    disabled={activeStep === 0}
+                    onClick={handleBack}
+                    className={classes.backButton}
+                    style={{ color: "gray" }}
+                  >
+                    Atras
+                  </Button>
+                  <Button
+                    variant="contained"
+                    onClick={
+                      activeStep === steps.length - 1 ? handleClose : handleNext
                     }
-                  })()}
-                  <div style={{ marginTop: "2%" }}>
-                    <Button
-                      disabled={activeStep === 0}
-                      onClick={handleBack}
-                      className={classes.backButton}
-                      style={{ color: "gray" }}
-                    >
-                      Atras
-                    </Button>
-                    <Button
-                      variant="contained"
-                      onClick={
-                        activeStep === steps.length - 1
-                          ? handleClose
-                          : handleNext
-                      }
-                      style={{ backgroundColor: "#FFB700", color: "white" }}
-                    >
-                      {activeStep === steps.length - 1
-                        ? "Agendar"
-                        : "Siguiente"}
-                    </Button>
-                  </div>
+                    style={{ backgroundColor: "#FFB700", color: "white" }}
+                  >
+                    {activeStep === steps.length - 1 ? "Agendar" : "Siguiente"}
+                  </Button>
                 </div>
               </div>
-            </DialogContent>
-          </Dialog>
-        </div>
-      </Content>
+            </div>
+          </DialogContent>
+        </Dialog>
+      </div>
+    </Content>
   );
 }

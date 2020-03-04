@@ -90,7 +90,7 @@ export default function Statistics() {
     setData({ ...data, [prop]: event.target.value });
   };
   return (
-    <Content nombre="Videos">
+    <Content nombre="Videos" select="videos">
         <div
           style={{
             width: "100%",
