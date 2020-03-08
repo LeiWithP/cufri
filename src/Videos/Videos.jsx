@@ -1,5 +1,5 @@
 import React from "react";
-import Content from '../Components/Content';
+import Content from "../Components/Content";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
@@ -91,154 +91,199 @@ export default function Statistics() {
   };
   return (
     <Content nombre="Videos" select="videos">
-        <div
-          style={{
-            width: "100%",
-            backgroundColor: "#F4F4F4",
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "space-around",
-            flexWrap: "wrap"
-          }}
-        >
-          {/**
-           * Aqui se insertan las cards
-           */}
-          {cards.map(card => {
-            return (
-              <Card className={classes.Card}>
-                <img src={Image} alt="" width="100%" />
-                <CardContent>
-                  <Typography
-                    style={{
-                      fontWeight: "bold",
-                      fontSize: "larger",
-                      fontFamily: "Roboto"
-                    }}
-                  >
-                    Titulo del video
-                  </Typography>
-                  <Typography
-                    color={"textSecondary"}
-                    style={{
-                      fontFamily: "Roboto",
-                      marginTop: "1vh"
-                    }}
-                  >
-                    Región del padecimiento:
-                  </Typography>
-                  <Typography
-                    color={"textSecondary"}
-                    style={{
-                      fontFamily: "Roboto"
-                    }}
-                  >
-                    Área específica:
-                  </Typography>
-                </CardContent>
-                <CardActions>
-                  <Button className={classes.Botones}>EDITAR</Button>
-                  <Button className={classes.Botones}>IR AL VIDEO</Button>
-                </CardActions>
-              </Card>
-            );
-          })}
-          {/**
-           * Fin del bloque de las cards
-           * se coloca un float action button
-           */}
-          <Fab
-            color="primary"
-            aria-label="add"
-            onClick={handleOpen}
-            className={classes.Fab}
-          >
-            <AddIcon />
-          </Fab>
-          {/**
-           * inicio de los dialogs
-           *
-           */}
-          <Dialog
-            open={open}
-            style={{ display: "flex", flexDirection: "column" }}
-            maxWidth={false}
-          >
-            <DialogTitle style={{ textAlign: "center" }}>
-              Agregar video
-              <Typography>Agrega los datos que se te piden</Typography>
-            </DialogTitle>
-            <DialogContent>
-              <form
-                id="formulario"
-                className={classes.formulario}
-                onSubmit={handleClose}
-              >
-                <TextField
-                  id="filled-helperText"
-                  label="Link del video"
-                  helperText="Ingresa el link del video"
-                  variant="filled"
-                  value={data.link}
-                  onChange={handleChange("link")}
-                />
-                <TextField
-                  id="filled-helperText"
-                  label="Titulo"
-                  helperText="Ingresa el titulo del video"
-                  variant="filled"
-                  value={data.titulo}
-                  onChange={handleChange("titulo")}
-                />
-                <div
-                  style={{ display: "flex", justifyContent: "space-between" }}
+      <div
+        style={{
+          width: "100%",
+          backgroundColor: "#F4F4F4",
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "space-around",
+          flexWrap: "wrap"
+        }}
+      >
+        {/**
+         * Aqui se insertan las cards
+         */}
+        {cards.map(card => {
+          return (
+            <Card className={classes.Card}>
+              <img src={Image} alt="" width="100%" />
+              <CardContent>
+                <Typography
+                  style={{
+                    fontWeight: "bold",
+                    fontSize: "larger",
+                    fontFamily: "Roboto"
+                  }}
                 >
-                  <TextField
-                    id="filled-helperText"
-                    label="Región del Padecimiento"
-                    helperText="Ingresa la región del padecimiento"
-                    variant="filled"
-                    value={data.region_padecimiento}
-                    onChange={handleChange("region_padecimiento")}
-                    style={{ width: "47%" }}
-                  />
-                  <TextField
-                    id="filled-helperText"
-                    label="Área específica"
-                    helperText="Ingresa el área específica"
-                    variant="filled"
-                    value={data.area_especifica}
-                    onChange={handleChange("area_especifica")}
-                    style={{ width: "47%" }}
-                  />
-                </div>
+                  Titulo del video
+                </Typography>
+                <Typography
+                  color={"textSecondary"}
+                  style={{
+                    fontFamily: "Roboto",
+                    marginTop: "1vh"
+                  }}
+                >
+                  Región del padecimiento:
+                </Typography>
+                <Typography
+                  color={"textSecondary"}
+                  style={{
+                    fontFamily: "Roboto"
+                  }}
+                >
+                  Área específica:
+                </Typography>
+              </CardContent>
+              <CardActions>
+                <Button className={classes.Botones}>EDITAR</Button>
+                <Button className={classes.Botones}>IR AL VIDEO</Button>
+              </CardActions>
+            </Card>
+          );
+        })}
+        {/**
+         * Fin del bloque de las cards
+         * se coloca un float action button
+         */}
+        <Fab
+          color="primary"
+          aria-label="add"
+          onClick={handleOpen}
+          className={classes.Fab}
+        >
+          <AddIcon />
+        </Fab>
+        {/**
+         * inicio de los dialogs
+         *
+         */}
+        <Dialog
+          open={open}
+          style={{ display: "flex", flexDirection: "column" }}
+          maxWidth={false}
+        >
+          <DialogTitle style={{ textAlign: "center" }}>
+            Agregar video
+            <Typography>Agrega los datos que se te piden</Typography>
+          </DialogTitle>
+          <DialogContent>
+            <form
+              id="formulario"
+              className={classes.formulario}
+              onSubmit={handleClose}
+            >
+              <TextField
+                id="filled-helperText"
+                label="Link del video"
+                required
+                helperText={
+                  /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([-.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/.test(
+                    data.link
+                  )
+                    ? "Ingresa el link del video"
+                    : "Ingresa un link valido"
+                }
+                variant="filled"
+                value={data.link}
+                error={
+                  /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([-.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/.test(
+                    data.link
+                  )
+                    ? false
+                    : true
+                }
+                onChange={handleChange("link")}
+              />
+              <TextField
+                id="filled-helperText"
+                label="Titulo"
+                inputProps={{ maxLength: 80 }}
+                required
+                error={/^[a-zñáéíóúA-ZÑÁÉÍÓÚ0-9]+$/.test(data.titulo) ? false : true}
+                helperText={
+                  /^[a-zñáéíóúA-ZÑÁÉÍÓÚ0-9]+$/.test(data.titulo)
+                    ? "Ingresa el titulo del video"
+                    : "El título no puede contener caracteres especiales"
+                }
+                variant="filled"
+                value={data.titulo}
+                onChange={handleChange("titulo")}
+              />
+              <div style={{ display: "flex", justifyContent: "space-between" }}>
                 <TextField
-                  id="filled-multiline-static"
-                  label="Observaciones"
-                  multiline
-                  rows="6"
-                  value={data.observaciones}
-                  onChange={handleChange("observaciones")}
-                  defaultValue=""
+                  id="filled-helperText"
+                  label="Región del Padecimiento"
+                  inputProps={{ maxLength: 60 }}
+                  required
+                  helperText={/^[a-zñáéíóúA-ZÑÁÉÍÓÚ0-9]+$/.test(data.region_padecimiento)
+                    ? "Ingrese región del padecimiento"
+                    : "No puede contener caracteres especiales"}
                   variant="filled"
+                  error={/^[a-zñáéíóúA-ZÑÁÉÍÓÚ0-9]+$/.test(data.region_padecimiento)?false:true}
+                  value={data.region_padecimiento}
+                  onChange={handleChange("region_padecimiento")}
+                  style={{ width: "47%" }}
                 />
-              </form>
-            </DialogContent>
-            <DialogActions>
-              <Button
-                className={classes.Botones}
-                onClick={e => {
-                  setOpen(false);
-                }}
-              >
-                REGRESAR
-              </Button>
-              <Button type="submit" form="formulario" className={classes.Boton}>
-                AGREGAR
-              </Button>
-            </DialogActions>
-          </Dialog>
-        </div>
-      </Content>
+                <TextField
+                  id="filled-helperText"
+                  inputProps={{ maxLength: 60 }}
+                  required
+                  label="Área específica"
+                  helperText={/^[a-zñáéíóúA-ZÑÁÉÍÓÚ0-9]+$/.test(data.area_especifica)
+                    ? "Ingrese el área específica"
+                    : "No puede contener caracteres especiales"}
+                  variant="filled"
+                  error={/^[a-zñáéíóúA-ZÑÁÉÍÓÚ0-9]+$/.test(data.area_especifica)?false:true}
+                  value={data.area_especifica}
+                  onChange={handleChange("area_especifica")}
+                  style={{ width: "47%" }}
+                />
+              </div>
+              <TextField
+                id="filled-multiline-static"
+                label="Observaciones"
+                error={/^[a-zA-Z0-9 ][ \w].+[a-zA-Z0-9 ]+$/.test(data.observaciones)?false:true}
+                multiline
+                helperText={/^[a-zA-Z0-9 ][ \w].+[a-zA-Z0-9 ]+$/.test(data.observaciones)?"Indique observaciones":"No puede iniciar ni terminar con caracteres especiales"}
+                rows="6"
+                value={data.observaciones}
+                onChange={handleChange("observaciones")}
+                variant="filled"
+              />
+            </form>
+          </DialogContent>
+          <DialogActions>
+            <Button
+              className={classes.Botones}
+              onClick={e => {
+                setOpen(false);
+              }}
+            >
+              REGRESAR
+            </Button>
+            <Button
+              type="submit"
+              form="formulario"
+              className={classes.Boton}
+              disabled={
+                (/^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([-.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/.test(
+                  data.link
+                )
+                  ? false
+                  : true) ||
+                (/^[a-zñáéíóúA-ZÑÁÉÍÓÚ0-9]+$/.test(data.titulo) ? false : true)||
+                (/^[a-zñáéíóúA-ZÑÁÉÍÓÚ0-9]+$/.test(data.region_padecimiento)?false:true)||
+                (/^[a-zñáéíóúA-ZÑÁÉÍÓÚ0-9]+$/.test(data.area_especifica)?false:true)||
+                (/^[a-zA-Z0-9 ][ \w].+[a-zA-Z0-9 ]+$/.test(data.observaciones)?false:true)
+              }
+            >
+              AGREGAR
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </div>
+    </Content>
   );
 }

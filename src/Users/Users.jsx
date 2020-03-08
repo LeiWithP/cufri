@@ -397,12 +397,15 @@ export default function Users() {
                     className={classes.formControl}
                     style={{ marginBottom: "2%" }}
                   >
-                    <InputLabel id="demo-simple-select-filled-label" error={values.sexo===""}>
+                    <InputLabel
+                      id="demo-simple-select-filled-label"
+                      error={values.sexo === ""}
+                    >
                       Sexo
                     </InputLabel>
                     <Select
                       required
-                      error={values.sexo===""}
+                      error={values.sexo === ""}
                       labelId="demo-simple-select-filled-label"
                       id="demo-simple-select-filled"
                       value={values.sexo}
@@ -414,21 +417,42 @@ export default function Users() {
                       <MenuItem value={"Hombre"}>Hombre</MenuItem>
                       <MenuItem value={"Mujer"}>Mujer</MenuItem>
                     </Select>
-                    <FormHelperText id="standard-weight-helper-text" error={values.sexo===""}>
-                      {values.sexo===""?"Campo requerido seleccione una de las opciones":"seleccione su Sexo"}
+                    <FormHelperText
+                      id="standard-weight-helper-text"
+                      error={values.sexo === ""}
+                    >
+                      {values.sexo === ""
+                        ? "Campo requerido seleccione una de las opciones"
+                        : "seleccione su Sexo"}
                     </FormHelperText>
                   </FormControl>
                   <FormControl
                     className={clsx(classes.margin, classes.textField)}
                     variant="filled"
                   >
-                    <InputLabel htmlFor="filled-adornment-password">
+                    <InputLabel
+                      htmlFor="filled-adornment-password"
+                      error={
+                        /^(?=.{5,}$)(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*\W).*$/.test(
+                          pw1
+                        )
+                          ? false
+                          : true
+                      }
+                    >
                       Password
                     </InputLabel>
                     <FilledInput
                       required
+                      error={
+                        /^(?=.{5,}$)(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*\W).*$/.test(
+                          pw1
+                        )
+                          ? false
+                          : true
+                      }
                       type={values.showPassword ? "text" : "password"}
-                      value={values.pw1}
+                      value={pw1}
                       onChange={e => setPw1(e.target.value)}
                       endAdornment={
                         <InputAdornment position="end">
@@ -447,8 +471,21 @@ export default function Users() {
                         </InputAdornment>
                       }
                     />
-                    <FormHelperText id="standard-weight-helper-text">
-                      Ingresa la contraseña
+                    <FormHelperText
+                      id="standard-weight-helper-text"
+                      error={
+                        /^(?=.{5,}$)(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*\W).*$/.test(
+                          pw1
+                        )
+                          ? false
+                          : true
+                      }
+                    >
+                      {/^(?=.{5,}$)(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*\W).*$/.test(
+                        pw1
+                      )
+                        ? "Ingresa la contraseña"
+                        : "Debe contener al menos 1 mayúscula, 1 minúscula, 1 dígito, 1 carácter especial y tener una longitud de al menos 5"}
                     </FormHelperText>
                   </FormControl>
                 </div>
@@ -526,18 +563,22 @@ export default function Users() {
                     className={clsx(classes.margin, classes.textField)}
                     variant="filled"
                   >
-                    <InputLabel htmlFor="filled-adornment-password" error={values.password===""}>
+                    <InputLabel
+                      htmlFor="filled-adornment-password"
+                      error={values.password !== pw1}
+                    >
                       Password
                     </InputLabel>
                     <FilledInput
                       type={values.showPassword ? "text" : "password"}
-                      onChange={e => {if(e.target.value===pw1)
-                      handleChange("password")
-                      else{
-                        console.log("No coincide")
-                      }
+                      onChange={e => {
+                        if (e.target.value === pw1) {
+                          setValues({ ...values, password: e.target.value });
+                        } else {
+                          console.log("No coincide");
+                        }
                       }}
-                      error={values.password===""}
+                      error={values.password !== pw1}
                       endAdornment={
                         <InputAdornment position="end">
                           <IconButton
@@ -555,8 +596,13 @@ export default function Users() {
                         </InputAdornment>
                       }
                     />
-                    <FormHelperText id="standard-weight-helper-text" error={values.password===""}>
-                      {values.password===""?"Contraseña diferente":"Comprueba la contraseña"}
+                    <FormHelperText
+                      id="standard-weight-helper-text"
+                      error={values.password !== pw1}
+                    >
+                      {values.password === ""
+                        ? "Contraseña diferente"
+                        : "Comprueba la contraseña"}
                     </FormHelperText>
                   </FormControl>
                 </div>
@@ -596,8 +642,14 @@ export default function Users() {
                   )
                     ? false
                     : true) ||
-                  (values.rango === "")||
-                  (values.sexo==="")
+                  (values.rango === "" )||
+                  (values.sexo === "" )||
+                  (values.password !== pw1)||
+                  (/^(?=.{5,}$)(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*\W).*$/.test(
+                    pw1
+                  )
+                    ? false
+                    : true)
                 }
               >
                 Registrar
