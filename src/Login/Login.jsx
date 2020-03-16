@@ -70,11 +70,23 @@ export default function Login() {
   const handleMouseDownPassword = event => {
     event.preventDefault();
   };
+  /*
   const handleSubmit = e => {
     e.preventDefault();
     history.push("/Home");
     console.log(values);
   };
+*/
+
+ const handleSubmit = e => { 
+  e.preventDefault();
+  fetch('/hola', {
+   method: 'post',
+   headers: {'Content-Type':'application/json'},
+   body: values,
+  });
+ };
+
   return (
     <div
       style={{
