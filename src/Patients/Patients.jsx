@@ -1,4 +1,4 @@
-import React from 'react';
+/*import React from 'react';
 import AppBar from '../Components/AppBar';
 import SideMenu from '../Components/SideMenu';
 import Paper from '@material-ui/core/Paper';
@@ -199,3 +199,4 @@ export default function Patients(){
     );
 }
 
+*/
