@@ -713,7 +713,7 @@ export default function Dates() {
                                           hover
                                           role="checkbox"
                                           tabIndex={-1}
-                                          key={row.code}
+                                          key={row}
                                         >
                                           <TableCell>
                                             <Radio
@@ -722,6 +722,7 @@ export default function Dates() {
                                                   id: e.target.value
                                                 });
                                               }}
+                                              value={row}
                                               color={"primary"}
                                             />
                                           </TableCell>
