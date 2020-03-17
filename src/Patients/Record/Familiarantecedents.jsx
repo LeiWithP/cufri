@@ -3,6 +3,8 @@ import { makeStyles } from "@material-ui/core/styles";
 import Content from "../../Components/Content";
 import {Typography} from "@material-ui/core";
 import Cardexp from '../../Components/Cardrecord';
+import NavigateNextIcon from '@material-ui/icons/NavigateNext';
+import Fab from "@material-ui/core/Fab";
 
 const useStyles = makeStyles(theme => ({
   title: {
@@ -65,6 +67,19 @@ export default function Antecedentes() {
                <Cardexp name={padecimiento} key={padecimiento}/>
                )}
         </div>
+        <Fab
+          color="primary"
+          aria-label="next"
+          style={{
+            alignSelf: "flex-end",
+            backgroundColor: "#FFB700",
+            position: "absolute",
+            bottom:10,
+            right:10
+          }}
+        >
+          <NavigateNextIcon/>
+        </Fab>
       </div>
     </Content>
   );
