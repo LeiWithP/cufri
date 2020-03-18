@@ -9,6 +9,7 @@ import Recordp3 from './Patients/Record/Nopatologicantecedents';
 import Recordp4 from './Patients/Record/Patologicrecord';
 import Recordp5 from './Patients/Record/Ginecoobstetricrecord';
 import Recordp6 from './Patients/Record/Generalrecord';
+import Recordp7 from './Patients/Record/Physicalexam';
 import Usuers from './Users/Users';
 import Stats from './Statistics/Statistics';
 import Videos from './Videos/Videos';
@@ -47,6 +48,9 @@ export default function App() {
               </Route>
               <Route exact path="/Patients/Aspectos generales">
                   <Recordp6/>
+              </Route>
+              <Route exact path="/Patients/Examen físico">
+                  <Recordp7/>
               </Route>
               <Route exact path="/Users">
                   <Usuers/>
