@@ -316,7 +316,6 @@ export default function Cardrecord(props) {
           }}
         >
           <TextField
-            id="filled-multiline-static"
             label="Detalles"
             multiline
             onChange={e=> {setEr({...er,[props.name]:{detalles:e.target.value}})}}

@@ -14,9 +14,9 @@ const useStyles = makeStyles(theme => ({
       width: "500px"
     }
   },
-  card:{
-      display:"flex",
-      flexDirection:"column"
+  card: {
+    display: "flex",
+    flexDirection: "column"
   },
   title: {
     alignSelf: "center",
@@ -36,148 +36,220 @@ const useStyles = makeStyles(theme => ({
 
 export default function Cardnopatologic(props) {
   const classes = useStyles();
-  const [values,setValues]=React.useState({
-    "Enfermedades Infecciosas de la infancia":{
-        confirmacion:"",
-        detalles:""
+  const [values, setValues] = React.useState({
+    "Enfermedades Infecciosas de la infancia": {
+      confirmacion: "",
+      detalles: ""
     },
-    "Intervenciones Quirúrgicas":{
-        confirmacion:"",
-        detalles:""
+    "Intervenciones Quirúrgicas": {
+      confirmacion: "",
+      detalles: ""
     },
-    "Traumatismos(Esguinces.fracturas,luxaciones,desgarres)":{
-        confirmacion:"",
-        detalles:""
+    "Traumatismos(Esguinces.fracturas,luxaciones,desgarres)": {
+      confirmacion: "",
+      detalles: ""
     },
-    "Infiltraciones":{
-        confirmacion:"",
-        detalles:""
+    Infiltraciones: {
+      confirmacion: "",
+      detalles: ""
     },
-    "Hospitalizaciones":{
-        confirmacion:"",
-        detalles:""
+    Hospitalizaciones: {
+      confirmacion: "",
+      detalles: ""
     },
-    "Perdida del Conocimiento":{
-        confirmacion:"",
-        detalles:""
+    "Perdida del Conocimiento": {
+      confirmacion: "",
+      detalles: ""
     },
-    "Intolerancia a medicamentos":{
-        confirmacion:"",
-        detalles:""
+    "Intolerancia a medicamentos": {
+      confirmacion: "",
+      detalles: ""
     },
-    "Transfuciones":{
-        confirmacion:"",
-        detalles:""
+    Transfuciones: {
+      confirmacion: "",
+      detalles: ""
     },
-    "Medicamentos":{
-        confirmacion:"",
-        detalles:""
+    Medicamentos: {
+      confirmacion: "",
+      detalles: ""
     },
-    "ETS":{
-        confirmacion:"",
-        detalles:""
+    ETS: {
+      confirmacion: "",
+      detalles: ""
     },
-    "Tipo de Cosntrucción no favorable":{
-        confirmacion:"",
-        detalles:""
+    "Tipo de Cosntrucción no favorable": {
+      confirmacion: "",
+      detalles: ""
     },
-    "Suelo no regular":{
-        confirmacion:"",
-        detalles:""
+    "Suelo no regular": {
+      confirmacion: "",
+      detalles: ""
     },
-    "Escaleras que dificulten actividades de la vida diaria":{
-        confirmacion:"",
-        detalles:""
+    "Escaleras que dificulten actividades de la vida diaria": {
+      confirmacion: "",
+      detalles: ""
     },
-    "Ventilación inadecuada":{
-        confirmacion:"",
-        detalles:""
+    "Ventilación inadecuada": {
+      confirmacion: "",
+      detalles: ""
     },
-    "Hacinamiento":{
-        confirmacion:"",
-        detalles:""
+    Hacinamiento: {
+      confirmacion: "",
+      detalles: ""
     },
-    "Adaptaciones y auxiliares para sus avd":{
-        confirmacion:"",
-        detalles:""
+    "Adaptaciones y auxiliares para sus avd": {
+      confirmacion: "",
+      detalles: ""
     },
-    "Servicios de agua":{
-        confirmacion:"",
-        detalles:""
+    "Servicios de agua": {
+      confirmacion: "",
+      detalles: ""
     },
-    "Servicios de luz":{
-        confirmacion:"",
-        detalles:""
+    "Servicios de luz": {
+      confirmacion: "",
+      detalles: ""
     },
-    "Servicios de drenaje inadecuados":{
-        confirmacion:"",
-        detalles:""
+    "Servicios de drenaje inadecuados": {
+      confirmacion: "",
+      detalles: ""
     },
-    "Hábitos personales de baño":{
-        confirmacion:"",
-        detalles:""
+    "Hábitos personales de baño": {
+      confirmacion: "",
+      detalles: ""
     },
-    "Higiene bucal":{
-        confirmacion:"",
-        detalles:""
+    "Higiene bucal": {
+      confirmacion: "",
+      detalles: ""
     },
-    "Defecación":{
-        confirmacion:"",
-        detalles:""
+    Defecación: {
+      confirmacion: "",
+      detalles: ""
     },
-    "Tabaquismo":{
-        confirmacion:"",
-        detalles:""
+    Tabaquismo: {
+      confirmacion: "",
+      detalles: ""
     },
-    "Alcoholismo":{
-        confirmacion:"",
-        detalles:""
+    Alcoholismo: {
+      confirmacion: "",
+      detalles: ""
     },
-    "Toxicomanías":{
-        confirmacion:"",
-        detalles:""
+    Toxicomanías: {
+      confirmacion: "",
+      detalles: ""
     },
-    "Alimentación":{
-        confirmacion:"",
-        detalles:""
+    Alimentación: {
+      confirmacion: "",
+      detalles: ""
     },
-    "Trabajo/Descanso":{
-        confirmacion:"",
-        detalles:""
+    "Trabajo/Descanso": {
+      confirmacion: "",
+      detalles: ""
     },
-    "Pasatiempo":{
-        confirmacion:"",
-        detalles:""
+    Pasatiempo: {
+      confirmacion: "",
+      detalles: ""
     },
-  })
+    "Aparato digestivo": {
+        confirmacion: "",
+        detalles: ""
+      },
+    "Aparato cardiovacular": {
+        confirmacion: "",
+        detalles: ""
+      },
+    "Aparato Respiratorio": {
+        confirmacion: "",
+        detalles: ""
+      },
+    "Aparato Urinario": {
+        confirmacion: "",
+        detalles: ""
+      },
+    "Aparato genital": {
+        confirmacion: "",
+        detalles: ""
+      },
+    "Aparato hematológico": {
+        confirmacion: "",
+        detalles: ""
+      },
+    "Sistema endócrino": {
+        confirmacion: "",
+        detalles: ""
+      },
+    "Sistema nervioso": {
+        confirmacion: "",
+        detalles: ""
+      },
+    "Sistema sensorial": {
+        confirmacion: "",
+        detalles: ""
+      },
+    "Sistema osteomuscular": {
+        confirmacion: "",
+        detalles: ""
+      }
+  });
   return (
     <Card className={classes.cardbody}>
       <CardContent className={classes.card}>
         <Typography style={{ textAlign: "center", marginTop: "1vh" }}>
-           {props.name}
+          {props.name}
         </Typography>
         <FormGroup row style={{ justifyContent: "center" }}>
           <FormControlLabel
-            control={<Checkbox value="si" color="primary" checked={values[props.name].confirmacion==="si"} onChange={e=> {setValues({...values,[props.name]:{confirmacion:e.target.value}})}}/>}
+            control={
+              <Checkbox
+                value="si"
+                color="primary"
+                checked={values[props.name].confirmacion === "si"}
+                onChange={e => {
+                  setValues({
+                    ...values,
+                    [props.name]: { confirmacion: e.target.value }
+                  });
+                }}
+              />
+            }
             label="Si"
-            disabled={(props.disabled==="no")||(props.disabled==="")}
+            disabled={props.disabled === "no" || props.disabled === ""}
           />
           <FormControlLabel
-            control={<Checkbox value="no" color="primary" checked={values[props.name].confirmacion==="no"} onChange={e=> {setValues({...values,[props.name]:{confirmacion:e.target.value}})}} />}
+            control={
+              <Checkbox
+                value="no"
+                color="primary"
+                checked={values[props.name].confirmacion === "no"}
+                onChange={e => {
+                  setValues({
+                    ...values,
+                    [props.name]: { confirmacion: e.target.value }
+                  });
+                }}
+              />
+            }
             label="No"
-            disabled={(props.disabled==="no")||(props.disabled==="")}
+            disabled={props.disabled === "no" || props.disabled === ""}
           />
         </FormGroup>
         <TextField
-            id="filled-multiline-static"
-            label="¿Cuál?"
-            multiline
-            helperText={"Ingresa los detalles"}
-            rows="4"
-            onChange={e=> {setValues({...values,[props.name]:{detalles:e.target.value}})}}
-            disabled={(props.disabled==="no")||(props.disabled==="")||(values[props.name].confirmacion==="no")}
-            variant="filled"
-          />
+          label="¿Cuál?"
+          multiline
+          helperText={"Ingresa los detalles"}
+          rows="4"
+          onChange={e => {
+            setValues({
+              ...values,
+              [props.name]: { detalles: e.target.value }
+            });
+          }}
+          disabled={
+            props.disabled === "no" ||
+            props.disabled === "" ||
+            values[props.name].confirmacion === "no"
+          }
+          variant="filled"
+        />
       </CardContent>
     </Card>
   );
