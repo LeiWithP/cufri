@@ -2,7 +2,7 @@ import React from 'react';
 import Login from './Login/Login';
 import Main from './MainPage/MainPage';
 import Dates from './Dates/Dates'; 
-import Patients from './Patients/Record/Patologicrecord';
+import Patients from './Patients/Patients';
 import Recordp1 from './Patients/Record/Identification';
 import Recordp2 from './Patients/Record/Familiarantecedents';
 import Recordp3 from './Patients/Record/Nopatologicantecedents';

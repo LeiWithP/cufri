@@ -7,6 +7,7 @@ import Fab from "@material-ui/core/Fab";
 import Cardyesno from '../../Components/Yesnocard';
 import CardnP from '../../Components/Cardnopatologic';
 import Cardtext from '../../Components/Textcard';
+import {useHistory} from 'react-router-dom';
 
 const useStyles = makeStyles(theme => ({
     title: {
@@ -52,6 +53,10 @@ const Otros =[
 ]
 export default function Genecorecord(){
 const classes = useStyles();
+const history = useHistory();
+const handleNext = ()=>{
+  history.push("/Patients/Examen físico")
+}
   return (
     <Content nombre="Pacientes" select="pacientes">
       <div
@@ -85,6 +90,7 @@ const classes = useStyles();
         <Fab
           color="primary"
           aria-label="next"
+          onClick={handleNext}
           style={{
             alignSelf: "flex-end",
             backgroundColor: "#FFB700",

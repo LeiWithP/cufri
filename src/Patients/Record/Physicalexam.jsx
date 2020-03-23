@@ -4,6 +4,7 @@ import { Typography, Card, TextField } from "@material-ui/core";
 import Content from "../../Components/Content";
 import NavigateNextIcon from "@material-ui/icons/NavigateNext";
 import Fab from "@material-ui/core/Fab";
+import {useHistory} from 'react-router-dom';
 
 const useStyles = makeStyles(theme => ({
   title: {
@@ -81,6 +82,7 @@ const mi=[
 ]
 export default function Pysicalexam() {
   const classes = useStyles();
+  const history = useHistory();
   const [values, setValues] = React.useState({
     "T.A": "",
     "F.C": "",
@@ -121,6 +123,9 @@ export default function Pysicalexam() {
     "Tobillo":"",
     "Pie(Pie equino, plano, cavo)":""
   });
+  const handleNext =()=>{
+    history.push("/patients")
+  }
   return (
     <Content nombre="Pacientes" select="pacientes">
       <div
@@ -250,6 +255,7 @@ export default function Pysicalexam() {
         <Fab
           color="primary"
           aria-label="next"
+          onClick={handleNext}
           style={{
             alignSelf: "flex-end",
             backgroundColor: "#FFB700",

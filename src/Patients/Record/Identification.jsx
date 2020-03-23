@@ -9,6 +9,7 @@ import FormControl from "@material-ui/core/FormControl";
 import FormHelperText from "@material-ui/core/FormHelperText";
 import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
+import {useHistory} from 'react-router-dom'
 
 const useStyles = makeStyles(theme => ({
   card: {
@@ -40,6 +41,7 @@ const useStyles = makeStyles(theme => ({
 
 export default function Fichaidentificacion() {
   const classes = useStyles();
+  const history = useHistory();
   /*
   * State donde se guardan todos los valores de los campos
   */
@@ -73,6 +75,9 @@ export default function Fichaidentificacion() {
   const handleChange = prop => event => {
     setValues({ ...values, [prop]: event.target.value });
   };
+  const handleSubmit = ()=>{
+    history.push("/Patients/Antecedentes familiares")
+  }
   return (
     <Content nombre="Pacientes" select="pacientes">
       <div
@@ -89,6 +94,8 @@ export default function Fichaidentificacion() {
         <Card className={classes.card}>
           <CardContent>
             <form
+              id="formulario"
+              onSubmit={handleSubmit}
               style={{
                 width: "100%",
                 height: "100%",
@@ -310,6 +317,8 @@ export default function Fichaidentificacion() {
         <Fab
           color="primary"
           aria-label="next"
+          type="submit"
+          form="formulario"
           style={{
             alignSelf: "flex-end",
             backgroundColor: "#FFB700",

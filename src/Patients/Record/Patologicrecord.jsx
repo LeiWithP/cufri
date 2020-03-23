@@ -5,6 +5,7 @@ import Content from '../../Components/Content'
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 import Fab from "@material-ui/core/Fab";
 import CardnP from '../../Components/Cardnopatologic';
+import {useHistory} from 'react-router-dom';
 
 const useStyles = makeStyles(theme => ({
     title: {
@@ -38,6 +39,10 @@ const useStyles = makeStyles(theme => ({
 ]
 export default function Nopatologic(){
     const classes=useStyles();
+    const history = useHistory();
+    const handleNext = ()=>{
+      history.push("/Patients/Antecedentes Gineco-obstetricos")
+    }
     return(
         <Content nombre="Pacientes" select="pacientes">
              <div
@@ -59,6 +64,7 @@ export default function Nopatologic(){
         <Fab
           color="primary"
           aria-label="next"
+          onClick={handleNext}
           style={{
             alignSelf: "flex-end",
             backgroundColor: "#FFB700",
