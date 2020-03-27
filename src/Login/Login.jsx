@@ -17,6 +17,8 @@ import FormHelperText from "@material-ui/core/FormHelperText";
 import clsx from "clsx";
 import Logo from "../Images/logoOffGrandeBlanco.png";
 
+const urlBack = "http://localhost:4433/umarista-back/";
+
 const useStyles = makeStyles(theme => ({
   root: {
     minWidth: 275,
@@ -70,21 +72,26 @@ export default function Login() {
   const handleMouseDownPassword = event => {
     event.preventDefault();
   };
-  /*
-  const handleSubmit = e => {
-    e.preventDefault();
-    history.push("/Home");
-    console.log(values);
-  };
-*/
-
- const handleSubmit = e => { 
+  
+ const handleSubmit = async e => { 
+  console.log(values);
   e.preventDefault();
-  fetch('/hola', {
-   method: 'post',
-   headers: {'Content-Type':'application/json'},
-   body: values,
-  });
+  const formData = new FormData();
+  formData.append("username",values["username"]);
+  formData.append("password",values["password"]);
+  const response = await fetch(urlBack + "login.php", {
+    method: 'POST',
+    //headers: {'Content-Type':'application/json', 'Accept': 'application/json'},
+    body: formData,
+  })
+
+  const res = await response.json();
+  if(res["status"]==="1"){
+    console.log("LOGIN EXITOSO");
+    history.push("/Home");
+  }else{
+    console.log("ERROR");
+  }
  };
 
   return (

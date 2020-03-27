@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Typography from "@material-ui/core/Typography";
 import Dialog from "@material-ui/core/Dialog";
 import DialogContent from "@material-ui/core/DialogContent";
@@ -31,6 +31,9 @@ import Content from "../Components/Content";
 import ClearIcon from "@material-ui/icons/Clear";
 import { makeStyles } from "@material-ui/core/styles";
 import { TextField, InputAdornment } from "@material-ui/core";
+import { createPortal } from "react-dom";
+
+const urlBack = "http://localhost:4433/umarista-back/";
 
 const columns = [
   {
@@ -56,22 +59,6 @@ const columns = [
   }
 ];
 
-function createData(Nombre_de_Usiario, Nombre, Rango, Acciones) {
-  return { Nombre_de_Usiario, Nombre, Rango, Acciones };
-}
-
-const rows = [
-  createData("Gustavo García Sánchez", "Masculino", "22 años", "443-166-3698"),
-  createData("Gustavo García Sánchez", "Masculino", "22 años", "443-166-3698"),
-  createData("Gustavo García Sánchez", "Masculino", "22 años", "443-166-3698"),
-  createData("Gustavo García Sánchez", "Masculino", "22 años", "443-166-3698"),
-  createData("Gustavo García Sánchez", "Masculino", "22 años", "443-166-3698"),
-  createData("Gustavo García Sánchez", "Masculino", "22 años", "443-166-3698"),
-  createData("Gustavo García Sánchez", "Masculino", "22 años", "443-166-3698"),
-  createData("Gustavo García Sánchez", "Masculino", "22 años", "443-166-3698"),
-  createData("Gustavo García Sánchez", "Masculino", "22 años", "443-166-3698"),
-  createData("Gustavo García Sánchez", "Masculino", "22 años", "443-166-3698")
-];
 const useStyles = makeStyles(theme => ({
   root: {
     width: "60%",
@@ -89,7 +76,64 @@ const useStyles = makeStyles(theme => ({
     alignSelf: "center"
   }
 }));
+
 export default function Users() {
+  function createData(Nombre_de_Usiario, Nombre, Rango, Acciones) {
+    return { Nombre_de_Usiario, Nombre, Rango, Acciones };
+  }
+
+  const rows = [
+    createData("Admin", "Gustavo García Sánchez", "Admin"),
+    createData("Medico", "Adrián García Sánchez", "Medico"),
+    createData("admin", "Gustavo García Sánchez", "Medico"),
+    createData("admin", "Gustavo García Sánchez", "Pasante"),
+    createData("admin", "Gustavo García Sánchez", "Pasante")
+  ];
+
+  useEffect(() => {
+    async function fetchData() {
+      //const response = await fetch(urlBack+"cargar_usrs.php",{method: 'GET'});
+      //const json = await response.json();
+      //setData(json);
+      const response = await fetch(urlBack + "usrs_cargar.php", {
+        method: "GET"
+      })
+        .then(response => response.json())
+        .then(posts => {
+          setDatos(Object.values(posts));
+        });
+    }
+
+    fetchData();
+  }, []);
+
+  //var modificar = false;
+  //var id_item = "";
+
+  function deleteItem(item) {}
+
+  function dialogItem(item) {
+    setModificar(true);
+    setId_item(item.id_usuarios);
+    values.nombre_usuario = item.username;
+    values.nombre = item.nombre;
+    values.apaterno = item.ap_p;
+    values.amaterno = item.ap_m;
+    values.sexo = item.sexo;
+    values.rango = item.rango;
+    setOpen(true);
+  }
+
+  function dialogNuevo() {
+    setModificar(false);
+    values.nombre_usuario = "";
+    values.nombre = "";
+    values.apaterno = "";
+    values.amaterno = "";
+    values.sexo = "";
+    values.rango = "";
+  }
+
   const classes = useStyles();
   const [values, setValues] = React.useState({
     nombre_usuario: "",
@@ -101,6 +145,9 @@ export default function Users() {
     rango: "",
     showPassword: false
   });
+  const [id_item, setId_item] = React.useState();
+  const [modificar, setModificar] = React.useState();
+  const [datos, setDatos] = React.useState([]);
   const [pw1, setPw1] = React.useState();
   const [page, setPage] = React.useState(0);
   const [search, setSearch] = React.useState("");
@@ -131,15 +178,75 @@ export default function Users() {
     setPage(0);
   };
   const handleOpen = () => {
+    dialogNuevo();
     setOpen(true);
   };
   const handleClear = e => {
     console.log(search);
     setSearch("");
   };
-  const handleSubmit = e => {
-    setOpen(false);
-    console.log(values);
+  const handleSubmit = async e => {
+    e.preventDefault();
+    console.log(modificar);
+    if (modificar === true) {
+      console.log("modificar");
+      const formData = new FormData(e.target);
+      formData.append("username", values["nombre_usuario"]);
+      formData.append("nombre", values["nombre"]);
+      formData.append("ap_p", values["apaterno"]);
+      formData.append("ap_m", values["amaterno"]);
+      formData.append("sexo", values["sexo"]);
+      formData.append("rango", values["rango"]);
+      formData.append("password", values["password"]);
+      formData.append("id_usuario", id_item);
+      const response = await fetch(urlBack + "usr_editar.php", {
+        method: "POST",
+        /*headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json"
+        },*/
+        body: formData
+      });
+
+      const res = await response.json();
+
+      if (res["status"] === "1") {
+        setOpen(false);
+        console.log("Se modificó con exito");
+        window.location.reload();
+      } else {
+        console.log("ERROR");
+      }
+    } else {
+      console.log("agregar");
+      const formData = new FormData(e.target);
+      formData.append("username", values["nombre_usuario"]);
+      formData.append("nombre", values["nombre"]);
+      formData.append("ap_p", values["apaterno"]);
+      formData.append("ap_m", values["amaterno"]);
+      formData.append("sexo", values["sexo"]);
+      formData.append("rango", values["rango"]);
+      formData.append("password", values["password"]);
+      const response = await fetch(urlBack + "usr-nuevo.php", {
+        method: "POST",
+        /*headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json"
+        },*/
+        body: formData
+      });
+
+      const res = await response.json();
+
+      if (res["status"] === "1") {
+        setOpen(false);
+        console.log("Se creó con exito");
+        window.location.reload();
+      } else {
+        console.log("ERROR");
+      }
+      console.log(formData.get("username"));
+    }
   };
 
   return (
@@ -221,23 +328,21 @@ export default function Users() {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {rows
+                {datos
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .map(row => {
+                  .map((item, index) => {
                     return (
-                      <TableRow
-                        hover
-                        role="checkbox"
-                        tabIndex={-1}
-                        key={row.code}
-                      >
-                        <TableCell>Médico_01</TableCell>
-                        <TableCell>Gustavo García Sánchez</TableCell>
-                        <TableCell>Médico</TableCell>
+                      <TableRow hover role="checkbox" tabIndex={-1} key={index}>
+                        <TableCell>{item.username}</TableCell>
+                        <TableCell>
+                          {item.nombre + " " + item.ap_p + " " + item.ap_m}
+                        </TableCell>
+                        <TableCell>{item.rango}</TableCell>
                         <TableCell>
                           <IconButton
                             color="inherit"
                             aria-label="edit"
+                            onClick={() => dialogItem(item)}
                             style={{ padding: 0, marginRight: "13%" }}
                           >
                             <EditIcon />
@@ -245,6 +350,7 @@ export default function Users() {
                           <IconButton
                             color="inherit"
                             aria-label="edit"
+                            onClick={() => deleteItem()}
                             style={{ padding: 0, marginRight: "13%" }}
                           >
                             <DeleteForeverIcon />
@@ -281,8 +387,14 @@ export default function Users() {
         >
           <AddIcon />
         </Fab>
-        {/**
-         * Dialog de registro
+        {/*
+         * 
+         
+         
+         Dialog de registro
+         
+         
+         
          */}
         <Dialog open={open}>
           <DialogContent>
@@ -329,6 +441,9 @@ export default function Users() {
                   }}
                   error={values.nombre_usuario === ""}
                   onChange={handleChange("nombre_usuario")}
+                  value={
+                    values.nombre_usuario === "" ? "" : values.nombre_usuario
+                  }
                 />
                 <TextField
                   label="Nombre(s)"
@@ -355,6 +470,7 @@ export default function Users() {
                       : true
                   }
                   onChange={handleChange("nombre")}
+                  value={values.nombre === "" ? "" : values.nombre}
                 />
               </div>
               <div style={{ display: "flex" }}>
@@ -391,6 +507,7 @@ export default function Users() {
                       marginBottom: "2%"
                     }}
                     onChange={handleChange("apaterno")}
+                    value={values.apaterno === "" ? "" : values.apaterno}
                   />
                   <FormControl
                     variant="filled"
@@ -408,7 +525,7 @@ export default function Users() {
                       error={values.sexo === ""}
                       labelId="demo-simple-select-filled-label"
                       id="demo-simple-select-filled"
-                      value={values.sexo}
+                      value={values.sexo === "" ? "" : values.sexo}
                       onChange={handleChange("sexo")}
                     >
                       <MenuItem value="">
@@ -452,7 +569,6 @@ export default function Users() {
                           : true
                       }
                       type={values.showPassword ? "text" : "password"}
-                      value={pw1}
                       onChange={e => setPw1(e.target.value)}
                       endAdornment={
                         <InputAdornment position="end">
@@ -520,6 +636,7 @@ export default function Users() {
                         : true
                     }
                     onChange={handleChange("amaterno")}
+                    value={values.amaterno === "" ? "" : values.amaterno}
                   />
                   <FormControl
                     variant="filled"
@@ -535,7 +652,7 @@ export default function Users() {
                     <Select
                       labelId="demo-simple-select-filled-label"
                       id="demo-simple-select-filled"
-                      value={values.rango}
+                      value={values.rango === "" ? "" : values.rango}
                       required
                       error={values.rango === ""}
                       onChange={handleChange("rango")}
@@ -543,10 +660,8 @@ export default function Users() {
                       <MenuItem value="">
                         <em>None</em>
                       </MenuItem>
-                      <MenuItem value={"Médico"}>Médico</MenuItem>
-                      <MenuItem value={"Fisioterapeuta"}>
-                        Fisioterapeuta
-                      </MenuItem>
+                      <MenuItem value={"Medico"}>Médico</MenuItem>
+                      <MenuItem value={"Fisio"}>Fisioterapeuta</MenuItem>
                       <MenuItem value={"Pasante"}>Pasante</MenuItem>
                       <MenuItem value={"Practicante"}>Paracticante</MenuItem>
                     </Select>
@@ -642,9 +757,9 @@ export default function Users() {
                   )
                     ? false
                     : true) ||
-                  (values.rango === "" )||
-                  (values.sexo === "" )||
-                  (values.password !== pw1)||
+                  values.rango === "" ||
+                  values.sexo === "" ||
+                  values.password !== pw1 ||
                   (/^(?=.{5,}$)(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*\W).*$/.test(
                     pw1
                   )
