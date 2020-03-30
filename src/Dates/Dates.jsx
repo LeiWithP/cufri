@@ -6,15 +6,6 @@ import Card from "@material-ui/core/Card";
 import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import Calendar from "react-calendar";
-import Paper from "@material-ui/core/Paper";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableContainer from "@material-ui/core/TableContainer";
-import TableHead from "@material-ui/core/TableHead";
-import TablePagination from "@material-ui/core/TablePagination";
-import TableRow from "@material-ui/core/TableRow";
-import Radio from "@material-ui/core/Radio";
 import FormControl from "@material-ui/core/FormControl";
 import FormHelperText from "@material-ui/core/FormHelperText";
 import InputLabel from "@material-ui/core/InputLabel";
@@ -30,18 +21,17 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import Stepper from "@material-ui/core/Stepper";
 import Step from "@material-ui/core/Step";
-import { TextField, InputAdornment } from "@material-ui/core";
-import ClearIcon from "@material-ui/icons/Clear";
+import { TextField } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
 import AccessTimeIcon from "@material-ui/icons/AccessTime";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
-import SearchIcon from "@material-ui/icons/Search";
 import EditIcon from "@material-ui/icons/Edit";
 import CancelIcon from "@material-ui/icons/Cancel";
 import StepLabel from "@material-ui/core/StepLabel";
 import DateFnsUtils from "@date-io/date-fns";
 import Grid from "@material-ui/core/Grid";
 import { makeStyles } from "@material-ui/core/styles";
+import { Alert, AlertTitle } from '@material-ui/lab';
 /**
  * funcion donde se encuentran los pasos del steper
  */
@@ -53,31 +43,6 @@ function getSteps() {
     "Definir padecimiento"
   ];
 }
-/**
- * constante donde se definen las columnas de la tabla de pacientes en el dialog
- */
-const columns = [
-  {
-    id: "check",
-    minWidth: 70,
-    align: "left"
-  },
-  {
-    id: "Nombre_paciente",
-    label: "Nombre del paciente",
-    minWidth: 170,
-    align: "left"
-  },
-  {
-    id: "Telefono",
-    label: "Telefono",
-    minWidth: 170,
-    align: "left",
-    format: value => value.toLocaleString()
-  }
-];
-
-const rows = [1, 2, 3, 4, 5, 6, 7];
 
 /**
  * se definen los estilos aplicados a la interfaz
@@ -116,6 +81,20 @@ const useStyles = makeStyles(theme => ({
     flexDirection: "column",
     justifyContent: "space-between",
     width: "30%"
+  },
+  alert:{
+    position:"absolute",
+    bottom:0,
+    right:0,
+    transition:".5s",
+    cursor:"pointer"
+  },
+  alertclose:{
+    position:"absolute",
+    bottom:0,
+    right:0,
+    visibility:"hidden",
+    transition:".5s"
   }
 }));
 /**
@@ -126,14 +105,15 @@ export default function Dates() {
   const [values, setValues] = React.useState({
     fecha: new Date(),
     time: new Date(),
-    id: null,
-    tipoconsulta: ''
+    paciente: "",
+    tipoconsulta: "",
+    telefono:""
   });
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+
   const [calendarDate, setCalendardate] = React.useState(new Date());
   const [activeStep, setActiveStep] = React.useState(0);
-  const [search, setSearch] = React.useState("");
+  const [error,setError]= React.useState(false);
+  const [success,setSuccess]= React.useState(false);
   const steps = getSteps();
   const [open, setOpen] = React.useState(false);
   const handleChange = prop => event => {
@@ -149,19 +129,6 @@ export default function Dates() {
   const handleBack = () => {
     setActiveStep(prevActiveStep => prevActiveStep - 1);
   };
-  /**
-   *
-   * @param {evento} event
-   * handle para buscar y limpiar campo de busqueda
-   */
-  const handleSearch = event => {
-    event.preventDefault();
-    setSearch(event.target.value);
-  };
-  const handleClear = () => {
-    console.log(search);
-    setSearch("");
-  };
 
   /**
    *
@@ -172,26 +139,18 @@ export default function Dates() {
     setValues({ fecha: date });
   };
   /**
-   *
-   * @param {evento} event
-   * @param {nueva pagina} newPage
-   * handles para la paginación
-   */
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-  };
-
-  const handleChangeRowsPerPage = event => {
-    setRowsPerPage(+event.target.value);
-    setPage(0);
-  };
-  /**
    * handle para el cierre del dialog
    */
   const handleClose = () => {
     setOpen(false);
-    setActiveStep(0)
+    setActiveStep(0);
+    if (values.paciente===""||values.telefono===""||values.tipoconsulta==="") {
+      setError(true);
+    }
+    else{
+    setSuccess(true);
     console.log(values);
+  }
   };
   /**
    *
@@ -623,7 +582,9 @@ export default function Dates() {
                       );
                     case 2:
                       return (
-                        <div>
+                        <div
+                          style={{ display: "flex", flexDirection: "column" }}
+                        >
                           <Typography
                             style={{
                               fontSize: "20px",
@@ -632,123 +593,30 @@ export default function Dates() {
                               margin: "3%"
                             }}
                           >
-                            Buscar paciente
+                            Paciente
                           </Typography>
-                          <Paper className={classes.root}>
-                            <span
-                              style={{
-                                width: "100%",
-                                display: "flex",
-                                flexDirection: "row",
-                                justifyContent: "space-between"
-                              }}
-                            >
-                              <Typography
-                                style={{
-                                  fontSize: "25px",
-                                  fontWeight: "bolder",
-                                  fontFamily: "Roboto",
-                                  margin: "3%"
-                                }}
-                              >
-                                Pacientes
-                              </Typography>
-                              <TextField
-                                id="standard-bare"
-                                margin="normal"
-                                placeholder="Buscar"
-                                value={search}
-                                onChange={handleSearch}
-                                InputProps={{
-                                  startAdornment: (
-                                    <InputAdornment position="end">
-                                      <SearchIcon />
-                                    </InputAdornment>
-                                  ),
-                                  endAdornment: (
-                                    <InputAdornment
-                                      position="end"
-                                      style={{ cursor: "pointer" }}
-                                      onClick={handleClear}
-                                    >
-                                      <ClearIcon />
-                                    </InputAdornment>
-                                  )
-                                }}
-                                style={{
-                                  color: "#e0e0e0",
-                                  alignSelf: "center",
-                                  marginRight: "3%",
-                                  width: "35%"
-                                }}
-                              />
-                            </span>
-                            <TableContainer className={classes.container}>
-                              <Table stickyHeader aria-label="sticky table">
-                                <TableHead>
-                                  <TableRow>
-                                    {columns.map(column => (
-                                      <TableCell
-                                        key={column.id}
-                                        align={column.align}
-                                        style={{
-                                          minWidth: column.minWidth,
-                                          fontWeight: "bold"
-                                        }}
-                                      >
-                                        {column.label}
-                                      </TableCell>
-                                    ))}
-                                  </TableRow>
-                                </TableHead>
-                                <TableBody>
-                                  {rows
-                                    .slice(
-                                      page * rowsPerPage,
-                                      page * rowsPerPage + rowsPerPage
-                                    )
-                                    .map(row => {
-                                      return (
-                                        <TableRow
-                                          hover
-                                          role="checkbox"
-                                          tabIndex={-1}
-                                          key={row}
-                                        >
-                                          <TableCell>
-                                            <Radio
-                                              onChange={e => {
-                                                setValues({
-                                                  id: e.target.value
-                                                });
-                                              }}
-                                              value={row}
-                                              color={"primary"}
-                                            />
-                                          </TableCell>
-                                          <TableCell>
-                                            Gustavo García Sánchez
-                                          </TableCell>
-                                          <TableCell>443-188-6353</TableCell>
-                                        </TableRow>
-                                      );
-                                    })}
-                                </TableBody>
-                              </Table>
-                            </TableContainer>
-                            <TablePagination
-                              rowsPerPageOptions={[
-                                5,
-                                { label: "All", value: -1 }
-                              ]}
-                              component="div"
-                              count={rows.length}
-                              rowsPerPage={rowsPerPage}
-                              page={page}
-                              onChangePage={handleChangePage}
-                              onChangeRowsPerPage={handleChangeRowsPerPage}
-                            />
-                          </Paper>
+                          <TextField
+                            label="Nombre del paciente"
+                            helperText="Ingresa nombre del paciente"
+                            onChange={handleChange("paciente")}
+                            style={{
+                              marginLeft: "6%",
+                              marginBottom: "6%",
+                              alignSelf: "center",
+                              width: "100%"
+                            }}
+                          />
+                          <TextField
+                            label="Teléfono del paciente"
+                            helperText="Ingresa teléfono del paciente"
+                            onChange={handleChange("telefono")}
+                            style={{
+                              marginLeft: "6%",
+                              marginBottom: "6%",
+                              alignSelf: "center",
+                              width: "100%"
+                            }}
+                          />
                         </div>
                       );
                     case 3:
@@ -764,10 +632,9 @@ export default function Dates() {
                               margin: "3%"
                             }}
                           >
-                            Definir padecimiento
+                            Tipo de consulta
                           </Typography>
                           <FormControl
-                            variant="filled"
                             className={classes.formControl}
                             style={{ marginBottom: "2%" }}
                           >
@@ -783,9 +650,15 @@ export default function Dates() {
                               <MenuItem value="">
                                 <em>None</em>
                               </MenuItem>
-                              <MenuItem value={"Primera vez"}>Primera vez</MenuItem>
-                              <MenuItem value={"Fisioterapia"}>Fisioterapia</MenuItem>
-                              <MenuItem value={"Hidroterapia"}>Hidroterapia</MenuItem>
+                              <MenuItem value={"Primera vez"}>
+                                Primera vez
+                              </MenuItem>
+                              <MenuItem value={"Fisioterapia"}>
+                                Fisioterapia
+                              </MenuItem>
+                              <MenuItem value={"Hidroterapia"}>
+                                Hidroterapia
+                              </MenuItem>
                             </Select>
                             <FormHelperText id="standard-weight-helper-text">
                               Seleccione el tipo de consulta
@@ -820,6 +693,14 @@ export default function Dates() {
             </div>
           </DialogContent>
         </Dialog>
+        <Alert severity="error" onClick={()=>{setError(false)}} className={error===true?classes.alert:classes.alertclose}>
+        <AlertTitle>Error</AlertTitle>
+        No se creo de manera adecuada la cita vuelva a intentarlo
+      </Alert>
+      <Alert severity="success" onClick={()=>{setSuccess(false)}} className={success===true?classes.alert:classes.alertclose}>
+        <AlertTitle>Success</AlertTitle>
+        Se ha agendado la cita de manera exitosa
+      </Alert>
       </div>
     </Content>
   );
