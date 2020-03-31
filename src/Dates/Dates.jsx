@@ -644,7 +644,6 @@ export default function Dates() {
                             <Select
                               labelId="demo-simple-select-filled-label"
                               id="demo-simple-select-filled"
-                              value={values.tipoconsulta}
                               onChange={handleChange("tipoconsulta")}
                             >
                               <MenuItem value="">
