@@ -201,9 +201,9 @@ export default function Statistics() {
                 label="Titulo"
                 inputProps={{ maxLength: 80 }}
                 required
-                error={/^[a-zñáéíóúA-ZÑÁÉÍÓÚ0-9]+$/.test(data.titulo) ? false : true}
+                error={ /^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$/.test(data.titulo) ? false : true}
                 helperText={
-                  /^[a-zñáéíóúA-ZÑÁÉÍÓÚ0-9]+$/.test(data.titulo)
+                  /^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$/.test(data.titulo)
                     ? "Ingresa el titulo del video"
                     : "El título no puede contener caracteres especiales"
                 }
@@ -217,11 +217,11 @@ export default function Statistics() {
                   label="Región del Padecimiento"
                   inputProps={{ maxLength: 60 }}
                   required
-                  helperText={/^[a-zñáéíóúA-ZÑÁÉÍÓÚ0-9]+$/.test(data.region_padecimiento)
+                  helperText={ /^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$/.test(data.region_padecimiento)
                     ? "Ingrese región del padecimiento"
                     : "No puede contener caracteres especiales"}
                   variant="filled"
-                  error={/^[a-zñáéíóúA-ZÑÁÉÍÓÚ0-9]+$/.test(data.region_padecimiento)?false:true}
+                  error={ /^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$/.test(data.region_padecimiento)?false:true}
                   value={data.region_padecimiento}
                   onChange={handleChange("region_padecimiento")}
                   style={{ width: "47%" }}
@@ -231,11 +231,11 @@ export default function Statistics() {
                   inputProps={{ maxLength: 60 }}
                   required
                   label="Área específica"
-                  helperText={/^[a-zñáéíóúA-ZÑÁÉÍÓÚ0-9]+$/.test(data.area_especifica)
+                  helperText={ /^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$/.test(data.area_especifica)
                     ? "Ingrese el área específica"
                     : "No puede contener caracteres especiales"}
                   variant="filled"
-                  error={/^[a-zñáéíóúA-ZÑÁÉÍÓÚ0-9]+$/.test(data.area_especifica)?false:true}
+                  error={ /^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$/.test(data.area_especifica)?false:true}
                   value={data.area_especifica}
                   onChange={handleChange("area_especifica")}
                   style={{ width: "47%" }}
@@ -273,9 +273,9 @@ export default function Statistics() {
                 )
                   ? false
                   : true) ||
-                (/^[a-zñáéíóúA-ZÑÁÉÍÓÚ0-9]+$/.test(data.titulo) ? false : true)||
-                (/^[a-zñáéíóúA-ZÑÁÉÍÓÚ0-9]+$/.test(data.region_padecimiento)?false:true)||
-                (/^[a-zñáéíóúA-ZÑÁÉÍÓÚ0-9]+$/.test(data.area_especifica)?false:true)||
+                ( /^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$/.test(data.titulo) ? false : true)||
+                ( /^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$/.test(data.region_padecimiento)?false:true)||
+                ( /^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$/.test(data.area_especifica)?false:true)||
                 (/^[a-zA-Z0-9 ][ \w].+[a-zA-Z0-9 ]+$/.test(data.observaciones)?false:true)
               }
             >

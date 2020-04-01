@@ -31,7 +31,7 @@ import StepLabel from "@material-ui/core/StepLabel";
 import DateFnsUtils from "@date-io/date-fns";
 import Grid from "@material-ui/core/Grid";
 import { makeStyles } from "@material-ui/core/styles";
-import { Alert, AlertTitle } from '@material-ui/lab';
+import { Alert, AlertTitle } from "@material-ui/lab";
 /**
  * funcion donde se encuentran los pasos del steper
  */
@@ -82,19 +82,19 @@ const useStyles = makeStyles(theme => ({
     justifyContent: "space-between",
     width: "30%"
   },
-  alert:{
-    position:"absolute",
-    bottom:0,
-    right:0,
-    transition:".5s",
-    cursor:"pointer"
+  alert: {
+    position: "absolute",
+    bottom: 0,
+    right: 0,
+    transition: ".5s",
+    cursor: "pointer"
   },
-  alertclose:{
-    position:"absolute",
-    bottom:0,
-    right:0,
-    visibility:"hidden",
-    transition:".5s"
+  alertclose: {
+    position: "absolute",
+    bottom: 0,
+    right: 0,
+    visibility: "hidden",
+    transition: ".5s"
   }
 }));
 /**
@@ -107,13 +107,13 @@ export default function Dates() {
     time: new Date(),
     paciente: "",
     tipoconsulta: "",
-    telefono:""
+    telefono: ""
   });
 
   const [calendarDate, setCalendardate] = React.useState(new Date());
   const [activeStep, setActiveStep] = React.useState(0);
-  const [error,setError]= React.useState(false);
-  const [success,setSuccess]= React.useState(false);
+  const [error, setError] = React.useState(false);
+  const [success, setSuccess] = React.useState(false);
   const steps = getSteps();
   const [open, setOpen] = React.useState(false);
   const handleChange = prop => event => {
@@ -144,13 +144,20 @@ export default function Dates() {
   const handleClose = () => {
     setOpen(false);
     setActiveStep(0);
-    if (values.paciente===""||values.telefono===""||values.tipoconsulta==="") {
+    if (
+      values.paciente === "" ||
+      values.telefono === "" ||
+      values.tipoconsulta === "" ||
+      /^(\+?)[1-9]{1}[0-9]{5,11}$/.test(values.telefono) === false||
+      /^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$/.test(
+        values.paciente
+      )===false
+    ) {
       setError(true);
+    } else {
+      setSuccess(true);
+      console.log(values);
     }
-    else{
-    setSuccess(true);
-    console.log(values);
-  }
   };
   /**
    *
@@ -565,7 +572,7 @@ export default function Dates() {
                               label="Time picker"
                               value={values.time}
                               onChange={e => {
-                                setValues({ time: e });
+                                setValues({ time: e.getHours() });
                               }}
                               KeyboardButtonProps={{
                                 "aria-label": "change time"
@@ -597,7 +604,20 @@ export default function Dates() {
                           </Typography>
                           <TextField
                             label="Nombre del paciente"
-                            helperText="Ingresa nombre del paciente"
+                            helperText={
+                              /^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$/.test(
+                                values.paciente
+                              )
+                                ? "Ingresa nombre del paciente"
+                                : "No puede contener caracteres especiales"
+                            }
+                            error={
+                              /^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$/.test(
+                                values.paciente
+                              )
+                                ? false
+                                : true
+                            }
                             onChange={handleChange("paciente")}
                             style={{
                               marginLeft: "6%",
@@ -608,8 +628,17 @@ export default function Dates() {
                           />
                           <TextField
                             label="Teléfono del paciente"
-                            helperText="Ingresa teléfono del paciente"
+                            helperText={
+                              /^(\+?)[1-9]{1}[0-9]{5,11}$/.test(values.telefono)
+                                ? "Ingresa teléfono del paciente"
+                                : "Ingresa un teléfono valido"
+                            }
                             onChange={handleChange("telefono")}
+                            error={
+                              /^(\+?)[1-9]{1}[0-9]{5,11}$/.test(values.telefono)
+                                ? false
+                                : true
+                            }
                             style={{
                               marginLeft: "6%",
                               marginBottom: "6%",
@@ -644,6 +673,12 @@ export default function Dates() {
                             <Select
                               labelId="demo-simple-select-filled-label"
                               id="demo-simple-select-filled"
+                              error={values.tipoconsulta===""}
+                              value={
+                                values.tipoconsulta === ""
+                                  ? ""
+                                  : values.tipoconsulta
+                              }
                               onChange={handleChange("tipoconsulta")}
                             >
                               <MenuItem value="">
@@ -660,7 +695,7 @@ export default function Dates() {
                               </MenuItem>
                             </Select>
                             <FormHelperText id="standard-weight-helper-text">
-                              Seleccione el tipo de consulta
+                              {values.tipoconsulta===""?"Seleccione el tipo de consulta":"Debe seleccionar uno"}
                             </FormHelperText>
                           </FormControl>
                         </div>
@@ -692,14 +727,26 @@ export default function Dates() {
             </div>
           </DialogContent>
         </Dialog>
-        <Alert severity="error" onClick={()=>{setError(false)}} className={error===true?classes.alert:classes.alertclose}>
-        <AlertTitle>Error</AlertTitle>
-        No se creo de manera adecuada la cita vuelva a intentarlo
-      </Alert>
-      <Alert severity="success" onClick={()=>{setSuccess(false)}} className={success===true?classes.alert:classes.alertclose}>
-        <AlertTitle>Success</AlertTitle>
-        Se ha agendado la cita de manera exitosa
-      </Alert>
+        <Alert
+          severity="error"
+          onClick={() => {
+            setError(false);
+          }}
+          className={error === true ? classes.alert : classes.alertclose}
+        >
+          <AlertTitle>Error</AlertTitle>
+          No se creo de manera adecuada la cita vuelva a intentarlo
+        </Alert>
+        <Alert
+          severity="success"
+          onClick={() => {
+            setSuccess(false);
+          }}
+          className={success === true ? classes.alert : classes.alertclose}
+        >
+          <AlertTitle>Success</AlertTitle>
+          Se ha agendado la cita de manera exitosa
+        </Alert>
       </div>
     </Content>
   );
