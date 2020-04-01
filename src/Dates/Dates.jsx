@@ -104,6 +104,7 @@ function addZero(i) {
   return i;
 }
 
+
 const citas =[
   {
     paciente:"Gustavo García Sánchez",
@@ -118,7 +119,7 @@ const citas =[
     edad:22,
     telefono:"443-165-3698",
     tipoconsulta:" Fisioterapia",
-    fecha:"2020-04-01",
+    fecha:"2020-04-02",
     hora:"16:00"
   },
 ]
@@ -190,9 +191,9 @@ export default function Dates() {
    * handle para guardar la fecha seleccionada en el calendario
    */
   const handleDate = e => {
+    console.log(calendarDate.getUTCDate());
+    console.log(new Date("2020-04-01").getUTCDate());
     setCalendardate(e);
-    console.log(calendarDate.toLocaleDateString());
-    console.log(new Date().getDate("2020-04-01"));
   };
   return (
     <Content nombre="Citas" select="citas">
@@ -261,7 +262,7 @@ export default function Dates() {
           </Typography>
           <Grid container spacing={3} style={{ padding: "2%",overflowY:"scroll" }}>
             {citas.map(cita=>(
-              calendarDate.getDate()===(new Date().getDate(cita.fecha))?
+              calendarDate.getUTCDate()===(new Date(cita.fecha).getUTCDate())?
               (<Grid item xs={6}>
               <Card className={classes.tarjeta}>
                 <CardContent style={{ backgroundColor: "#61B4E4" }}>

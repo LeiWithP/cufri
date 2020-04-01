@@ -153,6 +153,7 @@ export default function Users() {
   const [search, setSearch] = React.useState("");
   const [open, setOpen] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [borrar, setBorrar] = React.useState(false);
   const handleSearch = event => {
     event.preventDefault();
     setSearch(event.target.value);
@@ -184,6 +185,10 @@ export default function Users() {
   const handleClear = e => {
     console.log(search);
     setSearch("");
+  };
+  const handleDelete = () => {
+    setBorrar(false);
+    deleteItem();
   };
   const handleSubmit = async e => {
     e.preventDefault();
@@ -350,7 +355,7 @@ export default function Users() {
                           <IconButton
                             color="inherit"
                             aria-label="edit"
-                            onClick={() => deleteItem()}
+                            onClick={() => setBorrar(true)}
                             style={{ padding: 0, marginRight: "13%" }}
                           >
                             <DeleteForeverIcon />
@@ -387,6 +392,43 @@ export default function Users() {
         >
           <AddIcon />
         </Fab>
+        {/**
+         * Dialog de confirmacion para borrar
+         */}
+        <Dialog open={borrar}>
+          <DialogContent>
+            <Typography style={{ fontSize: "larger", textAlign: "center" }}>
+              ¿Está seguro que quiere borrar este usuario?
+            </Typography>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "flex-end",
+                width: "70%"
+              }}
+            >
+              <Button
+                onClick={handleDelete}
+                style={{
+                  backgroundColor: "#FFC107",
+                  color: "white",
+                  marginTop: "1vh",
+                  alignSelf: "center"
+                }}
+              >
+                Si
+              </Button>
+              <Button
+                onClick={() => {
+                  setBorrar(false);
+                }}
+                style={{color:"black"}}
+              >
+                No
+              </Button>
+            </div>
+          </DialogContent>
+        </Dialog>
         {/*
          * 
          
