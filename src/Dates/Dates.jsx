@@ -97,6 +97,31 @@ const useStyles = makeStyles(theme => ({
     transition: ".5s"
   }
 }));
+function addZero(i) {
+  if (i < 10) {
+    i = "0" + i;
+  }
+  return i;
+}
+
+const citas =[
+  {
+    paciente:"Gustavo García Sánchez",
+    edad:22,
+    telefono:"443-165-3698",
+    tipoconsulta:" Fisioterapia",
+    fecha:"2020-04-01",
+    hora:"12:00"
+  },
+  {
+    paciente:"Gustavo García Sánchez",
+    edad:22,
+    telefono:"443-165-3698",
+    tipoconsulta:" Fisioterapia",
+    fecha:"2020-04-01",
+    hora:"16:00"
+  },
+]
 /**
  * función principal del componente
  */
@@ -166,7 +191,8 @@ export default function Dates() {
    */
   const handleDate = e => {
     setCalendardate(e);
-    console.log(calendarDate);
+    console.log(calendarDate.toLocaleDateString());
+    console.log(new Date().getDate("2020-04-01"));
   };
   return (
     <Content nombre="Citas" select="citas">
@@ -233,8 +259,10 @@ export default function Dates() {
           >
             Citas de hoy
           </Typography>
-          <Grid container spacing={3} style={{ padding: "2%" }}>
-            <Grid item xs={6}>
+          <Grid container spacing={3} style={{ padding: "2%",overflowY:"scroll" }}>
+            {citas.map(cita=>(
+              calendarDate.getDate()===(new Date().getDate(cita.fecha))?
+              (<Grid item xs={6}>
               <Card className={classes.tarjeta}>
                 <CardContent style={{ backgroundColor: "#61B4E4" }}>
                   <Typography
@@ -244,18 +272,18 @@ export default function Dates() {
                       fontWeight: "bolder"
                     }}
                   >
-                    Gustavo García Sánchez
+                    {cita.paciente}
                   </Typography>
                   <div style={{ display: "flex" }}>
                     <Typography style={{ color: "white", marginRight: "5%" }}>
-                      22años
+                      {cita.edad} años
                     </Typography>
                     <Typography style={{ color: "white" }}>
-                      443-165-3698
+                      {cita.telefono}
                     </Typography>
                   </div>
                   <Typography style={{ color: "white", fontSize: "small" }}>
-                    Tipo de Consulta: Fisioterapia
+                    Tipo de Consulta: {cita.tipoconsulta}
                   </Typography>
                 </CardContent>
                 <CardActions
@@ -276,7 +304,7 @@ export default function Dates() {
                         marginLeft: "3%"
                       }}
                     >
-                      08:00-09:00
+                      {new Date('1970-01-01T'+cita.hora).getHours()}:{addZero(new Date('1970-01-01T'+cita.hora).getMinutes())}-{new Date('1970-01-01T'+cita.hora).getHours()+1}:{addZero(new Date('1970-01-01T'+cita.hora).getMinutes())}
                     </Typography>
                   </div>
                   <div
@@ -310,161 +338,7 @@ export default function Dates() {
                   </div>
                 </CardActions>
               </Card>
-            </Grid>
-            <Grid item xs={6}>
-              <Card className={classes.tarjeta}>
-                <CardContent style={{ backgroundColor: "#61B4E4" }}>
-                  <Typography
-                    style={{
-                      color: "white",
-                      fontSize: "Large",
-                      fontWeight: "bolder"
-                    }}
-                  >
-                    Gustavo García Sánchez
-                  </Typography>
-                  <div style={{ display: "flex" }}>
-                    <Typography style={{ color: "white", marginRight: "5%" }}>
-                      22años
-                    </Typography>
-                    <Typography style={{ color: "white" }}>
-                      443-165-3698
-                    </Typography>
-                  </div>
-                  <Typography style={{ color: "white", fontSize: "small" }}>
-                    Tipo de Consulta: Fisioterapia
-                  </Typography>
-                </CardContent>
-                <CardActions
-                  style={{
-                    backgroundColor: "#003764",
-                    display: "flex",
-                    flexDirection: "row",
-                    justifyContent: "space-between"
-                  }}
-                >
-                  <div style={{ display: "flex", width: "50%" }}>
-                    <AccessTimeIcon style={{ color: "white" }} />
-                    <Typography
-                      style={{
-                        color: "white",
-                        fontSize: "small",
-                        alignSelf: "center",
-                        marginLeft: "3%"
-                      }}
-                    >
-                      08:00-09:00
-                    </Typography>
-                  </div>
-                  <div
-                    style={{
-                      display: "flex",
-                      width: "40%",
-                      justifyContent: "flex-end"
-                    }}
-                  >
-                    <CheckCircleIcon
-                      style={{
-                        color: "white",
-                        paddingRight: "5%",
-                        cursor: "pointer"
-                      }}
-                    />
-                    <EditIcon
-                      style={{
-                        color: "white",
-                        paddingRight: "5%",
-                        cursor: "pointer"
-                      }}
-                    />
-                    <CancelIcon
-                      style={{
-                        color: "white",
-                        paddingRight: "5%",
-                        cursor: "pointer"
-                      }}
-                    />
-                  </div>
-                </CardActions>
-              </Card>
-            </Grid>
-            <Grid item xs={6}>
-              <Card className={classes.tarjeta}>
-                <CardContent style={{ backgroundColor: "#61B4E4" }}>
-                  <Typography
-                    style={{
-                      color: "white",
-                      fontSize: "Large",
-                      fontWeight: "bolder"
-                    }}
-                  >
-                    Gustavo García Sánchez
-                  </Typography>
-                  <div style={{ display: "flex" }}>
-                    <Typography style={{ color: "white", marginRight: "5%" }}>
-                      22años
-                    </Typography>
-                    <Typography style={{ color: "white" }}>
-                      443-165-3698
-                    </Typography>
-                  </div>
-                  <Typography style={{ color: "white", fontSize: "small" }}>
-                    Tipo de Consulta: Fisioterapia
-                  </Typography>
-                </CardContent>
-                <CardActions
-                  style={{
-                    backgroundColor: "#003764",
-                    display: "flex",
-                    flexDirection: "row",
-                    justifyContent: "space-between"
-                  }}
-                >
-                  <div style={{ display: "flex", width: "50%" }}>
-                    <AccessTimeIcon style={{ color: "white" }} />
-                    <Typography
-                      style={{
-                        color: "white",
-                        fontSize: "small",
-                        alignSelf: "center",
-                        marginLeft: "3%"
-                      }}
-                    >
-                      08:00-09:00
-                    </Typography>
-                  </div>
-                  <div
-                    style={{
-                      display: "flex",
-                      width: "40%",
-                      justifyContent: "flex-end"
-                    }}
-                  >
-                    <CheckCircleIcon
-                      style={{
-                        color: "white",
-                        paddingRight: "5%",
-                        cursor: "pointer"
-                      }}
-                    />
-                    <EditIcon
-                      style={{
-                        color: "white",
-                        paddingRight: "5%",
-                        cursor: "pointer"
-                      }}
-                    />
-                    <CancelIcon
-                      style={{
-                        color: "white",
-                        paddingRight: "5%",
-                        cursor: "pointer"
-                      }}
-                    />
-                  </div>
-                </CardActions>
-              </Card>
-            </Grid>
+            </Grid>):""))}
           </Grid>
         </Card>
         {/**
@@ -572,7 +446,7 @@ export default function Dates() {
                               label="Time picker"
                               value={values.time}
                               onChange={e => {
-                                setValues({ time: e.getHours() });
+                                setValues({...values,time: e});
                               }}
                               KeyboardButtonProps={{
                                 "aria-label": "change time"
@@ -681,7 +555,7 @@ export default function Dates() {
                               }
                               onChange={handleChange("tipoconsulta")}
                             >
-                              <MenuItem value="">
+                              <MenuItem value={''}>
                                 <em>None</em>
                               </MenuItem>
                               <MenuItem value={"Primera vez"}>
