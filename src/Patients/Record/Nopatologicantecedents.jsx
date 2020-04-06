@@ -1,7 +1,7 @@
 import React from 'react'
 import { makeStyles } from "@material-ui/core/styles";
 import {Typography} from "@material-ui/core";
-import Content from '../../Components/Content'
+import Content from '../../Components/ContentExp'
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 import FormGroup from "@material-ui/core/FormGroup";
 import Checkbox from "@material-ui/core/Checkbox";
@@ -56,7 +56,7 @@ export default function Nopatologic(){
       history.push("/Patients/Antecedentes patologicos")
     }
     return(
-        <Content nombre="Pacientes" select="pacientes">
+        <Content nombre="Pacientes" select="antnopatologicos">
              <div
         style={{
           width: "100%",

@@ -255,7 +255,7 @@ export default function Users() {
   };
 
   return (
-    <Content nombre="Usuarios" select="usuarios">
+    <Content nombre="Usuarios" type="Medico" select="usuarios">
       <div
         style={{
           width: "100%",

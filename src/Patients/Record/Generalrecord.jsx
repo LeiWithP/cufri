@@ -1,6 +1,6 @@
 import React from 'react'
 import { makeStyles } from "@material-ui/core/styles";
-import Content from "../../Components/Content";
+import Content from "../../Components/ContentExp";
 import {Typography} from "@material-ui/core";
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 import Fab from "@material-ui/core/Fab";
@@ -58,7 +58,7 @@ const handleNext = ()=>{
   history.push("/Patients/Examen físico")
 }
   return (
-    <Content nombre="Pacientes" select="pacientes">
+    <Content nombre="Pacientes" select="padecimientos">
       <div
         style={{
           width: "100%",

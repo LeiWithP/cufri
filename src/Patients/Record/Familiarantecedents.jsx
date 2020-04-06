@@ -1,6 +1,6 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import Content from "../../Components/Content";
+import Content from "../../Components/ContentExp";
 import {Typography} from "@material-ui/core";
 import Cardexp from '../../Components/Cardrecord';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
@@ -54,7 +54,7 @@ export default function Antecedentes() {
     history.push("/Patients/Antecedentes no patologicos")
   }
   return (
-    <Content nombre="Pacientes" select="pacientes">
+    <Content nombre="Pacientes" select="afamiliares">
       <div
         style={{
           width: "100%",

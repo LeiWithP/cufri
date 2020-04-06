@@ -17,7 +17,7 @@ const useStyles = makeStyles(theme => ({
 export default function Main(){
     const classes =useStyles();
     return(
-        <Content nombre="Home">
+        <Content type="Medico" nombre="Home">
             <img src={Logo} alt="" width="30%" className={classes.image}/>
         </Content>
     );

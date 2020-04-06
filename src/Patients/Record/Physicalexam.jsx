@@ -1,7 +1,7 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { Typography, Card, TextField } from "@material-ui/core";
-import Content from "../../Components/Content";
+import Content from "../../Components/ContentExp";
 import NavigateNextIcon from "@material-ui/icons/NavigateNext";
 import Fab from "@material-ui/core/Fab";
 import {useHistory} from 'react-router-dom';
@@ -124,10 +124,10 @@ export default function Pysicalexam() {
     "Pie(Pie equino, plano, cavo)":""
   });
   const handleNext =()=>{
-    history.push("/patients")
+    history.push("/patients/Postura")
   }
   return (
-    <Content nombre="Pacientes" select="pacientes">
+    <Content nombre="Pacientes" select="efisica">
       <div
         style={{
           width: "100%",

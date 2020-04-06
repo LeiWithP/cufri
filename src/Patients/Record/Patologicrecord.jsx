@@ -1,7 +1,7 @@
 import React from 'react'
 import { makeStyles } from "@material-ui/core/styles";
 import {Typography} from "@material-ui/core";
-import Content from '../../Components/Content'
+import Content from '../../Components/ContentExp'
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 import Fab from "@material-ui/core/Fab";
 import CardnP from '../../Components/Cardnopatologic';
@@ -44,7 +44,7 @@ export default function Nopatologic(){
       history.push("/Patients/Antecedentes Gineco-obstetricos")
     }
     return(
-        <Content nombre="Pacientes" select="pacientes">
+        <Content nombre="Pacientes" select="apatologicos">
              <div
         style={{
           width: "100%",

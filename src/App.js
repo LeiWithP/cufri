@@ -10,6 +10,10 @@ import Recordp4 from './Patients/Record/Patologicrecord';
 import Recordp5 from './Patients/Record/Ginecoobstetricrecord';
 import Recordp6 from './Patients/Record/Generalrecord';
 import Recordp7 from './Patients/Record/Physicalexam';
+import Recordp8 from './Patients/Record/Postura';
+import Recordp9 from './Patients/Record/Dermatomas';
+import Recordp10 from './Patients/Record/Diagnostico';
+import Recordp12 from './Patients/Record/Mapadolor';
 import Usuers from './Users/Users';
 import Stats from './Statistics/Statistics';
 import Videos from './Videos/Videos';
@@ -51,6 +55,18 @@ export default function App() {
               </Route>
               <Route exact path="/Patients/Examen físico">
                   <Recordp7/>
+              </Route>
+              <Route exact path="/Patients/Postura">
+                  <Recordp8/>
+              </Route>
+              <Route exact path="/Patients/Dermatomas mitomas y pares craneales">
+                  <Recordp9/>
+              </Route>
+              <Route exact path="/Patients/Diagnóstico y plan fisioterapéutico">
+                  <Recordp10/>
+              </Route>
+              <Route exact path="/Patients/Mapa del dolor">
+                  <Recordp12/>
               </Route>
               <Route exact path="/Users">
                   <Usuers/>
