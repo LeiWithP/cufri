@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Content from "../Components/Content";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
@@ -32,6 +32,10 @@ import DateFnsUtils from "@date-io/date-fns";
 import Grid from "@material-ui/core/Grid";
 import { makeStyles } from "@material-ui/core/styles";
 import { Alert, AlertTitle } from "@material-ui/lab";
+import { format } from "date-fns";
+
+const urlBack = "http://localhost:4433/umarista-back/";
+
 /**
  * funcion donde se encuentran los pasos del steper
  */
@@ -104,28 +108,47 @@ function addZero(i) {
   return i;
 }
 
-const citas =[
+const citas = [
   {
-    paciente:"Gustavo García Sánchez",
-    edad:22,
-    telefono:"443-165-3698",
-    tipoconsulta:" Fisioterapia",
-    fecha:"2020-04-01",
-    hora:"12:00"
+    paciente: "Gustavo García Sánchez",
+    edad: 22,
+    telefono: "443-165-3698",
+    tipoconsulta: " Fisioterapia",
+    fecha: "2020-04-01",
+    hora: "12:00"
   },
   {
-    paciente:"Gustavo García Sánchez",
-    edad:22,
-    telefono:"443-165-3698",
-    tipoconsulta:" Fisioterapia",
-    fecha:"2020-04-01",
-    hora:"16:00"
-  },
-]
+    paciente: "Gustavo García Sánchez",
+    edad: 22,
+    telefono: "443-165-3698",
+    tipoconsulta: " Fisioterapia",
+    fecha: "2020-04-01",
+    hora: "16:00"
+  }
+];
 /**
  * función principal del componente
  */
 export default function Dates() {
+  useEffect(() => {
+    //console.log(format(calendarDate, "HH:mm"));
+    async function fetchData() {
+      const formData = new FormData();
+      formData.append("fecha", format(calendarDate, "yyyy-MM-dd"));
+      const response = await fetch(urlBack + "citas_cargar.php", {
+        method: "POST",
+        body: formData
+      })
+        .then(response => response.json())
+        .then(posts => {
+          console.log(Object.values(posts));
+          setDatos(Object.values(posts));
+        });
+    }
+
+    fetchData();
+  }, []);
+
   const classes = useStyles();
   const [values, setValues] = React.useState({
     fecha: new Date(),
@@ -135,6 +158,8 @@ export default function Dates() {
     telefono: ""
   });
 
+  const [modificar, setModificar] = React.useState(true);
+  const [datos, setDatos] = React.useState([]);
   const [calendarDate, setCalendardate] = React.useState(new Date());
   const [activeStep, setActiveStep] = React.useState(0);
   const [error, setError] = React.useState(false);
@@ -173,26 +198,111 @@ export default function Dates() {
       values.paciente === "" ||
       values.telefono === "" ||
       values.tipoconsulta === "" ||
-      /^(\+?)[1-9]{1}[0-9]{5,11}$/.test(values.telefono) === false||
+      /^(\+?)[1-9]{1}[0-9]{5,11}$/.test(values.telefono) === false ||
       /^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$/.test(
         values.paciente
-      )===false
+      ) === false
     ) {
       setError(true);
     } else {
-      setSuccess(true);
-      console.log(values);
+      agendar();
+      //setSuccess(true);
+      //console.log(values);
     }
+    /*FALTARÁ REAGENDAR*/
   };
+
+  async function atenderCita(item) {
+    const formData = new FormData();
+    formData.append("estado", "Atendido");
+    formData.append("id_cita", item.id_citas);
+    const response = await fetch(urlBack + "citas_estado.php", {
+      method: "POST",
+      body: formData
+    });
+
+    const res = await response.json();
+
+    if (res["status"] === "1") {
+      console.log("Se modificó con exito");
+      window.location.reload();
+    } else {
+      console.log("ERROR");
+    }
+  }
+
+  async function cancelarCita(item) {
+    const formData = new FormData();
+    formData.append("estado", "Cancelado");
+    formData.append("id_cita", item.id_citas);
+    const response = await fetch(urlBack + "citas_estado.php", {
+      method: "POST",
+      body: formData
+    });
+
+    const res = await response.json();
+
+    if (res["status"] === "1") {
+      console.log("Se modificó con exito");
+      window.location.reload();
+    } else {
+      console.log("ERROR");
+    }
+  }
+
+  function reagendarCita(item) {
+    console.log(new Date(item.fecha).toLocaleString());
+    values.fecha = new Date(item.fecha).getUTCDate().toLocaleString();
+    //values.time = item.hora;
+    values.paciente = item.nombre_paciente;
+    values.telefono = item.telefono;
+    values.tipoconsulta = item.padecimiento;
+    setOpen(true);
+  }
+
+  async function agendar() {
+    if (modificar === true) {
+      const formData = new FormData();
+      formData.append("fecha", format(values["fecha"], "yyyy-MM-dd"));
+      formData.append("hora", format(values["time"], "HH:mm"));
+      formData.append("nombre_paciente", values["paciente"]);
+      formData.append("telefono", values["telefono"]);
+      formData.append("padecimiento", values["tipoconsulta"]);
+      const response = await fetch(urlBack + "citas_agendar.php", {
+        method: "POST",
+        body: formData
+      });
+
+      const res = await response.json();
+
+      if (res["status"] === "1") {
+        setSuccess(true);
+        window.location.reload();
+      } else {
+        console.log("ERROR");
+        setError(true);
+      }
+    }
+  }
   /**
    *
    * @param {evento} e
    * handle para guardar la fecha seleccionada en el calendario
    */
-  const handleDate = e => {
+  const handleDate = async e => {
     setCalendardate(e);
-    console.log(calendarDate.toLocaleDateString());
-    console.log(new Date().getDate("2020-04-01"));
+    console.log(calendarDate);
+    const formData = new FormData();
+    formData.append("fecha", format(calendarDate, "yyyy-MM-dd"));
+    const response = await fetch(urlBack + "citas_cargar.php", {
+      method: "POST",
+      body: formData
+    })
+      .then(response => response.json())
+      .then(posts => {
+        console.log(Object.values(posts));
+        setDatos(Object.values(posts));
+      });
   };
   return (
     <Content nombre="Citas" select="citas">
@@ -259,86 +369,102 @@ export default function Dates() {
           >
             Citas de hoy
           </Typography>
-          <Grid container spacing={3} style={{ padding: "2%",overflowY:"scroll" }}>
-            {citas.map(cita=>(
-              calendarDate.getDate()===(new Date().getDate(cita.fecha))?
-              (<Grid item xs={6}>
-              <Card className={classes.tarjeta}>
-                <CardContent style={{ backgroundColor: "#61B4E4" }}>
-                  <Typography
-                    style={{
-                      color: "white",
-                      fontSize: "Large",
-                      fontWeight: "bolder"
-                    }}
-                  >
-                    {cita.paciente}
-                  </Typography>
-                  <div style={{ display: "flex" }}>
-                    <Typography style={{ color: "white", marginRight: "5%" }}>
-                      {cita.edad} años
-                    </Typography>
-                    <Typography style={{ color: "white" }}>
-                      {cita.telefono}
-                    </Typography>
-                  </div>
-                  <Typography style={{ color: "white", fontSize: "small" }}>
-                    Tipo de Consulta: {cita.tipoconsulta}
-                  </Typography>
-                </CardContent>
-                <CardActions
-                  style={{
-                    backgroundColor: "#003764",
-                    display: "flex",
-                    flexDirection: "row",
-                    justifyContent: "space-between"
-                  }}
-                >
-                  <div style={{ display: "flex", width: "50%" }}>
-                    <AccessTimeIcon style={{ color: "white" }} />
-                    <Typography
+          <Grid
+            container
+            spacing={3}
+            style={{ padding: "2%", overflowY: "scroll" }}
+          >
+            {datos.map((item, index) =>
+              calendarDate.getUTCDate() ===
+              new Date(item.fecha).getUTCDate() ? (
+                <Grid item xs={6}>
+                  <Card className={classes.tarjeta}>
+                    <CardContent style={{ backgroundColor: "#61B4E4" }}>
+                      <Typography
+                        style={{
+                          color: "white",
+                          fontSize: "Large",
+                          fontWeight: "bolder"
+                        }}
+                      >
+                        {item.nombre_paciente}
+                      </Typography>
+                      <div style={{ display: "flex" }}>
+                        <Typography style={{ color: "white" }}>
+                          {item.telefono}
+                        </Typography>
+                      </div>
+                      <Typography style={{ color: "white", fontSize: "small" }}>
+                        Tipo de Consulta: {item.padecimiento}
+                      </Typography>
+                    </CardContent>
+                    <CardActions
                       style={{
-                        color: "white",
-                        fontSize: "small",
-                        alignSelf: "center",
-                        marginLeft: "3%"
+                        backgroundColor: "#003764",
+                        display: "flex",
+                        flexDirection: "row",
+                        justifyContent: "space-between"
                       }}
                     >
-                      {new Date('1970-01-01T'+cita.hora).getHours()}:{addZero(new Date('1970-01-01T'+cita.hora).getMinutes())}-{new Date('1970-01-01T'+cita.hora).getHours()+1}:{addZero(new Date('1970-01-01T'+cita.hora).getMinutes())}
-                    </Typography>
-                  </div>
-                  <div
-                    style={{
-                      display: "flex",
-                      width: "40%",
-                      justifyContent: "flex-end"
-                    }}
-                  >
-                    <CheckCircleIcon
-                      style={{
-                        color: "white",
-                        paddingRight: "5%",
-                        cursor: "pointer"
-                      }}
-                    />
-                    <EditIcon
-                      style={{
-                        color: "white",
-                        paddingRight: "5%",
-                        cursor: "pointer"
-                      }}
-                    />
-                    <CancelIcon
-                      style={{
-                        color: "white",
-                        paddingRight: "5%",
-                        cursor: "pointer"
-                      }}
-                    />
-                  </div>
-                </CardActions>
-              </Card>
-            </Grid>):""))}
+                      <div style={{ display: "flex", width: "50%" }}>
+                        <AccessTimeIcon style={{ color: "white" }} />
+                        <Typography
+                          style={{
+                            color: "white",
+                            fontSize: "small",
+                            alignSelf: "center",
+                            marginLeft: "3%"
+                          }}
+                        >
+                          {new Date("1970-01-01T" + item.hora).getHours()}:
+                          {addZero(
+                            new Date("1970-01-01T" + item.hora).getMinutes()
+                          )}
+                          -{new Date("1970-01-01T" + item.hora).getHours() + 1}:
+                          {addZero(
+                            new Date("1970-01-01T" + item.hora).getMinutes()
+                          )}
+                        </Typography>
+                      </div>
+                      <div
+                        style={{
+                          display: "flex",
+                          width: "40%",
+                          justifyContent: "flex-end"
+                        }}
+                      >
+                        <CheckCircleIcon
+                          style={{
+                            color: "white",
+                            paddingRight: "5%",
+                            cursor: "pointer"
+                          }}
+                          onClick={() => atenderCita(item)}
+                        />
+                        <EditIcon
+                          style={{
+                            color: "white",
+                            paddingRight: "5%",
+                            cursor: "pointer"
+                          }}
+                          onClick={() => reagendarCita(item)}
+                        />
+                        <CancelIcon
+                          style={{
+                            color: "white",
+                            paddingRight: "5%",
+                            cursor: "pointer"
+                          }}
+                          onClick={() => cancelarCita(item)}
+                        />
+                      </div>
+                    </CardActions>
+                  </Card>
+                </Grid>
+              ) : (
+                ""
+              )
+            )}
           </Grid>
         </Card>
         {/**
@@ -446,7 +572,7 @@ export default function Dates() {
                               label="Time picker"
                               value={values.time}
                               onChange={e => {
-                                setValues({...values,time: e});
+                                setValues({ ...values, time: e });
                               }}
                               KeyboardButtonProps={{
                                 "aria-label": "change time"
@@ -547,7 +673,7 @@ export default function Dates() {
                             <Select
                               labelId="demo-simple-select-filled-label"
                               id="demo-simple-select-filled"
-                              error={values.tipoconsulta===""}
+                              error={values.tipoconsulta === ""}
                               value={
                                 values.tipoconsulta === ""
                                   ? ""
@@ -555,7 +681,7 @@ export default function Dates() {
                               }
                               onChange={handleChange("tipoconsulta")}
                             >
-                              <MenuItem value={''}>
+                              <MenuItem value={""}>
                                 <em>None</em>
                               </MenuItem>
                               <MenuItem value={"Primera vez"}>
@@ -569,7 +695,9 @@ export default function Dates() {
                               </MenuItem>
                             </Select>
                             <FormHelperText id="standard-weight-helper-text">
-                              {values.tipoconsulta===""?"Seleccione el tipo de consulta":"Debe seleccionar uno"}
+                              {values.tipoconsulta === ""
+                                ? "Seleccione el tipo de consulta"
+                                : "Debe seleccionar uno"}
                             </FormHelperText>
                           </FormControl>
                         </div>
