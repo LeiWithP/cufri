@@ -12,8 +12,25 @@ const useStyles = makeStyles(theme=>({
       width: 250,
       height:"100%",
       boxShadow:"2px 0 5px -2px #888;",
-      overflow:"hidden",
-      zIndex:"1", 
+      overflowY:"scroll",
+      zIndex:"1",
+      '&::-webkit-scrollbar-thumb':{
+        borderRadius:"10px !important",
+        WebkitBorderRadius:"inset 0 0 6px rgba(0,0,0,.3)",
+        backgroundColor:"#555",
+        opacity:".6"
+    },
+    '&::-webkit-scrollbar':{
+       width:"5px",
+       backgroundColor:"#F5F5F5",
+       opacity:".6"
+    },
+    '&::-webkit-scrollbar-track':{
+        WebkitBorderRadius:"inset 0 0 6px rgba(0,0,0,.3)",
+        borderRadius:"10px !important",
+        backgroundColor:"#F5F5F5",
+        opacity:".6"
+     },
     },
     menuHide:{
         transition:"0.7s",
@@ -73,6 +90,12 @@ const useStyles = makeStyles(theme=>({
                 <ListItem button key="Mapa del dolor" style={props.select==="mapadolor"? {backgroundColor:"#61B4E4",color:"white"}:{}} onClick={()=>(props.edit||props.view)?history.push("/Patients/Mapa del dolor"):history.push("#")}>
                     <ListItemText primary="Mapa del dolor" />
                 </ListItem>
+                <ListItem button key="Notas de valoración" style={props.select==="nval"? {backgroundColor:"#61B4E4",color:"white"}:{}} onClick={()=>(props.edit||props.view)?history.push("/Patients/Notas de valoracion"):history.push("#")}>
+                    <ListItemText primary="Notas de valoración " />
+                </ListItem>
+                <ListItem button key="Notas de Evolución" style={props.select==="nevol"? {backgroundColor:"#61B4E4",color:"white"}:{}} onClick={()=>(props.edit||props.view)?history.push("/Patients/Notas de evolucion"):history.push("#")}>
+                    <ListItemText primary="Notas de evolución " />
+                </ListItem> 
                 <ListItem button key="Cancelar" onClick={e => history.push("/Patients") }>
                     <ListItemText primary="Cancelar" />
                 </ListItem>

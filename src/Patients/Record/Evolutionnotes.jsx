@@ -9,7 +9,7 @@ import {
 import DateFnsUtils from "@date-io/date-fns";
 import NavigateNextIcon from "@material-ui/icons/NavigateNext";
 import Fab from "@material-ui/core/Fab";
-import Valnote from '../../Components/Valnote';
+import Evolnote from '../../Components/Evolnote';
 import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
@@ -26,14 +26,14 @@ const useStyles = makeStyles((theme) => ({
     width: "95%",
     alignSelf: "center",
     alignItems: "center",
-    overflowY: "visible",
     height: "fit-content",
+    overflow: "initial",
   },
   content: {
     width: "97%",
     display: "flex",
+    flexDirection:"column",
     justifyContent: "space-between",
-    flexWrap: "wrap",
     marginTop: "2%",
     marginBottom: "2%",
   },
@@ -42,11 +42,11 @@ const useStyles = makeStyles((theme) => ({
 const data =[
     {
         fecha:"06/04/2020",
-        EVA:"Nada",
-        Pfuncionales:"Correctas",
-        Afuncional:"Fallas",
-        Fuerza:"Normal",
-        ROM:"Correcto"
+        nota:"Hay un gran avance",
+    },
+    {
+        fecha:"07/04/2020",
+        nota:"Hay un gran avance",
     }
 ]
 
@@ -55,24 +55,20 @@ export default function Valnotes() {
   const history = useHistory();
   const [values, setValues] = React.useState({
     fecha: new Date(),
-    EVA: "",
-    Pfuncionales: "",
-    Afuncional: "",
-    Fuerza: "",
-    ROM: "",
+    Nevolucion: "",
   });
   const handleChange = (props) => (e) => {
     setValues({ ...values, [props]: e.target.value });
   };
   const handleNext = () => {
-    history.push("/Patients/Mapa del dolor");
+    history.push("/Patients/Examen físico");
   };
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log(values);
   };
   return (
-    <Content nombre="Pacientes" select="nval">
+    <Content nombre="Pacientes" select="nevol">
       <div
         style={{
           width: "100%",
@@ -82,7 +78,7 @@ export default function Valnotes() {
           overflowY: "scroll",
         }}
       >
-        <Typography className={classes.title}>Notas de Valoración</Typography>
+        <Typography className={classes.title}>Notas de Evolución</Typography>
         <Card className={classes.Card}>
           <form id="formulario" name="formulario" onSubmit={handleSubmit} className={classes.content}>
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -93,7 +89,7 @@ export default function Valnotes() {
                 margin="normal"
                 id="date-picker-inline"
                 label="Fecha"
-                style={{ margin: "initial" }}
+                style={{ margin: "initial",width:"150px" }}
                 value={values.fecha}
                 onChange={(e) => {
                   setValues({ ...values, fecha: e });
@@ -105,34 +101,13 @@ export default function Valnotes() {
               />
             </MuiPickersUtilsProvider>
             <TextField
-              variant="standard"
-              label="EVA"
-              onChange={handleChange("EVA")}
-              style={{ width: "30%" }}
-            />
-            <TextField
-              variant="standard"
-              label="Pruebas funcionales"
-              onChange={handleChange("Pfuncionales")}
-              style={{ width: "30%" }}
-            />
-            <TextField
-              variant="standard"
-              label="Actividad funcional"
-              onChange={handleChange("Afuncional")}
-              style={{ width: "30%" }}
-            />
-            <TextField
-              variant="standard"
-              label="Fuerza"
-              onChange={handleChange("Fuerza")}
-              style={{ width: "30%" }}
-            />
-            <TextField
-              variant="standard"
-              label="ROM"
-              onChange={handleChange("ROM")}
-              style={{ width: "30%" }}
+              variant="filled"
+              label="Nota de evolución"
+              multiline
+              rows="12"
+              onChange={handleChange("Nevolucion")}
+              style={{ width: "100%",marginTop:"2%" }}
+              helperText={"Escribir detalles"}
             />
           </form>
           <Button
@@ -146,12 +121,12 @@ export default function Valnotes() {
             type="submit"
             form="formulario"
           >
-            Agregar nota de valoración
+            Agregar nota de evolución
           </Button>
         </Card>
-        <Typography className={classes.title}>Notas de valoración anotadas</Typography>
+        <Typography className={classes.title}>Notas de evolución anotadas</Typography>
         {data.map(datos=>(
-            <Valnote data={datos}/>
+            <Evolnote data={datos}/>
         ))}
         <Fab
           color="primary"

@@ -40,7 +40,7 @@ export default function Genecorecord() {
     "Plan fisioterapéutico":""
   });
   const handleNext = () => {
-    history.push("/Patients/Mapa del dolor");
+    history.push("/Patients/Notas de valoracion");
   };
   return (
     <Content nombre="Pacientes" select="diagnostico">

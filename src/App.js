@@ -13,7 +13,9 @@ import Recordp7 from './Patients/Record/Physicalexam';
 import Recordp8 from './Patients/Record/Postura';
 import Recordp9 from './Patients/Record/Dermatomas';
 import Recordp10 from './Patients/Record/Diagnostico';
+import Recordp11 from './Patients/Record/Valorationnotes';
 import Recordp12 from './Patients/Record/Mapadolor';
+import Recordp14 from './Patients/Record/Evolutionnotes';
 import Usuers from './Users/Users';
 import Stats from './Statistics/Statistics';
 import Videos from './Videos/Videos';
@@ -65,8 +67,14 @@ export default function App() {
               <Route exact path="/Patients/Diagnóstico y plan fisioterapéutico">
                   <Recordp10/>
               </Route>
+              <Route exact path="/Patients/Notas de valoracion">
+                  <Recordp11/>
+              </Route>
               <Route exact path="/Patients/Mapa del dolor">
                   <Recordp12/>
+              </Route>
+              <Route exact path="/Patients/Notas de evolucion">
+                  <Recordp14/>
               </Route>
               <Route exact path="/Users">
                   <Usuers/>
