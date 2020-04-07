@@ -81,11 +81,11 @@ export default function Cardgineco(props){
         </Typography>
         <FormGroup row style={{ justifyContent: "center" }}>
           <FormControlLabel
-            control={<Checkbox value="si" color="primary" checked={values[props.name].confirmacion==="si"} onChange={e=> {setValues({...values,[props.name]:{confirmacion:e.target.value}})}}/>}
+            control={<Checkbox value="si" color="primary" checked={values[props.name].confirmacion==="si"} onChange={e=> {setValues({...values,[props.name]:{...values[props.name],confirmacion:e.target.value}})}}/>}
             label="Si"
           />
           <FormControlLabel
-            control={<Checkbox value="no" color="primary" checked={values[props.name].confirmacion==="no"} onChange={e=> {setValues({...values,[props.name]:{confirmacion:e.target.value}})}} />}
+            control={<Checkbox value="no" color="primary" checked={values[props.name].confirmacion==="no"} onChange={e=> {setValues({...values,[props.name]:{...values[props.name],confirmacion:e.target.value}})}} />}
             label="No"
           />
         </FormGroup>
@@ -93,7 +93,7 @@ export default function Cardgineco(props){
             label="¿Cuantos?"
             helperText={"Ingresa los detalles"}
             disabled={values[props.name].confirmacion==="no"}
-            onChange={e=> {setValues({...values,[props.name]:{detalles:e.target.value}})}}
+            onChange={e=> {setValues({...values,[props.name]:{...values[props.name],detalles:e.target.value}})}}
             variant="filled"
           />
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -105,7 +105,7 @@ export default function Cardgineco(props){
             label="Fecha"
             disabled={values[props.name].confirmacion==="no"}
             value={values[props.name].fecha}
-            onChange={date=> {setValues({...values,[props.name]:{fecha:date}})}}
+            onChange={date=> {setValues({...values,[props.name]:{...values[props.name],fecha:date}})}}
             KeyboardButtonProps={{
               "aria-label": "change date"
             }}

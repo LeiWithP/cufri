@@ -61,7 +61,7 @@ export default function Cardnopatologic(props) {
           onChange={e => {
             setValues({
               ...values,
-              [props.name]: { detalles: e.target.value }
+              [props.name]: {...values[props.name],detalles: e.target.value }
             });
           }}
           variant="filled"

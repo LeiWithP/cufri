@@ -223,7 +223,7 @@ export default function Cardrecord(props) {
                   value="si"
                   color="primary"
                   checked={er[props.name].confirmacion === "si"}
-                  onChange={e=> {setEr({...er,[props.name]:{confirmacion:e.target.value}})}}
+                  onChange={e=> {setEr({...er,[props.name]:{...er[props.name],confirmacion:e.target.value}})}}
                 />
               }
               label="Si"
@@ -235,7 +235,7 @@ export default function Cardrecord(props) {
                   value="no"
                   color="primary"
                   checked={er[props.name].confirmacion === "no"}
-                  onChange={e=> {setEr({...er,[props.name]:{confirmacion:e.target.value}})}}
+                  onChange={e=> {setEr({...er,[props.name]:{...er[props.name],confirmacion:e.target.value}})}}
                 />
               }
               label="No"
@@ -249,7 +249,7 @@ export default function Cardrecord(props) {
                   value="si"
                   disabled={er[props.name].confirmacion === "" || er[props.name].confirmacion === "no"}
                   color="primary"
-                  onChange={e=> {setEr({...er,[props.name]:{madre:e.target.value}})}}
+                  onChange={e=> {setEr({...er,[props.name]:{...er[props.name],madre:e.target.value}})}}
                 />
               }
               label="Madre"
@@ -261,7 +261,7 @@ export default function Cardrecord(props) {
                   value="si"
                   disabled={er[props.name].confirmacion === "" || er[props.name].confirmacion === "no"}
                   color="primary"
-                  onChange={e=> {setEr({...er,[props.name]:{abuelos:e.target.value}})}}
+                  onChange={e=> {setEr({...er,[props.name]:{...er[props.name],abuelos:e.target.value}})}}
                 />
               }
               label="Abuelos"
@@ -273,7 +273,7 @@ export default function Cardrecord(props) {
                   value="si"
                   disabled={er[props.name].confirmacion === "" || er[props.name].confirmacion === "no"}
                   color="primary"
-                  onChange={e=> {setEr({...er,[props.name]:{padre:e.target.value}})}}
+                  onChange={e=> {setEr({...er,[props.name]:{...er[props.name],padre:e.target.value}})}}
                 />
               }
               label="Padre"
@@ -285,7 +285,7 @@ export default function Cardrecord(props) {
                   value="si"
                   disabled={er[props.name].confirmacion === "" || er[props.name].confirmacion === "no"}
                   color="primary"
-                  onChange={e=> {setEr({...er,[props.name]:{hermano:e.target.value}})}}
+                  onChange={e=> {setEr({...er,[props.name]:{...er[props.name],hermano:e.target.value}})}}
                 />
               }
               label="Hermano"
@@ -297,7 +297,7 @@ export default function Cardrecord(props) {
                   value="si"
                   disabled={er[props.name].confirmacion === "" || er[props.name].confirmacion === "no"}
                   color="primary"
-                  onChange={e=> {setEr({...er,[props.name]:{otros:e.target.value}})}}
+                  onChange={e=> {setEr({...er,[props.name]:{...er[props.name],otros:e.target.value}})}}
                 />
               }
               label="Otros"
@@ -318,7 +318,7 @@ export default function Cardrecord(props) {
           <TextField
             label="Detalles"
             multiline
-            onChange={e=> {setEr({...er,[props.name]:{detalles:e.target.value}})}}
+            onChange={e=> {setEr({...er,[props.name]:{...er[props.name],detalles:e.target.value}})}}
             helperText={"Ingresa los detalles"}
             rows="4"
             variant="filled"

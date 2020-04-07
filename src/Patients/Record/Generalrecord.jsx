@@ -7,6 +7,7 @@ import Fab from "@material-ui/core/Fab";
 import Cardyesno from '../../Components/Yesnocard';
 import CardnP from '../../Components/Cardnopatologic';
 import Cardtext from '../../Components/Textcard';
+import Evacard from '../../Components/Evacards';
 import {useHistory} from 'react-router-dom';
 
 const useStyles = makeStyles(theme => ({
@@ -51,6 +52,11 @@ const Otros =[
     "Tratamientos anteriores(Tiempo,tipo)",
     "Inquietud subyacente",
 ]
+const Eva=[
+  "Inicio",
+  "Evolución",
+  "Actual"
+]
 export default function Genecorecord(){
 const classes = useStyles();
 const history = useHistory();
@@ -68,6 +74,12 @@ const handleNext = ()=>{
           overflowY:"scroll"
         }}
       >
+        <Typography className={classes.title}>
+          Padecimiento Actual
+        </Typography>
+        {Eva.map(eva=>(
+          <Evacard title={eva}/>
+        ))}
         <Typography className={classes.title}>
           Sintomas Generales
         </Typography>

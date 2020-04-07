@@ -69,7 +69,7 @@ export default function Yesnocard(props) {
                 onChange={e => {
                   setValues({
                     ...values,
-                    [props.name]: { confirmacion: e.target.value }
+                    [props.name]: {...values[props.name],confirmacion: e.target.value }
                   });
                 }}
               />
@@ -85,7 +85,7 @@ export default function Yesnocard(props) {
                 onChange={e => {
                   setValues({
                     ...values,
-                    [props.name]: { confirmacion: e.target.value }
+                    [props.name]: {...values[props.name],confirmacion: e.target.value }
                   });
                 }}
               />

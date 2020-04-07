@@ -206,7 +206,7 @@ export default function Cardnopatologic(props) {
                 onChange={e => {
                   setValues({
                     ...values,
-                    [props.name]: { confirmacion: e.target.value }
+                    [props.name]: {...values[props.name],confirmacion: e.target.value }
                   });
                 }}
               />
@@ -223,7 +223,7 @@ export default function Cardnopatologic(props) {
                 onChange={e => {
                   setValues({
                     ...values,
-                    [props.name]: { confirmacion: e.target.value }
+                    [props.name]: {...values[props.name],confirmacion: e.target.value }
                   });
                 }}
               />
@@ -240,7 +240,7 @@ export default function Cardnopatologic(props) {
           onChange={e => {
             setValues({
               ...values,
-              [props.name]: { detalles: e.target.value }
+              [props.name]: {...values[props.name],detalles: e.target.value }
             });
           }}
           disabled={

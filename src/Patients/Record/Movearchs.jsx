@@ -1,10 +1,10 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Content from "../../Components/ContentExp";
-import { Typography, Card, TextField } from "@material-ui/core";
+import { Typography} from "@material-ui/core";
+import Archcard from '../../Components/Movearchcard'
 import NavigateNextIcon from "@material-ui/icons/NavigateNext";
 import Fab from "@material-ui/core/Fab";
-import MapaDolor from "../../Images/Mapadolor.jpg";
 import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
@@ -21,23 +21,42 @@ const useStyles = makeStyles((theme) => ({
     width: "95%",
     alignSelf: "center",
     alignItems: "center",
-    height:"fit-content"
+    overflowY: "visible",
+    height: "fit-content",
+    overflow:"initial"
   },
-  tf: {
-    width: "70%",
-    marginTop: "1.5%",
+  content: {
+    width: "97%",
+    display: "flex",
+    justifyContent: "space-between",
+    flexWrap: "wrap",
+    marginTop: "2%",
+    marginBottom: "2%",
   },
 }));
 
-export default function Genecorecord() {
+const Arcos=[
+    "Columna cervical",
+    "Columna dorsal",
+    "Columna lumbar",
+    "Hombro",
+    "Codo",
+    "Muñeca",
+    "Mano",
+    "Cadera",
+    "Rodilla",
+    "Tobillo",
+    "Pie"
+]
+
+export default function MoveArch() {
   const classes = useStyles();
   const history = useHistory();
-  const [detalles, setDetalles] = React.useState("");
   const handleNext = () => {
-    history.push("/Patients/Arcos de movimiento");
+    history.push("/Patients/Notas de evolucion");
   };
   return (
-    <Content nombre="Pacientes" select="mapadolor">
+    <Content nombre="Pacientes" select="nval">
       <div
         style={{
           width: "100%",
@@ -47,27 +66,13 @@ export default function Genecorecord() {
           overflowY: "scroll",
         }}
       >
-        <Typography className={classes.title}>Dermatomas, mitomas y pares craneales</Typography>
-        <Card className={classes.Card}>
-          <img src={MapaDolor} alt="" width="50%" style={{ height: "65%" }} />
-          <TextField
-            variant="filled"
-            className={classes.tf}
-            rows="8"
-            multiline
-            label="Escriba las zonas"
-            helperText="Escriba los detalles"
-            onChange={(e) => {
-              setDetalles(e.target.value);
-            }}
-          />
-        </Card>
+        <Typography className={classes.title}>Notas de Valoración</Typography>
+        {Arcos.map(arco=>(
+            <Archcard key={arco}titulo={arco}/>
+        ))}
         <Fab
           color="primary"
           aria-label="next"
-          disabled={
-            detalles===""
-          }
           onClick={handleNext}
           style={{
             alignSelf: "flex-end",
