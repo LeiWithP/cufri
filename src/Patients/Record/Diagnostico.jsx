@@ -5,6 +5,8 @@ import { Typography, Card, TextField } from "@material-ui/core";
 import NavigateNextIcon from "@material-ui/icons/NavigateNext";
 import Fab from "@material-ui/core/Fab";
 import { useHistory } from "react-router-dom";
+import { connect } from "react-redux";
+import {addDiagnosticoAction} from '../../store/actions/Diagnostico'
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -22,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
     height:"fit-content",
     marginTop:"5%",
-    overflow:"visible"
+    overflow:"visible",
   },
   tf: {
     width: "90%",
@@ -30,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 const planes=["Diagnóstico fisioterapéutico","Pronostico","Objetivos","Plan fisioterapéutico"]
-export default function Genecorecord() {
+function Diagnostico({addDiagnostico}) {
   const classes = useStyles();
   const history = useHistory();
   const [detalles, setDetalles] = React.useState({
@@ -40,7 +42,8 @@ export default function Genecorecord() {
     "Plan fisioterapéutico":""
   });
   const handleNext = () => {
-    history.push("/Patients/Notas de valoracion");
+    addDiagnostico(detalles);
+    history.push("/Patients/Mapa del dolor");
   };
   return (
     <Content nombre="Pacientes" select="diagnostico">
@@ -89,3 +92,12 @@ export default function Genecorecord() {
     </Content>
   );
 }
+const mapStateToProps = state => ({});
+const mapDispatchToProps = dispatch => ({
+addDiagnostico: addDiagnosticoAction(dispatch)
+});
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Diagnostico);
+

@@ -6,6 +6,8 @@ import NavigateNextIcon from "@material-ui/icons/NavigateNext";
 import Fab from "@material-ui/core/Fab";
 import MapaDolor from "../../Images/Mapadolor.jpg";
 import { useHistory } from "react-router-dom";
+import { connect } from "react-redux";
+import {addMapadolorAction} from '../../store/actions/Mapadolor'
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -21,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
     width: "95%",
     alignSelf: "center",
     alignItems: "center",
-    height:"fit-content"
+    height:"80%"
   },
   tf: {
     width: "70%",
@@ -29,12 +31,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Genecorecord() {
+function Mapadolorform({addMapadolor}) {
   const classes = useStyles();
   const history = useHistory();
   const [detalles, setDetalles] = React.useState("");
   const handleNext = () => {
-    history.push("/Patients/Examen físico");
+    addMapadolor(detalles);
+    history.push("/Patients/Arcos de movimiento");
   };
   return (
     <Content nombre="Pacientes" select="mapadolor">
@@ -47,7 +50,7 @@ export default function Genecorecord() {
           overflowY: "scroll",
         }}
       >
-        <Typography className={classes.title}>Dermatomas, mitomas y pares craneales</Typography>
+        <Typography className={classes.title}>Mapa del dolor</Typography>
         <Card className={classes.Card}>
           <img src={MapaDolor} alt="" width="50%" style={{ height: "65%" }} />
           <TextField
@@ -83,3 +86,12 @@ export default function Genecorecord() {
     </Content>
   );
 }
+const mapStateToProps = state => ({});
+const mapDispatchToProps = dispatch => ({
+addMapadolor: addMapadolorAction(dispatch)
+});
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Mapadolorform);
+

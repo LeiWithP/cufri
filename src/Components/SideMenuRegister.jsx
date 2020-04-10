@@ -90,6 +90,9 @@ const useStyles = makeStyles(theme=>({
                 <ListItem button key="Mapa del dolor" style={props.select==="mapadolor"? {backgroundColor:"#61B4E4",color:"white"}:{}} onClick={()=>(props.edit||props.view)?history.push("/Patients/Mapa del dolor"):history.push("#")}>
                     <ListItemText primary="Mapa del dolor" />
                 </ListItem>
+                <ListItem button key="Arcos de movimiento" style={props.select==="amovimiento"? {backgroundColor:"#61B4E4",color:"white"}:{}} onClick={()=>(props.edit||props.view)?history.push("/Patients/Arcos de movimiento"):history.push("#")}>
+                    <ListItemText primary="Arcos de movimiento" />
+                </ListItem>
                 <ListItem button key="Notas de valoración" style={props.select==="nval"? {backgroundColor:"#61B4E4",color:"white"}:{}} onClick={()=>(props.edit||props.view)?history.push("/Patients/Notas de valoracion"):history.push("#")}>
                     <ListItemText primary="Notas de valoración " />
                 </ListItem>

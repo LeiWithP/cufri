@@ -262,7 +262,8 @@ export default function Users() {
           backgroundColor: "#F4F4F4",
           display: "flex",
           flexDirection: "column",
-          justifyContent: "center"
+          justifyContent: "center",
+          overflowX:"auto"
         }}
       >
         <Paper className={classes.root}>

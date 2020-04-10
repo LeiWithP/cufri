@@ -6,6 +6,8 @@ import NavigateNextIcon from "@material-ui/icons/NavigateNext";
 import Fab from "@material-ui/core/Fab";
 import Dermatomas from "../../Images/Drematomas.jpg";
 import { useHistory } from "react-router-dom";
+import { connect } from "react-redux";
+import {addDermatomasAction} from '../../store/actions/Dermatomas'
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -21,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
     width: "95%",
     alignSelf: "center",
     alignItems: "center",
-    height:"fit-content"
+    height:"80%"
   },
   tf: {
     width: "70%",
@@ -29,11 +31,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Genecorecord() {
+function Dermatomasform({addDermatomas}) {
   const classes = useStyles();
   const history = useHistory();
   const [detalles, setDetalles] = React.useState("");
   const handleNext = () => {
+    addDermatomas(detalles)
     history.push("/Patients/Diagnóstico y plan fisioterapéutico");
   };
   return (
@@ -83,3 +86,11 @@ export default function Genecorecord() {
     </Content>
   );
 }
+const mapStateToProps = state => ({});
+const mapDispatchToProps = dispatch => ({
+addDermatomas: addDermatomasAction(dispatch)
+});
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Dermatomasform);

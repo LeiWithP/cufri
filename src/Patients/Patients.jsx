@@ -115,7 +115,8 @@ export default function Pacientes() {
           backgroundColor: "#F4F4F4",
           display: "flex",
           flexDirection: "column",
-          justifyContent: "center"
+          justifyContent: "center",
+          overflowX:"auto"
         }}
       >
         <Paper className={classes.root}>

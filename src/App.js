@@ -15,6 +15,7 @@ import Recordp9 from './Patients/Record/Dermatomas';
 import Recordp10 from './Patients/Record/Diagnostico';
 import Recordp11 from './Patients/Record/Valorationnotes';
 import Recordp12 from './Patients/Record/Mapadolor';
+import Recordp13 from './Patients/Record/Movearchs';
 import Recordp14 from './Patients/Record/Evolutionnotes';
 import Usuers from './Users/Users';
 import Stats from './Statistics/Statistics';
@@ -72,6 +73,9 @@ export default function App() {
               </Route>
               <Route exact path="/Patients/Mapa del dolor">
                   <Recordp12/>
+              </Route>
+              <Route exact path="/Patients/Arcos de movimiento">
+                  <Recordp13/>
               </Route>
               <Route exact path="/Patients/Notas de evolucion">
                   <Recordp14/>

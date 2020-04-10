@@ -7,8 +7,11 @@ import {
     MuiPickersUtilsProvider
   } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
+import { connect } from "react-redux";
+import {addGinecoAction} from '../store/actions/Gineco'
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import { Card, Typography, CardContent, TextField } from "@material-ui/core";
+import { useEffect } from "react";
 
 const useStyles = makeStyles(theme => ({
   cardbody: {
@@ -39,7 +42,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function Cardgineco(props){
+function Cardgineco({name,addCardgineco}){
     const classes = useStyles();
     const [values,setValues]=React.useState({
         "Menarca":{
@@ -73,27 +76,30 @@ export default function Cardgineco(props){
             fecha:new Date()
         }
     })
+    useEffect(()=>{
+      addCardgineco(values[name],name);
+    },[values])
     return(
         <Card className={classes.cardbody}>
       <CardContent className={classes.card}>
         <Typography style={{ textAlign: "center", marginTop: "1vh" }}>
-           {props.name}
+           {name}
         </Typography>
         <FormGroup row style={{ justifyContent: "center" }}>
           <FormControlLabel
-            control={<Checkbox value="si" color="primary" checked={values[props.name].confirmacion==="si"} onChange={e=> {setValues({...values,[props.name]:{confirmacion:e.target.value}})}}/>}
+            control={<Checkbox value="si" color="primary" checked={values[name].confirmacion==="si"} onChange={e=> {setValues({...values,[name]:{...values[name],confirmacion:e.target.value}})}}/>}
             label="Si"
           />
           <FormControlLabel
-            control={<Checkbox value="no" color="primary" checked={values[props.name].confirmacion==="no"} onChange={e=> {setValues({...values,[props.name]:{confirmacion:e.target.value}})}} />}
+            control={<Checkbox value="no" color="primary" checked={values[name].confirmacion==="no"} onChange={e=> {setValues({...values,[name]:{...values[name],confirmacion:e.target.value}})}} />}
             label="No"
           />
         </FormGroup>
         <TextField
             label="¿Cuantos?"
             helperText={"Ingresa los detalles"}
-            disabled={values[props.name].confirmacion==="no"}
-            onChange={e=> {setValues({...values,[props.name]:{detalles:e.target.value}})}}
+            disabled={values[name].confirmacion==="no"}
+            onChange={e=> {setValues({...values,[name]:{...values[name],detalles:e.target.value}})}}
             variant="filled"
           />
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -103,9 +109,9 @@ export default function Cardgineco(props){
             format="dd/MM/yyyy"
             margin="normal"
             label="Fecha"
-            disabled={values[props.name].confirmacion==="no"}
-            value={values[props.name].fecha}
-            onChange={date=> {setValues({...values,[props.name]:{fecha:date}})}}
+            disabled={values[name].confirmacion==="no"}
+            value={values[name].fecha}
+            onChange={date=> {setValues({...values,[name]:{...values[name],fecha:date}})}}
             KeyboardButtonProps={{
               "aria-label": "change date"
             }}
@@ -119,3 +125,11 @@ export default function Cardgineco(props){
     </Card>
     )
 }
+const mapStateToProps = state => ({});
+const mapDispatchToProps = dispatch => ({
+addCardgineco: addGinecoAction(dispatch)
+});
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Cardgineco);

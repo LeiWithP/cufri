@@ -4,6 +4,9 @@ import FormGroup from "@material-ui/core/FormGroup";
 import Checkbox from "@material-ui/core/Checkbox";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import { Card, Typography, CardContent} from "@material-ui/core";
+import { connect } from "react-redux";
+import {addSufferingAction} from '../store/actions/Suffering'
+import { useEffect } from "react";
 
 const useStyles = makeStyles(theme => ({
   cardbody: {
@@ -34,7 +37,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function Yesnocard(props) {
+function Yesnocard({name,addSuffering}) {
   const classes = useStyles();
   const [values,setValues] = React.useState({
     "Astenia":{
@@ -47,17 +50,20 @@ export default function Yesnocard(props) {
         confirmacion:""
     },
     "Fiebre":{
-        confirmaicion:""
+        confirmacion:""
     },
     "Perdida de peso":{
         confirmacion:""
     },
-  })
+  });
+  useEffect(()=>{
+    addSuffering(values[name].confirmacion,name);
+  },[values])
   return (
     <Card className={classes.cardbody}>
       <CardContent className={classes.card}>
         <Typography style={{ textAlign: "center", marginTop: "1vh" }}>
-          {props.name}
+          {name}
         </Typography>
         <FormGroup row style={{ justifyContent: "center" }}>
           <FormControlLabel
@@ -65,11 +71,11 @@ export default function Yesnocard(props) {
               <Checkbox
                 value="si"
                 color="primary"
-                checked={values[props.name].confirmacion === "si"}
+                checked={values[name].confirmacion === "si"}
                 onChange={e => {
                   setValues({
                     ...values,
-                    [props.name]: { confirmacion: e.target.value }
+                    [name]: {...values[name],confirmacion: e.target.value }
                   });
                 }}
               />
@@ -81,11 +87,11 @@ export default function Yesnocard(props) {
               <Checkbox
                 value="no"
                 color="primary"
-                checked={values[props.name].confirmacion === "no"}
+                checked={values[name].confirmacion === "no"}
                 onChange={e => {
                   setValues({
                     ...values,
-                    [props.name]: { confirmacion: e.target.value }
+                    [name]: {...values[name],confirmacion: e.target.value }
                   });
                 }}
               />
@@ -97,3 +103,11 @@ export default function Yesnocard(props) {
     </Card>
   );
 }
+const mapStateToProps = state => ({});
+const mapDispatchToProps = dispatch => ({
+addSuffering: addSufferingAction(dispatch)
+});
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Yesnocard);

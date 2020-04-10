@@ -3,7 +3,10 @@ import { makeStyles } from "@material-ui/core/styles";
 import FormGroup from "@material-ui/core/FormGroup";
 import Checkbox from "@material-ui/core/Checkbox";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
+import { connect } from "react-redux";
+import {addAntecedentsHFAction} from '../store/actions/AHeredofamiliares'
 import { Card, Typography, CardContent, TextField } from "@material-ui/core";
+import { useEffect } from "react";
 
 const useStyles = makeStyles(theme => ({
   card: {
@@ -34,7 +37,7 @@ const useStyles = makeStyles(theme => ({
     width: "40%"
   }
 }));
-export default function Cardrecord(props) {
+function Cardrecord({name, addAHF }) {
   const classes = useStyles();
   const [er, setEr] = React.useState({
     "Enfermedades Reumatológicas": {
@@ -200,10 +203,17 @@ export default function Cardrecord(props) {
         dtalles: ""
       }
   });
+  const handleChange= (prop) =>(e) => {
+    e.preventDefault();
+    setEr({...er,[name]:{...er[name],[prop]:e.target.value}});
+  }
+  useEffect(()=>{
+    addAHF(er[name],name);
+  },[er])
   return (
-    <Card className={classes.cardbody} key={props.name}>
+    <Card className={classes.cardbody} key={name}>
       <Typography className={classes.cardtitle}>
-        {props.name}
+        {name}
       </Typography>
       <CardContent className={classes.card}>
         {/**
@@ -222,8 +232,8 @@ export default function Cardrecord(props) {
                 <Checkbox
                   value="si"
                   color="primary"
-                  checked={er[props.name].confirmacion === "si"}
-                  onChange={e=> {setEr({...er,[props.name]:{confirmacion:e.target.value}})}}
+                  checked={er[name].confirmacion === "si"}
+                  onChange={handleChange("confirmacion")}
                 />
               }
               label="Si"
@@ -234,8 +244,8 @@ export default function Cardrecord(props) {
                 <Checkbox
                   value="no"
                   color="primary"
-                  checked={er[props.name].confirmacion === "no"}
-                  onChange={e=> {setEr({...er,[props.name]:{confirmacion:e.target.value}})}}
+                  checked={er[name].confirmacion === "no"}
+                  onChange={handleChange("confirmacion")}
                 />
               }
               label="No"
@@ -247,9 +257,9 @@ export default function Cardrecord(props) {
               control={
                 <Checkbox
                   value="si"
-                  disabled={er[props.name].confirmacion === "" || er[props.name].confirmacion === "no"}
+                  disabled={er[name].confirmacion === "" || er[name].confirmacion === "no"}
                   color="primary"
-                  onChange={e=> {setEr({...er,[props.name]:{madre:e.target.value}})}}
+                  onChange={handleChange("madre")}
                 />
               }
               label="Madre"
@@ -259,9 +269,9 @@ export default function Cardrecord(props) {
               control={
                 <Checkbox
                   value="si"
-                  disabled={er[props.name].confirmacion === "" || er[props.name].confirmacion === "no"}
+                  disabled={er[name].confirmacion === "" || er[name].confirmacion === "no"}
                   color="primary"
-                  onChange={e=> {setEr({...er,[props.name]:{abuelos:e.target.value}})}}
+                  onChange={handleChange("abuelos")}
                 />
               }
               label="Abuelos"
@@ -271,9 +281,9 @@ export default function Cardrecord(props) {
               control={
                 <Checkbox
                   value="si"
-                  disabled={er[props.name].confirmacion === "" || er[props.name].confirmacion === "no"}
+                  disabled={er[name].confirmacion === "" || er[name].confirmacion === "no"}
                   color="primary"
-                  onChange={e=> {setEr({...er,[props.name]:{padre:e.target.value}})}}
+                  onChange={handleChange("padre")}
                 />
               }
               label="Padre"
@@ -283,9 +293,9 @@ export default function Cardrecord(props) {
               control={
                 <Checkbox
                   value="si"
-                  disabled={er[props.name].confirmacion === "" || er[props.name].confirmacion === "no"}
+                  disabled={er[name].confirmacion === "" || er[name].confirmacion === "no"}
                   color="primary"
-                  onChange={e=> {setEr({...er,[props.name]:{hermano:e.target.value}})}}
+                  onChange={handleChange("hermano")}
                 />
               }
               label="Hermano"
@@ -295,9 +305,9 @@ export default function Cardrecord(props) {
               control={
                 <Checkbox
                   value="si"
-                  disabled={er[props.name].confirmacion === "" || er[props.name].confirmacion === "no"}
+                  disabled={er[name].confirmacion === "" || er[name].confirmacion === "no"}
                   color="primary"
-                  onChange={e=> {setEr({...er,[props.name]:{otros:e.target.value}})}}
+                  onChange={handleChange("ortros")}
                 />
               }
               label="Otros"
@@ -318,14 +328,22 @@ export default function Cardrecord(props) {
           <TextField
             label="Detalles"
             multiline
-            onChange={e=> {setEr({...er,[props.name]:{detalles:e.target.value}})}}
+            onChange={handleChange("dtalles")}
             helperText={"Ingresa los detalles"}
             rows="4"
             variant="filled"
-            disabled={er[props.name].confirmacion === "" || er[props.name].confirmacion === "no"}
+            disabled={er[name].confirmacion === "" || er[name].confirmacion === "no"}
           />
         </div>
       </CardContent>
     </Card>
   );
 }
+const mapStateToProps = state => ({});
+const mapDispatchToProps = dispatch => ({
+addAHF: addAntecedentsHFAction(dispatch)
+});
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Cardrecord);
