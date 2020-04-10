@@ -61,7 +61,7 @@ export default function Valnotes() {
     setValues({ ...values, [props]: e.target.value });
   };
   const handleNext = () => {
-    history.push("/Patients/Examen físico");
+    history.push("#");
   };
   const handleSubmit = (e) => {
     e.preventDefault();
