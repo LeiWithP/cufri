@@ -65,7 +65,7 @@ export default function Valnotes() {
     setValues({ ...values, [props]: e.target.value });
   };
   const handleNext = () => {
-    history.push("/Patients/Mapa del dolor");
+    history.push("/Patients/Notas de evolucion");
   };
   const handleSubmit = (e) => {
     e.preventDefault();
