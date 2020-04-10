@@ -6,6 +6,8 @@ import NavigateNextIcon from "@material-ui/icons/NavigateNext";
 import Fab from "@material-ui/core/Fab";
 import Postura from "../../Images/postura.jpg";
 import { useHistory } from "react-router-dom";
+import { connect } from "react-redux";
+import {addPosturaAction} from '../../store/actions/Postura'
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -21,6 +23,7 @@ const useStyles = makeStyles((theme) => ({
     width: "95%",
     alignSelf: "center",
     alignItems: "center",
+    height:"80%"
   },
   tf: {
     width: "70%",
@@ -28,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Genecorecord() {
+function Posturaform({addPostura}) {
   const classes = useStyles();
   const history = useHistory();
   const [values, setValues] = React.useState({
@@ -37,6 +40,7 @@ export default function Genecorecord() {
     Posterior: "",
   });
   const handleNext = () => {
+    addPostura(values);
     history.push("/Patients/Dermatomas mitomas y pares craneales");
   };
   return (
@@ -53,6 +57,7 @@ export default function Genecorecord() {
         <Typography className={classes.title}>Postura</Typography>
         <Card className={classes.Card}>
           <img src={Postura} alt="" width="50%" style={{ height: "50%" }} />
+          <form id="formulario" name="formulario" onSubmit={handleNext} style={{width:"100%",display:"flex",flexDirection:"column",alignItems:"center" }}>
           <TextField
             variant="filled"
             className={classes.tf}
@@ -80,6 +85,7 @@ export default function Genecorecord() {
               setValues({ ...values, Posterior: e.target.value });
             }}
           />
+          </form>
         </Card>
         <Fab
           color="primary"
@@ -89,7 +95,8 @@ export default function Genecorecord() {
             values.Lateral === "" ||
             values.Posterior === ""
           }
-          onClick={handleNext}
+          type="submit"
+          form="formulario"
           style={{
             alignSelf: "flex-end",
             backgroundColor: "#FFB700",
@@ -104,3 +111,12 @@ export default function Genecorecord() {
     </Content>
   );
 }
+const mapStateToProps = state => ({});
+const mapDispatchToProps = dispatch => ({
+addPostura: addPosturaAction(dispatch)
+});
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Posturaform);
+

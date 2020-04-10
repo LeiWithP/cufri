@@ -10,6 +10,8 @@ import FormHelperText from "@material-ui/core/FormHelperText";
 import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
 import { useHistory } from "react-router-dom";
+import { connect } from "react-redux";
+import {addFichaAction} from '../../store/actions/Ficha'
 
 const useStyles = makeStyles(theme => ({
   card: {
@@ -39,7 +41,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function Fichaidentificacion() {
+function Fichaidentificacion({ addFicha }) {
   const classes = useStyles();
   const history = useHistory();
   /*
@@ -76,6 +78,7 @@ export default function Fichaidentificacion() {
     setValues({ ...values, [prop]: event.target.value });
   };
   const handleSubmit = () => {
+    addFicha(values);
     history.push("/Patients/Antecedentes familiares");
   };
   return (
@@ -535,4 +538,13 @@ export default function Fichaidentificacion() {
       </div>
     </Content>
   );
+ 
 }
+const mapStateToProps = state => ({});
+const mapDispatchToProps = dispatch => ({
+addFicha: addFichaAction(dispatch)
+});
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Fichaidentificacion);

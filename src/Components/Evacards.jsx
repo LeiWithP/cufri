@@ -1,7 +1,9 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { Typography, Card, TextField,Slider} from "@material-ui/core";
-
+import { connect } from "react-redux";
+import {addSufferingAction} from '../store/actions/Suffering'
+import { useEffect } from "react";
 
 const useStyles = makeStyles((theme) => ({
     title: {
@@ -25,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
    
   }));
 
-  export default function EVAcard(props){
+ function EVAcard({title,addSuffering}){
       const classes=useStyles();
       const [values,setValues] = React.useState({
           "Inicio":{
@@ -42,15 +44,18 @@ const useStyles = makeStyles((theme) => ({
           }
       });
       const handleChange = (prop) => (e) => {
-        setValues({ ...values,[props.title]:{...values[props.title],[prop]: e.target.value}});
-        console.log(values[props.title]);
+        setValues({ ...values,[title]:{...values[title],[prop]: e.target.value}});
+        console.log(values[title]);
       };
       const handleChangeEva=(event,val)=>{
-          setValues({ ...values,[props.title]:{...values[props.title],EVA:val}})
+          setValues({ ...values,[title]:{...values[title],EVA:val}})
       }
+      useEffect(()=>{
+        addSuffering(values[title],title);
+      },[values])
       return(
           <Card className={classes.Card}> 
-            <Typography className={classes.title}>{props.title}</Typography>
+            <Typography className={classes.title}>{title}</Typography>
             <TextField 
               variant="filled"
               label={"Padecimiento actual-Inicio"}
@@ -60,7 +65,15 @@ const useStyles = makeStyles((theme) => ({
               helperText={"Escribe los detalles"}
               style={{ width: "97%",marginTop:"2%" }}/>
               <Typography style={{fontWeight:"normal"}} className={classes.title}>Escala visual analógica-EVA</Typography>
-              <Slider style={{width:"97%"}} value={values[props.title].EVA} onChange={handleChangeEva} aria-labelledby="continuous-slider"/>
+              <Slider style={{width:"97%"}} value={values[title].EVA} onChange={handleChangeEva} aria-labelledby="continuous-slider"/>
           </Card>
       )
   }
+const mapStateToProps = state => ({});
+const mapDispatchToProps = dispatch => ({
+addSuffering: addSufferingAction(dispatch)
+});
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(EVAcard);

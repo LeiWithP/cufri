@@ -56,7 +56,7 @@ export default function MoveArch() {
     history.push("/Patients/Notas de evolucion");
   };
   return (
-    <Content nombre="Pacientes" select="nval">
+    <Content nombre="Pacientes" select="amovimiento">
       <div
         style={{
           width: "100%",
@@ -66,7 +66,7 @@ export default function MoveArch() {
           overflowY: "scroll",
         }}
       >
-        <Typography className={classes.title}>Notas de Valoración</Typography>
+        <Typography className={classes.title}>Arcos de movimiento</Typography>
         {Arcos.map(arco=>(
             <Archcard key={arco}titulo={arco}/>
         ))}

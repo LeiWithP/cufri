@@ -2,8 +2,11 @@ import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import FormGroup from "@material-ui/core/FormGroup";
 import Checkbox from "@material-ui/core/Checkbox";
+import { connect } from "react-redux";
+import {addCardnpAction} from '../store/actions/Cardnp'
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import { Card, Typography, CardContent, TextField } from "@material-ui/core";
+import { useEffect } from "react";
 
 const useStyles = makeStyles(theme => ({
   cardbody: {
@@ -34,7 +37,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function Cardnopatologic(props) {
+function Cardnopatologic({name,disabled,addCardnp}) {
   const classes = useStyles();
   const [values, setValues] = React.useState({
     "Enfermedades Infecciosas de la infancia": {
@@ -190,11 +193,14 @@ export default function Cardnopatologic(props) {
         detalles: ""
       }
   });
+  useEffect(()=>{
+    addCardnp(values[name],name)
+  },[values])
   return (
     <Card className={classes.cardbody}>
       <CardContent className={classes.card}>
         <Typography style={{ textAlign: "center", marginTop: "1vh" }}>
-          {props.name}
+          {name}
         </Typography>
         <FormGroup row style={{ justifyContent: "center" }}>
           <FormControlLabel
@@ -202,34 +208,34 @@ export default function Cardnopatologic(props) {
               <Checkbox
                 value="si"
                 color="primary"
-                checked={values[props.name].confirmacion === "si"}
+                checked={values[name].confirmacion === "si"}
                 onChange={e => {
                   setValues({
                     ...values,
-                    [props.name]: {...values[props.name],confirmacion: e.target.value }
+                    [name]: {...values[name],confirmacion: e.target.value }
                   });
                 }}
               />
             }
             label="Si"
-            disabled={props.disabled === "no" || props.disabled === ""}
+            disabled={disabled === "no" || disabled === ""}
           />
           <FormControlLabel
             control={
               <Checkbox
                 value="no"
                 color="primary"
-                checked={values[props.name].confirmacion === "no"}
+                checked={values[name].confirmacion === "no"}
                 onChange={e => {
                   setValues({
                     ...values,
-                    [props.name]: {...values[props.name],confirmacion: e.target.value }
+                    [name]: {...values[name],confirmacion: e.target.value }
                   });
                 }}
               />
             }
             label="No"
-            disabled={props.disabled === "no" || props.disabled === ""}
+            disabled={disabled === "no" || disabled === ""}
           />
         </FormGroup>
         <TextField
@@ -240,13 +246,13 @@ export default function Cardnopatologic(props) {
           onChange={e => {
             setValues({
               ...values,
-              [props.name]: {...values[props.name],detalles: e.target.value }
+              [name]: {...values[name],detalles: e.target.value }
             });
           }}
           disabled={
-            props.disabled === "no" ||
-            props.disabled === "" ||
-            values[props.name].confirmacion === "no"
+            disabled === "no" ||
+            disabled === "" ||
+            values[name].confirmacion === "no"
           }
           variant="filled"
         />
@@ -254,3 +260,11 @@ export default function Cardnopatologic(props) {
     </Card>
   );
 }
+const mapStateToProps = state => ({});
+const mapDispatchToProps = dispatch => ({
+addCardnp: addCardnpAction(dispatch)
+});
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Cardnopatologic);

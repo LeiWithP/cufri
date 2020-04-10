@@ -1,6 +1,8 @@
-import React from "react";
+import React,{useEffect} from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { Typography, Card, TextField} from "@material-ui/core";
+import { connect } from "react-redux";
+import {addMovearchAction} from '../store/actions/Movearch'
 
 const useStyles = makeStyles((theme) => ({
     title: {
@@ -31,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
     },
   }));
 
-  export default function Movearchcard(props){
+  function Movearchcard({titulo,addMovearch}){
     const classes = useStyles();
     const [values,setValues]=React.useState({
         "Columna cervical":{
@@ -146,12 +148,15 @@ const useStyles = makeStyles((theme) => ({
         },
     })
     const handleChange = (prop) => (e) => {
-        setValues({ ...values,[props.titulo]:{...values[props.titulo],[prop]: e.target.value}});
-        console.log(values[props.titulo]);
+        setValues({ ...values,[titulo]:{...values[titulo],[prop]: e.target.value}});
+        console.log(values[titulo]);
       };
+    useEffect(()=>{
+      addMovearch(values[titulo],titulo);
+    },[values])
     return(
         <Card className={classes.Card}>
-        <Typography className={classes.title}>{props.titulo}</Typography>
+        <Typography className={classes.title}>{titulo}</Typography>
           <div className={classes.content}>
           <TextField
               variant="filled"
@@ -213,3 +218,11 @@ const useStyles = makeStyles((theme) => ({
         </Card>
     );
   }
+const mapStateToProps = state => ({});
+const mapDispatchToProps = dispatch => ({
+addMovearch: addMovearchAction(dispatch)
+});
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Movearchcard);

@@ -1,6 +1,9 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { Card, Typography, CardContent, TextField } from "@material-ui/core";
+import { connect } from "react-redux";
+import {addSufferingAction} from '../store/actions/Suffering'
+import { useEffect } from "react";
 
 const useStyles = makeStyles(theme => ({
   cardbody: {
@@ -31,7 +34,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function Cardnopatologic(props) {
+function Textcard({name,addSuffering}) {
   const classes = useStyles();
   const[values,setValues]=React.useState({
     "Diagnosticos anteriores":{
@@ -47,21 +50,24 @@ export default function Cardnopatologic(props) {
         detalles:""
     },
   });
+  useEffect(()=>{
+    addSuffering(values[name].detalles,name);
+  },[values])
   return (
     <Card className={classes.cardbody}>
       <CardContent className={classes.card}>
         <Typography style={{ textAlign: "center", marginTop: "1vh" }}>
-          {props.name}
+          {name}
         </Typography>
         <TextField
-          label={props.name}
+          label={name}
           multiline
           helperText={"Ingresa los detalles"}
           rows="4"
           onChange={e => {
             setValues({
               ...values,
-              [props.name]: {...values[props.name],detalles: e.target.value }
+              [name]: {...values[name],detalles: e.target.value }
             });
           }}
           variant="filled"
@@ -70,3 +76,11 @@ export default function Cardnopatologic(props) {
     </Card>
   );
 }
+const mapStateToProps = state => ({});
+const mapDispatchToProps = dispatch => ({
+addSuffering: addSufferingAction(dispatch)
+});
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Textcard);

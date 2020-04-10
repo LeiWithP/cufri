@@ -5,6 +5,8 @@ import Content from "../../Components/ContentExp";
 import NavigateNextIcon from "@material-ui/icons/NavigateNext";
 import Fab from "@material-ui/core/Fab";
 import {useHistory} from 'react-router-dom';
+import { connect } from "react-redux";
+import {addPhysicaleAction} from '../../store/actions/Physicalexam'
 
 const useStyles = makeStyles(theme => ({
   title: {
@@ -80,7 +82,7 @@ const mi=[
     "Tobillo",
     "Pie(Pie equino, plano, cavo)"
 ]
-export default function Pysicalexam() {
+function Pysicalexam({addPhysicale}) {
   const classes = useStyles();
   const history = useHistory();
   const [values, setValues] = React.useState({
@@ -124,6 +126,7 @@ export default function Pysicalexam() {
     "Pie(Pie equino, plano, cavo)":""
   });
   const handleNext =()=>{
+    addPhysicale(values);
     history.push("/patients/Postura")
   }
   return (
@@ -153,6 +156,9 @@ export default function Pysicalexam() {
               flexDirection: "column",
               width: "90%"
             }}
+            onSubmit={handleNext}
+            id="formulario"
+            name="formulario"
           >
             <div className={classes.container}>
               {ef.map(val => (
@@ -255,7 +261,8 @@ export default function Pysicalexam() {
         <Fab
           color="primary"
           aria-label="next"
-          onClick={handleNext}
+          type="submit"
+          form="formulario"
           style={{
             alignSelf: "flex-end",
             backgroundColor: "#FFB700",
@@ -270,3 +277,11 @@ export default function Pysicalexam() {
     </Content>
   );
 }
+const mapStateToProps = state => ({});
+const mapDispatchToProps = dispatch => ({
+addPhysicale: addPhysicaleAction(dispatch)
+});
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Pysicalexam);
