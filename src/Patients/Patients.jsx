@@ -1,5 +1,5 @@
-import React from 'react';
-import Content from '../Components/Content';
+import React from "react";
+import Content from "../Components/Content";
 import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 import SearchIcon from "@material-ui/icons/Search";
@@ -15,10 +15,13 @@ import { makeStyles } from "@material-ui/core/styles";
 import { TextField, InputAdornment } from "@material-ui/core";
 import IconButton from "@material-ui/core/IconButton";
 import EditIcon from "@material-ui/icons/Edit";
-import {useHistory} from 'react-router-dom';
+import { useHistory } from "react-router-dom";
 import Fab from "@material-ui/core/Fab";
 import AddIcon from "@material-ui/icons/Add";
 import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
+import { useEffect } from "react";
+
+const urlBack = "http://localhost:4433/umarista-back/";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -68,10 +71,23 @@ const columns = [
     format: value => value.toLocaleString()
   }
 ];
- const rows = [1,2,3,4,5,6,7,8,9,10,11,12,13]
+const rows = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13];
 
-export default function Pacientes(){
-  const classes =useStyles();
+export default function Pacientes() {
+  useEffect(() => {
+    async function fetchData() {
+      const response = await fetch(urlBack + "usrs_cargar.php", {
+        method: "GET"
+      })
+        .then(response => response.json())
+        .then(posts => {
+          setDatos(Object.values(posts));
+        });
+    }
+  });
+
+  const [datos, setDatos] = React.useState([]);
+  const classes = useStyles();
   const history = useHistory();
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [page, setPage] = React.useState(0);
@@ -91,9 +107,9 @@ export default function Pacientes(){
     console.log(search);
     setSearch("");
   };
-  return(
+  return (
     <Content nombre="Pacientes" select="pacientes">
-       <div
+      <div
         style={{
           width: "100%",
           backgroundColor: "#F4F4F4",
@@ -103,8 +119,8 @@ export default function Pacientes(){
           overflowX:"auto"
         }}
       >
-         <Paper className={classes.root}>
-         <span
+        <Paper className={classes.root}>
+          <span
             style={{
               width: "100%",
               display: "flex",
@@ -171,20 +187,22 @@ export default function Pacientes(){
                 </TableRow>
               </TableHead>
               <TableBody>
-                {rows
+                {datos
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .map(row => {
+                  .map((item, index) => {
                     return (
                       <TableRow
                         hover
                         role="checkbox"
                         tabIndex={-1}
-                        key={row.code}
+                        key={item.id_f_identificacion}
                       >
-                        <TableCell>Gustavo García Sánchez</TableCell>
-                        <TableCell>Masculino</TableCell>
-                        <TableCell>22 años</TableCell>
-                        <TableCell>443-166-3698</TableCell>
+                        <TableCell>
+                          {item.nombre + " " + item.ap_p + " " + item.ap_m}
+                        </TableCell>
+                        <TableCell>{item.sexo}</TableCell>
+                        <TableCell>{item.edad + " años"}</TableCell>
+                        <TableCell>{item.telefono_pac}</TableCell>
                         <TableCell>
                           <IconButton
                             color="inherit"
@@ -216,12 +234,12 @@ export default function Pacientes(){
             onChangePage={handleChangePage}
             onChangeRowsPerPage={handleChangeRowsPerPage}
           />
-         </Paper>
-         <Fab
+        </Paper>
+        <Fab
           color="primary"
           aria-label="add"
-          onClick={()=>{
-            history.push("/Patients/Ficha de identificacion")
+          onClick={() => {
+            history.push("/Patients/Ficha de identificacion");
           }}
           style={{
             alignSelf: "flex-end",
