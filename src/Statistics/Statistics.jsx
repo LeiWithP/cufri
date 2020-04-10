@@ -1,10 +1,55 @@
 import React from 'react';
 import Content from '../Components/Content';
+import Excel from '../Images/excel.png'
+import { Button } from '@material-ui/core';
+import ReactExport from "react-export-excel";
+
+const ExcelFile = ReactExport.ExcelFile;
+const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
+const ExcelColumn = ReactExport.ExcelFile.ExcelColumn;
+
+const dataSet1 = [
+    {
+        name: "Johson",
+        amount: 30000,
+        sex: 'M',
+        is_married: true
+    },
+    {
+        name: "Monika",
+        amount: 355000,
+        sex: 'F',
+        is_married: false
+    },
+    {
+        name: "John",
+        amount: 250000,
+        sex: 'M',
+        is_married: false
+    },
+    {
+        name: "Josef",
+        amount: 450500,
+        sex: 'M',
+        is_married: true
+    }
+];
+
 
 export default function Statistics(){
     return(
         <Content nombre="Estadisticas" select="estadisticas">
-            <div style={{width:"100%",backgroundColor:"#F4F4F4",display:"flex",flexDirection:"column",justifyContent:"center" }}>
+            <div style={{width:"100%",backgroundColor:"#F4F4F4",display:"flex",flexDirection:"column",justifyContent:"center",alignItems:"center" }}>
+                <img src={Excel} alt="" width="50%"></img>
+                <ExcelFile element={<Button style={{ backgroundColor: "#FFB700", color: "white",width:"180%" }}>Obtener Excel</Button>}>
+                <ExcelSheet data={dataSet1} name="Employees">
+                    <ExcelColumn label="Name" value="name"/>
+                    <ExcelColumn label="Wallet Money" value="amount"/>
+                    <ExcelColumn label="Gender" value="sex"/>
+                    <ExcelColumn label="Marital Status"
+                                 value={(col) => col.is_married ? "Married" : "Single"}/>
+                </ExcelSheet>
+            </ExcelFile>
             </div>
          </Content>
     );
