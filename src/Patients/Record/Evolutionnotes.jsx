@@ -11,6 +11,9 @@ import NavigateNextIcon from "@material-ui/icons/NavigateNext";
 import Fab from "@material-ui/core/Fab";
 import Evolnote from '../../Components/Evolnote';
 import { useHistory } from "react-router-dom";
+import { connect } from "react-redux";
+import { useEffect } from "react";
+
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -50,7 +53,7 @@ const data =[
     }
 ]
 
-export default function Valnotes() {
+function Valnotes({ficha}) {
   const classes = useStyles();
   const history = useHistory();
   const [values, setValues] = React.useState({
@@ -67,6 +70,9 @@ export default function Valnotes() {
     e.preventDefault();
     console.log(values);
   };
+  useEffect(()=>{
+    console.log({ficha});
+  })
   return (
     <Content nombre="Pacientes" select="nevol">
       <div
@@ -146,3 +152,9 @@ export default function Valnotes() {
     </Content>
   );
 }
+const mapStateToProps = state => ({ ficha: state.Ficha.ficha });
+const mapDispatchToProps = state => ({});
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Valnotes);
