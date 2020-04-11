@@ -53,7 +53,7 @@ export default function MoveArch() {
   const classes = useStyles();
   const history = useHistory();
   const handleNext = () => {
-    history.push("/Patients/Notas de evolucion");
+    history.push("/Patients/Notas de valoracion");
   };
   return (
     <Content nombre="Pacientes" select="amovimiento">
