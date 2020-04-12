@@ -23,22 +23,22 @@ import { useEffect } from "react";
 
 const urlBack = "http://localhost:4433/umarista-back/";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     width: "70%",
-    alignSelf: "center"
+    alignSelf: "center",
   },
   container: {
-    maxHeight: 587
+    maxHeight: 587,
   },
   title: {
-    flexGrow: 1
+    flexGrow: 1,
   },
   formulario: {
     display: "flex",
     flexDirection: "column",
-    alignSelf: "center"
-  }
+    alignSelf: "center",
+  },
 }));
 
 const columns = [
@@ -46,7 +46,7 @@ const columns = [
     id: "Nombre",
     label: "Nombre",
     minWidth: 170,
-    align: "left"
+    align: "left",
   },
   { id: "Sexo", label: "Sexo", minWidth: 170, align: "left" },
   {
@@ -54,37 +54,41 @@ const columns = [
     label: "Edad",
     minWidth: 170,
     align: "left",
-    format: value => value.toLocaleString()
+    format: (value) => value.toLocaleString(),
   },
   {
     id: "Teléfono",
     label: "Teléfono",
     minWidth: 170,
     align: "left",
-    format: value => value.toLocaleString()
+    format: (value) => value.toLocaleString(),
   },
   {
     id: "Acciones",
     label: "Acciones",
     minWidth: 170,
     align: "left",
-    format: value => value.toLocaleString()
-  }
+    format: (value) => value.toLocaleString(),
+  },
 ];
 const rows = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13];
 
 export default function Pacientes() {
   useEffect(() => {
     async function fetchData() {
-      const response = await fetch(urlBack + "usrs_cargar.php", {
-        method: "GET"
+      const response = await fetch(urlBack + "pacientes_cargar.php", {
+        method: "GET",
       })
-        .then(response => response.json())
-        .then(posts => {
+        .then((response) => response.json())
+        .then((posts) => {
+          console.log("CARGAR DATOS");
+          console.log(Object.values(posts));
           setDatos(Object.values(posts));
         });
     }
-  });
+
+    fetchData();
+  }, []);
 
   const [datos, setDatos] = React.useState([]);
   const classes = useStyles();
@@ -95,15 +99,15 @@ export default function Pacientes() {
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
-  const handleSearch = event => {
+  const handleSearch = (event) => {
     event.preventDefault();
     setSearch(event.target.value);
   };
-  const handleChangeRowsPerPage = event => {
+  const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(+event.target.value);
     setPage(0);
   };
-  const handleClear = e => {
+  const handleClear = (e) => {
     console.log(search);
     setSearch("");
   };
@@ -116,7 +120,7 @@ export default function Pacientes() {
           display: "flex",
           flexDirection: "column",
           justifyContent: "center",
-          overflowX:"auto"
+          overflowX: "auto",
         }}
       >
         <Paper className={classes.root}>
@@ -125,7 +129,7 @@ export default function Pacientes() {
               width: "100%",
               display: "flex",
               flexDirection: "row",
-              justifyContent: "space-between"
+              justifyContent: "space-between",
             }}
           >
             <Typography
@@ -133,7 +137,7 @@ export default function Pacientes() {
                 fontSize: "25px",
                 fontWeight: "bolder",
                 fontFamily: "Roboto",
-                margin: "3%"
+                margin: "3%",
               }}
             >
               Pacientes
@@ -158,13 +162,13 @@ export default function Pacientes() {
                   >
                     <ClearIcon />
                   </InputAdornment>
-                )
+                ),
               }}
               style={{
                 color: "#e0e0e0",
                 alignSelf: "center",
                 marginRight: "3%",
-                width: "35%"
+                width: "35%",
               }}
             />
           </span>
@@ -172,13 +176,13 @@ export default function Pacientes() {
             <Table stickyHeader aria-label="sticky table">
               <TableHead>
                 <TableRow>
-                  {columns.map(column => (
+                  {columns.map((column) => (
                     <TableCell
                       key={column.id}
                       align={column.align}
                       style={{
                         minWidth: column.minWidth,
-                        fontWeight: "bold"
+                        fontWeight: "bold",
                       }}
                     >
                       {column.label}
@@ -247,7 +251,7 @@ export default function Pacientes() {
             marginRight: "1%",
             marginBottom: "1%",
             position: "absolute",
-            bottom: 0
+            bottom: 0,
           }}
         >
           <AddIcon />
