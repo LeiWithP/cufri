@@ -10,7 +10,7 @@ import DateFnsUtils from "@date-io/date-fns";
 import NavigateNextIcon from "@material-ui/icons/NavigateNext";
 import Fab from "@material-ui/core/Fab";
 import Evolnote from '../../Components/Evolnote';
-import { useHistory } from "react-router-dom";
+import { useHistory, useParams  } from "react-router-dom";
 import { connect } from "react-redux";
 import { useEffect } from "react";
 
@@ -53,9 +53,10 @@ const data =[
     }
 ]
 
-function Valnotes({ficha}) {
+function Valnotes({ficha,ahf}) {
   const classes = useStyles();
   const history = useHistory();
+  const {id} = useParams();
   const [values, setValues] = React.useState({
     fecha: new Date(),
     Nevolucion: "",
@@ -71,7 +72,7 @@ function Valnotes({ficha}) {
     console.log(values);
   };
   useEffect(()=>{
-    console.log({ficha});
+    console.log({ahf,ficha});
   })
   return (
     <Content nombre="Pacientes" select="nevol">
@@ -117,6 +118,7 @@ function Valnotes({ficha}) {
             />
           </form>
           <Button
+          disabled={!id}
             style={{
               alignSelf: "flex-end",
               backgroundColor: "#FFB700",
@@ -152,7 +154,7 @@ function Valnotes({ficha}) {
     </Content>
   );
 }
-const mapStateToProps = state => ({ ficha: state.Ficha.ficha });
+const mapStateToProps = state => ({ ficha: state.Ficha.ficha,ahf:state.AHeredofamiliares });
 const mapDispatchToProps = state => ({});
 export default connect(
   mapStateToProps,

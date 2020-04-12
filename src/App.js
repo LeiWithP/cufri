@@ -71,6 +71,9 @@ export default function App() {
               <Route exact path="/Patients/Notas de valoracion">
                   <Recordp11/>
               </Route>
+              <Route exact path="/Patients/Notas de valoracion/:id">
+                  <Recordp11/>
+              </Route>
               <Route exact path="/Patients/Mapa del dolor">
                   <Recordp12/>
               </Route>
@@ -78,6 +81,9 @@ export default function App() {
                   <Recordp13/>
               </Route>
               <Route exact path="/Patients/Notas de evolucion">
+                  <Recordp14/>
+              </Route>
+              <Route exact path="/Patients/Notas de evolucion/:id">
                   <Recordp14/>
               </Route>
               <Route exact path="/Users">

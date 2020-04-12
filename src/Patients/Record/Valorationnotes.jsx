@@ -10,7 +10,7 @@ import DateFnsUtils from "@date-io/date-fns";
 import NavigateNextIcon from "@material-ui/icons/NavigateNext";
 import Fab from "@material-ui/core/Fab";
 import Valnote from '../../Components/Valnote';
-import { useHistory } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -53,6 +53,7 @@ const data =[
 export default function Valnotes() {
   const classes = useStyles();
   const history = useHistory();
+  const {id} = useParams();
   const [values, setValues] = React.useState({
     fecha: new Date(),
     EVA: "",
@@ -136,6 +137,7 @@ export default function Valnotes() {
             />
           </form>
           <Button
+          disabled={!id}
             style={{
               alignSelf: "flex-end",
               backgroundColor: "#FFB700",
