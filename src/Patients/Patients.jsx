@@ -90,6 +90,11 @@ export default function Pacientes() {
     fetchData();
   }, []);
 
+  function sendUrl(id) {
+    const url = "/Patients/Ficha de identificacion/" + id;
+    history.push(url);
+  }
+
   const [datos, setDatos] = React.useState([]);
   const classes = useStyles();
   const history = useHistory();
@@ -212,6 +217,7 @@ export default function Pacientes() {
                             color="inherit"
                             aria-label="edit"
                             style={{ padding: 0, marginRight: "13%" }}
+                            onClick={() => sendUrl(item.id_f_identificacion)}
                           >
                             <EditIcon />
                           </IconButton>

@@ -4,16 +4,19 @@ import { Typography, Card, TextField } from "@material-ui/core";
 import Content from "../../Components/ContentExp";
 import NavigateNextIcon from "@material-ui/icons/NavigateNext";
 import Fab from "@material-ui/core/Fab";
-import {useHistory} from 'react-router-dom';
+import { useHistory, useParams } from "react-router-dom";
 import { connect } from "react-redux";
-import {addPhysicaleAction} from '../../store/actions/Physicalexam'
+import { addPhysicaleAction } from "../../store/actions/Physicalexam";
+import { useEffect } from "react";
 
-const useStyles = makeStyles(theme => ({
+const urlBack = "http://localhost:4433/umarista-back/";
+
+const useStyles = makeStyles((theme) => ({
   title: {
     alignSelf: "center",
     fontWeight: "bold",
     fontSize: "x-large",
-    marginTop: "4vh"
+    marginTop: "4vh",
   },
   container: {
     display: "flex",
@@ -21,14 +24,14 @@ const useStyles = makeStyles(theme => ({
     flexWrap: "wrap",
     width: "92%",
     alignSelf: "center",
-    justifyContent: "center"
+    justifyContent: "center",
   },
   subtitle: {
     alignSelf: "left",
     fontWeight: "bold",
     fontSize: "x-large",
     marginTop: "4vh",
-    marginLeft:"6%"
+    marginLeft: "6%",
   },
 }));
 
@@ -43,7 +46,7 @@ const ef = [
   "Peso actual",
   "Peso anterior",
   "Peso ideal",
-  "IMC"
+  "IMC",
 ];
 const eg = [
   "Estado de conciencia",
@@ -51,38 +54,95 @@ const eg = [
   "Movimientos anormales",
   "Postura",
   "Marcha",
-  "Estado general de nutrición"
+  "Estado general de nutrición",
 ];
-const er=[
-    "Piel y anexos",
-    "Cabeza",
-    "Ojos",
-    "Oidos",
-    "Nariz y senos p/n",
-    "Boca",
-    "Torax",
-    "Vasos sanguíneos",
-    "Mamas",
-    "Genitales"
-]
-const columna=[
-    "Cervical",
-    "Dorsal",
-    "Sacroiliaca"
-]
-const ms=[
-    "Hombros",
-    "Codo",
-    "Muñeca",
-    "Mano"
-]
-const mi=[
-    "Cadera",
-    "Rodilla(Genu varo/valgo, recurvatum)",
-    "Tobillo",
-    "Pie(Pie equino, plano, cavo)"
-]
-function Pysicalexam({addPhysicale}) {
+const er = [
+  "Piel y anexos",
+  "Cabeza",
+  "Ojos",
+  "Oidos",
+  "Nariz y senos p/n",
+  "Boca",
+  "Torax",
+  "Vasos sanguíneos",
+  "Mamas",
+  "Genitales",
+];
+const columna = ["Cervical", "Dorsal", "Sacroiliaca"];
+const ms = ["Hombros", "Codo", "Muñeca", "Mano"];
+const mi = [
+  "Cadera",
+  "Rodilla(Genu varo/valgo, recurvatum)",
+  "Tobillo",
+  "Pie(Pie equino, plano, cavo)",
+];
+function Pysicalexam({ addPhysicale }) {
+  useEffect(() => {
+    async function fetchData() {
+      const formData = new FormData();
+      formData.append("id", id);
+      const response = await fetch(urlBack + "pac_exp_fis.php", {
+        method: "POST",
+        body: formData,
+      })
+        .then((response) => response.json())
+        .then((posts) => {
+          console.log(Object.values(posts));
+          setMap(Object.values(posts));
+        });
+    }
+
+    if (id) {
+      fetchData();
+    }
+  }, []);
+
+  function setMap(dat) {
+    dat.map((item, index) => {
+      setValues({
+        "T.A": item.ta,
+        "F.C": item.fc,
+        "F.R": item.fr,
+        "Temp.": item.temp,
+        "Talla actual": item.talla,
+        "Talla anterior": item.talla_anterior,
+        S02: item.s02,
+        "Peso actual": item.peso_actual,
+        "Peso anterior": item.peso_anterior,
+        "Peso ideal": item.peso_ideal,
+        IMC: item.imc,
+        "Estado de conciencia": item.estado_conciencia,
+        Actitud: item.actitud,
+        "Movimientos anormales": item.movimientos_anormales,
+        Postura: item.postura,
+        Marcha: item.marcha,
+        "Estado general de nutrición": item.estado_gral_nutri,
+        "Piel y anexos": item.piel_anexos,
+        Cabeza: item.cabeza,
+        Ojos: item.ojos,
+        Oidos: item.oidos,
+        "Nariz y senos p/n": item.nariz_senos,
+        Boca: item.boca,
+        Torax: item.torax,
+        "Vasos sanguíneos": item.vasos_sang,
+        Mamas: item.mamas,
+        Genitales: item.genitales,
+        Cervical: item.cervical,
+        Dorsal: item.dorsal,
+        Sacroiliaca: item.sacroiliaca,
+        Hombros: item.hombros,
+        Codo: item.codo,
+        Muñeca: item.muneca,
+        Mano: item.mano,
+        Cadera: item.cadera,
+        "Rodilla(Genu varo/valgo, recurvatum)": item.rodilla,
+        Tobillo: item.tobillo,
+        "Pie(Pie equino, plano, cavo)": item.pie,
+      });
+    });
+  }
+
+  const { id } = useParams();
   const classes = useStyles();
   const history = useHistory();
   const [values, setValues] = React.useState({
@@ -103,34 +163,39 @@ function Pysicalexam({addPhysicale}) {
     Postura: "",
     Marcha: "",
     "Estado general de nutrición": "",
-    "Piel y anexos":"",
-    "Cabeza":"",
-    "Ojos":"",
-    "Oidos":"",
-    "Nariz y senos p/n":"",
-    "Boca":"",
-    "Torax":"",
-    "Vasos sanguíneos":"",
-    "Mamas":"",
-    "Genitales":"",
-    "Cervical":"",
-    "Dorsal":"",
-    "Sacroiliaca":"",
-    "Hombros":"",
-    "Codo":"",
-    "Muñeca":"",
-    "Mano":"",
-    "Cadera":"",
-    "Rodilla(Genu varo/valgo, recurvatum)":"",
-    "Tobillo":"",
-    "Pie(Pie equino, plano, cavo)":""
+    "Piel y anexos": "",
+    Cabeza: "",
+    Ojos: "",
+    Oidos: "",
+    "Nariz y senos p/n": "",
+    Boca: "",
+    Torax: "",
+    "Vasos sanguíneos": "",
+    Mamas: "",
+    Genitales: "",
+    Cervical: "",
+    Dorsal: "",
+    Sacroiliaca: "",
+    Hombros: "",
+    Codo: "",
+    Muñeca: "",
+    Mano: "",
+    Cadera: "",
+    "Rodilla(Genu varo/valgo, recurvatum)": "",
+    Tobillo: "",
+    "Pie(Pie equino, plano, cavo)": "",
   });
-  const handleNext =()=>{
+  const handleNext = () => {
     addPhysicale(values);
-    history.push("/patients/Postura")
-  }
+    history.push("/patients/Postura");
+  };
   return (
-    <Content nombre="Pacientes" select="efisica">
+    <Content
+      nombre="Pacientes"
+      edit={id ? true : false}
+      id={id}
+      select="efisica"
+    >
       <div
         style={{
           width: "100%",
@@ -146,7 +211,7 @@ function Pysicalexam({addPhysicale}) {
             alignSelf: "center",
             display: "flex",
             flexDirection: "column",
-            overflowY: "scroll"
+            overflowY: "scroll",
           }}
         >
           <form
@@ -154,22 +219,23 @@ function Pysicalexam({addPhysicale}) {
               alignSelf: "center",
               display: "flex",
               flexDirection: "column",
-              width: "90%"
+              width: "90%",
             }}
             onSubmit={handleNext}
             id="formulario"
             name="formulario"
           >
             <div className={classes.container}>
-              {ef.map(val => (
+              {ef.map((val) => (
                 <TextField
                   variant={"filled"}
                   label={val}
-                  onChange={e => {
+                  onChange={(e) => {
                     setValues({ ...values, [val]: e.target.value });
                   }}
                   helperText={"Escriba los detalles"}
                   style={{ marginRight: "2%", marginTop: "2%" }}
+                  value={values[val] === "" ? "" : values[val]}
                 />
               ))}
             </div>
@@ -177,15 +243,16 @@ function Pysicalexam({addPhysicale}) {
               Exploración General
             </Typography>
             <div className={classes.container}>
-              {eg.map(valg => (
+              {eg.map((valg) => (
                 <TextField
                   variant={"filled"}
                   label={valg}
-                  onChange={e => {
+                  onChange={(e) => {
                     setValues({ ...values, [valg]: e.target.value });
                   }}
                   helperText={"Escriba los detalles"}
-                  style={{ marginRight: "3%", marginTop: "2%",width:"350px" }}
+                  style={{ marginRight: "3%", marginTop: "2%", width: "350px" }}
+                  value={values[valg] === "" ? "" : values[valg]}
                 />
               ))}
             </div>
@@ -193,69 +260,71 @@ function Pysicalexam({addPhysicale}) {
               Exploración por región
             </Typography>
             <div className={classes.container}>
-            {er.map(valr => (
+              {er.map((valr) => (
                 <TextField
                   variant={"filled"}
                   label={valr}
-                  onChange={e => {
+                  onChange={(e) => {
                     setValues({ ...values, [valr]: e.target.value });
                   }}
                   helperText={"Escriba los detalles"}
-                  style={{ marginTop: "2%",width:"95%" }}
+                  style={{ marginTop: "2%", width: "95%" }}
+                  value={values[valr] === "" ? "" : values[valr]}
                 />
               ))}
-            </div> 
+            </div>
             <Typography className={classes.title}>
               Sistemas musculoesqueléticos por regiones
             </Typography>
-            <Typography className={classes.subtitle}>
-              Columna
-            </Typography>
+            <Typography className={classes.subtitle}>Columna</Typography>
             <div className={classes.container}>
-            {columna.map(valr => (
+              {columna.map((valr) => (
                 <TextField
                   variant={"filled"}
                   label={valr}
-                  onChange={e => {
+                  onChange={(e) => {
                     setValues({ ...values, [valr]: e.target.value });
                   }}
                   helperText={"Escriba los detalles"}
-                  style={{ marginTop: "2%",width:"95%" }}
+                  style={{ marginTop: "2%", width: "95%" }}
+                  value={values[valr] === "" ? "" : values[valr]}
                 />
               ))}
-            </div> 
+            </div>
             <Typography className={classes.subtitle}>
               Miembro superior
             </Typography>
             <div className={classes.container}>
-            {ms.map(valr => (
+              {ms.map((valr) => (
                 <TextField
                   variant={"filled"}
                   label={valr}
-                  onChange={e => {
+                  onChange={(e) => {
                     setValues({ ...values, [valr]: e.target.value });
                   }}
                   helperText={"Escriba los detalles"}
-                  style={{ marginTop: "2%",width:"95%" }}
+                  style={{ marginTop: "2%", width: "95%" }}
+                  value={values[valr] === "" ? "" : values[valr]}
                 />
               ))}
-            </div> 
+            </div>
             <Typography className={classes.subtitle}>
               Miembro Inferior
             </Typography>
             <div className={classes.container}>
-            {mi.map(valr => (
+              {mi.map((valr) => (
                 <TextField
                   variant={"filled"}
                   label={valr}
-                  onChange={e => {
+                  onChange={(e) => {
                     setValues({ ...values, [valr]: e.target.value });
                   }}
                   helperText={"Escriba los detalles"}
-                  style={{ marginTop: "2%",width:"95%" }}
+                  style={{ marginTop: "2%", width: "95%" }}
+                  value={values[valr] === "" ? "" : values[valr]}
                 />
               ))}
-            </div> 
+            </div>
           </form>
         </Card>
         <Fab
@@ -268,7 +337,7 @@ function Pysicalexam({addPhysicale}) {
             backgroundColor: "#FFB700",
             position: "absolute",
             bottom: 10,
-            right: 10
+            right: 10,
           }}
         >
           <NavigateNextIcon />
@@ -277,11 +346,8 @@ function Pysicalexam({addPhysicale}) {
     </Content>
   );
 }
-const mapStateToProps = state => ({});
-const mapDispatchToProps = dispatch => ({
-addPhysicale: addPhysicaleAction(dispatch)
+const mapStateToProps = (state) => ({});
+const mapDispatchToProps = (dispatch) => ({
+  addPhysicale: addPhysicaleAction(dispatch),
 });
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Pysicalexam);
+export default connect(mapStateToProps, mapDispatchToProps)(Pysicalexam);

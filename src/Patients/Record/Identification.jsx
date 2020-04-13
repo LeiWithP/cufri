@@ -9,41 +9,95 @@ import FormControl from "@material-ui/core/FormControl";
 import FormHelperText from "@material-ui/core/FormHelperText";
 import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
-import { useHistory } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import { connect } from "react-redux";
-import {addFichaAction} from '../../store/actions/Ficha'
+import { addFichaAction } from "../../store/actions/Ficha";
+import { useEffect } from "react";
 
-const useStyles = makeStyles(theme => ({
+const urlBack = "http://localhost:4433/umarista-back/";
+
+const useStyles = makeStyles((theme) => ({
   card: {
     width: "95%",
     height: "85%",
     alignSelf: "center",
-    marginTop: "2vh"
+    marginTop: "2vh",
   },
   title: {
     alignSelf: "center",
     fontWeight: "bold",
     fontSize: "larger",
-    marginTop: "3vh"
+    marginTop: "3vh",
   },
   multipleTextfield: {
     display: "flex",
     justifyContent: "space-between",
     width: "100%",
     flexWrap: "wrap",
-    marginTop: "4%"
+    marginTop: "4%",
   },
   textfieldindiv: {
     width: "48%",
     [theme.breakpoints.down(850)]: {
-      width: "100%"
-    }
-  }
+      width: "100%",
+    },
+  },
 }));
 
 function Fichaidentificacion({ addFicha }) {
+  useEffect(() => {
+    async function fetchData() {
+      const formData = new FormData();
+      formData.append("id", id);
+      const response = await fetch(urlBack + "pac_ficha_ident.php", {
+        method: "POST",
+        body: formData,
+      })
+        .then((response) => response.json())
+        .then((posts) => {
+          console.log(Object.values(posts));
+          setDatos(Object.values(posts));
+          setMap(Object.values(posts));
+        });
+    }
+
+    if (id) {
+      fetchData();
+    }
+  }, []);
+
+  function setMap(dat) {
+    console.log(dat);
+    dat.map((item, index) => {
+      setValues({
+        nombre: item.nombre,
+        apaterno: item.ap_p,
+        amaterno: item.ap_m,
+        edad: item.edad,
+        sexo: item.sexo,
+        curp: item.curp,
+        nacionalidad: item.nacionalidad,
+        ocupacion: item.ocupacion,
+        religion: item.religion,
+        calle: item.calle,
+        colonia: item.colonia,
+        numeroExterior: item.num_ext,
+        codigopostal: item.cod_p,
+        municipio: item.municipio,
+        estado: item.estado,
+        telefono: item.telefono_pac,
+        celularP: item.celular,
+        correo: item.correo,
+        nfamiliar: item.nom_familiar,
+        celularF: item.telefono_fam,
+      });
+    });
+  }
+
+  const [datos, setDatos] = React.useState([]);
   const classes = useStyles();
   const history = useHistory();
+  const { id } = useParams();
   /*
    * State donde se guardan todos los valores de los campos
    */
@@ -67,14 +121,14 @@ function Fichaidentificacion({ addFicha }) {
     celularP: "",
     correo: "",
     nfamiliar: "",
-    celularF: ""
+    celularF: "",
   });
   /**
    *
    * @param {nombre de la vvariable a la que se le va a asignar el valor del campo} prop
    * funcion para guardar los valores en el state
    */
-  const handleChange = prop => event => {
+  const handleChange = (prop) => (event) => {
     setValues({ ...values, [prop]: event.target.value });
   };
   const handleSubmit = () => {
@@ -82,13 +136,18 @@ function Fichaidentificacion({ addFicha }) {
     history.push("/Patients/Antecedentes familiares");
   };
   return (
-    <Content nombre="Pacientes" select="fidentificacion">
+    <Content
+      nombre="Pacientes"
+      edit={id ? true : false}
+      id={id}
+      select="fidentificacion"
+    >
       <div
         style={{
           width: "100%",
           backgroundColor: "#F4F4F4",
           display: "flex",
-          flexDirection: "column"
+          flexDirection: "column",
         }}
       >
         <Typography className={classes.title}>
@@ -103,17 +162,15 @@ function Fichaidentificacion({ addFicha }) {
                 width: "100%",
                 height: "100%",
                 display: "flex",
-                justifyContent: "space-between"
+                justifyContent: "space-between",
               }}
             >
-              {/**
-               * Izquierda
-               */}
+              {}
               <div
                 style={{
                   width: "48%",
                   display: "flex",
-                  flexDirection: "column"
+                  flexDirection: "column",
                 }}
               >
                 <TextField
@@ -136,6 +193,7 @@ function Fichaidentificacion({ addFicha }) {
                   }
                   onChange={handleChange("nombre")}
                   style={{ marginTop: "4%" }}
+                  value={values.nombre === "" ? "" : values.nombre}
                 />
                 <div className={classes.multipleTextfield}>
                   <TextField
@@ -158,6 +216,7 @@ function Fichaidentificacion({ addFicha }) {
                     }
                     onChange={handleChange("apaterno")}
                     className={classes.textfieldindiv}
+                    value={values.apaterno === "" ? "" : values.apaterno}
                   />
                   <TextField
                     variant="filled"
@@ -172,6 +231,7 @@ function Fichaidentificacion({ addFicha }) {
                     helperText={"Ingrese el apellido materno"}
                     onChange={handleChange("amaterno")}
                     className={classes.textfieldindiv}
+                    value={values.amaterno === "" ? "" : values.amaterno}
                   />
                 </div>
                 <div className={classes.multipleTextfield}>
@@ -189,6 +249,7 @@ function Fichaidentificacion({ addFicha }) {
                         : "Ingrese la edad del paciente"
                     }
                     onChange={handleChange("edad")}
+                    value={values.edad === "" ? "" : values.edad}
                   />
                   <FormControl
                     variant="filled"
@@ -206,7 +267,7 @@ function Fichaidentificacion({ addFicha }) {
                       error={values.sexo === ""}
                       labelId="demo-simple-select-filled-label"
                       id="demo-simple-select-filled"
-                      value={values.sexo}
+                      value={values.sexo === "" ? "" : values.sexo}
                       onChange={handleChange("sexo")}
                     >
                       <MenuItem value="">
@@ -245,6 +306,7 @@ function Fichaidentificacion({ addFicha }) {
                   }
                   onChange={handleChange("curp")}
                   style={{ marginTop: "4%" }}
+                  value={values.curp === "" ? "" : values.curp}
                 />
                 <TextField
                   variant="filled"
@@ -254,6 +316,7 @@ function Fichaidentificacion({ addFicha }) {
                   helperText={"Ingrese la nacionalidad del paciente"}
                   onChange={handleChange("nacionalidad")}
                   style={{ marginTop: "4%" }}
+                  value={values.nacionalidad === "" ? "" : values.nacionalidad}
                 />
                 <div className={classes.multipleTextfield}>
                   <TextField
@@ -276,6 +339,7 @@ function Fichaidentificacion({ addFicha }) {
                     }
                     onChange={handleChange("ocupacion")}
                     className={classes.textfieldindiv}
+                    value={values.ocupacion === "" ? "" : values.ocupacion}
                   />
                   <TextField
                     variant="filled"
@@ -297,6 +361,7 @@ function Fichaidentificacion({ addFicha }) {
                     }
                     onChange={handleChange("religion")}
                     className={classes.textfieldindiv}
+                    value={values.religion === "" ? "" : values.religion}
                   />
                 </div>
               </div>
@@ -307,7 +372,7 @@ function Fichaidentificacion({ addFicha }) {
                 style={{
                   width: "48%",
                   display: "flex",
-                  flexDirection: "column"
+                  flexDirection: "column",
                 }}
               >
                 <TextField
@@ -318,6 +383,7 @@ function Fichaidentificacion({ addFicha }) {
                   helperText={"Ingresa la calle del paciente"}
                   onChange={handleChange("calle")}
                   style={{ marginTop: "4%" }}
+                  value={values.calle === "" ? "" : values.calle}
                 />
                 <div className={classes.multipleTextfield}>
                   <TextField
@@ -328,6 +394,7 @@ function Fichaidentificacion({ addFicha }) {
                     helperText={"Ingrese la colonia de paciente"}
                     onChange={handleChange("colonia")}
                     style={{ width: "68%" }}
+                    value={values.colonia === "" ? "" : values.colonia}
                   />
                   <TextField
                     variant="filled"
@@ -339,6 +406,9 @@ function Fichaidentificacion({ addFicha }) {
                     helperText={"Ingrese el número exterior"}
                     onChange={handleChange("numeroExterior")}
                     style={{ width: "30%" }}
+                    value={
+                      values.numeroExterior === "" ? "" : values.numeroExterior
+                    }
                   />
                 </div>
                 <div className={classes.multipleTextfield}>
@@ -356,6 +426,9 @@ function Fichaidentificacion({ addFicha }) {
                     }
                     onChange={handleChange("codigopostal")}
                     style={{ width: "30%" }}
+                    value={
+                      values.codigopostal === "" ? "" : values.codigopostal
+                    }
                   />
                   <TextField
                     variant="filled"
@@ -365,6 +438,7 @@ function Fichaidentificacion({ addFicha }) {
                     helperText={"Ingrese el municipio del paciente"}
                     onChange={handleChange("municipio")}
                     style={{ width: "68%" }}
+                    value={values.municipio === "" ? "" : values.municipio}
                   />
                 </div>
                 <div className={classes.multipleTextfield}>
@@ -376,6 +450,7 @@ function Fichaidentificacion({ addFicha }) {
                     helperText={"Ingrese el Estado"}
                     onChange={handleChange("estado")}
                     className={classes.textfieldindiv}
+                    value={values.estado === "" ? "" : values.estado}
                   />
                   <TextField
                     variant="filled"
@@ -386,14 +461,17 @@ function Fichaidentificacion({ addFicha }) {
                         : true && values.telefono !== ""
                     }
                     helperText={
-                     (/^(\+?)[1-9]{1}[0-9]{5,11}$/.test(values.telefono)
-                     ? true
-                     : false && values.telefono !== "")
+                      (
+                        /^(\+?)[1-9]{1}[0-9]{5,11}$/.test(values.telefono)
+                          ? true
+                          : false && values.telefono !== ""
+                      )
                         ? "Ingrese el telefono del paciente"
                         : "Ingrese un telefono válido"
                     }
                     onChange={handleChange("telefono")}
                     className={classes.textfieldindiv}
+                    value={values.telefono === "" ? "" : values.telefono}
                   />
                 </div>
                 <div className={classes.multipleTextfield}>
@@ -413,6 +491,7 @@ function Fichaidentificacion({ addFicha }) {
                     }
                     onChange={handleChange("celularP")}
                     className={classes.textfieldindiv}
+                    value={values.celularP === "" ? "" : values.celularP}
                   />
                   <TextField
                     variant="filled"
@@ -434,30 +513,37 @@ function Fichaidentificacion({ addFicha }) {
                     }
                     onChange={handleChange("correo")}
                     className={classes.textfieldindiv}
+                    value={values.correo === "" ? "" : values.correo}
                   />
                 </div>
                 <div className={classes.multipleTextfield}>
                   <TextField
                     variant="filled"
-                    error={(/^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$/.test(
-                      values.nfamiliar
-                    )
-                      ? false
-                      : true) && values.nfamiliar !== ""}
+                    error={
+                      (/^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$/.test(
+                        values.nfamiliar
+                      )
+                        ? false
+                        : true) && values.nfamiliar !== ""
+                    }
                     label="Nombre de un familiar"
                     helperText={"Ingrese el nombre de un familiar"}
                     onChange={handleChange("nfamiliar")}
                     className={classes.textfieldindiv}
+                    value={values.nfamiliar === "" ? "" : values.nfamiliar}
                   />
                   <TextField
                     variant="filled"
                     label="Teléfono/celular (familiar)"
-                    error={/^(\+?)[1-9]{1}[0-9]{5,11}$/.test(values.celularF)
-                    ? false
-                    : true && values.telefono !== ""}
+                    error={
+                      /^(\+?)[1-9]{1}[0-9]{5,11}$/.test(values.celularF)
+                        ? false
+                        : true && values.telefono !== ""
+                    }
                     helperText={"Ingrese el teléfono o celular del familiar"}
                     onChange={handleChange("celularF")}
                     className={classes.textfieldindiv}
+                    value={values.telefono === "" ? "" : values.telefono}
                   />
                 </div>
               </div>
@@ -514,15 +600,16 @@ function Fichaidentificacion({ addFicha }) {
               values.correo
             )
               ? false
-              : true)||
-             ( (/^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$/.test(
-                values.nfamiliar
-              )
-                ? false
-                : true) && values.nfamiliar !== "")||
+              : true) ||
+            ((/^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$/.test(
+              values.nfamiliar
+            )
+              ? false
+              : true) &&
+              values.nfamiliar !== "") ||
             (/^(\+?)[1-9]{1}[0-9]{5,11}$/.test(values.celularF)
-            ? false
-            : true && values.telefono !== "")
+              ? false
+              : true && values.telefono !== "")
           }
           form="formulario"
           style={{
@@ -530,7 +617,7 @@ function Fichaidentificacion({ addFicha }) {
             backgroundColor: "#FFB700",
             position: "absolute",
             bottom: 10,
-            right: 10
+            right: 10,
           }}
         >
           <NavigateNextIcon />
@@ -538,11 +625,10 @@ function Fichaidentificacion({ addFicha }) {
       </div>
     </Content>
   );
- 
 }
-const mapStateToProps = state => ({});
-const mapDispatchToProps = dispatch => ({
-addFicha: addFichaAction(dispatch)
+const mapStateToProps = (state) => ({});
+const mapDispatchToProps = (dispatch) => ({
+  addFicha: addFichaAction(dispatch),
 });
 export default connect(
   mapStateToProps,

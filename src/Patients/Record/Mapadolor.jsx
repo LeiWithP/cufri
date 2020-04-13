@@ -5,9 +5,12 @@ import { Typography, Card, TextField } from "@material-ui/core";
 import NavigateNextIcon from "@material-ui/icons/NavigateNext";
 import Fab from "@material-ui/core/Fab";
 import MapaDolor from "../../Images/Mapadolor.jpg";
-import { useHistory } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import { connect } from "react-redux";
-import {addMapadolorAction} from '../../store/actions/Mapadolor'
+import { addMapadolorAction } from "../../store/actions/Mapadolor";
+import { useEffect } from "react";
+
+const urlBack = "http://localhost:4433/umarista-back/";
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -23,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
     width: "95%",
     alignSelf: "center",
     alignItems: "center",
-    height:"80%"
+    height: "80%",
   },
   tf: {
     width: "70%",
@@ -31,7 +34,33 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function Mapadolorform({addMapadolor}) {
+function Mapadolorform({ addMapadolor }) {
+  useEffect(() => {
+    async function fetchData() {
+      const formData = new FormData();
+      formData.append("id", id);
+      const response = await fetch(urlBack + "pac_map_dol.php", {
+        method: "POST",
+        body: formData,
+      })
+        .then((response) => response.json())
+        .then((posts) => {
+          setMap(Object.values(posts));
+        });
+    }
+
+    if (id) {
+      fetchData();
+    }
+  }, []);
+
+  function setMap(dat) {
+    dat.map((item, index) => {
+      setDetalles(item.zonas);
+    });
+  }
+
+  const { id } = useParams();
   const classes = useStyles();
   const history = useHistory();
   const [detalles, setDetalles] = React.useState("");
@@ -40,7 +69,12 @@ function Mapadolorform({addMapadolor}) {
     history.push("/Patients/Arcos de movimiento");
   };
   return (
-    <Content nombre="Pacientes" select="mapadolor">
+    <Content
+      nombre="Pacientes"
+      edit={id ? true : false}
+      id={id}
+      select="mapadolor"
+    >
       <div
         style={{
           width: "100%",
@@ -63,14 +97,13 @@ function Mapadolorform({addMapadolor}) {
             onChange={(e) => {
               setDetalles(e.target.value);
             }}
+            value={detalles === "" ? "" : detalles}
           />
         </Card>
         <Fab
           color="primary"
           aria-label="next"
-          disabled={
-            detalles===""
-          }
+          disabled={detalles === ""}
           onClick={handleNext}
           style={{
             alignSelf: "flex-end",
@@ -86,12 +119,8 @@ function Mapadolorform({addMapadolor}) {
     </Content>
   );
 }
-const mapStateToProps = state => ({});
-const mapDispatchToProps = dispatch => ({
-addMapadolor: addMapadolorAction(dispatch)
+const mapStateToProps = (state) => ({});
+const mapDispatchToProps = (dispatch) => ({
+  addMapadolor: addMapadolorAction(dispatch),
 });
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Mapadolorform);
-
+export default connect(mapStateToProps, mapDispatchToProps)(Mapadolorform);

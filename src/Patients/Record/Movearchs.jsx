@@ -1,11 +1,11 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Content from "../../Components/ContentExp";
-import { Typography} from "@material-ui/core";
-import Archcard from '../../Components/Movearchcard'
+import { Typography } from "@material-ui/core";
+import Archcard from "../../Components/Movearchcard";
 import NavigateNextIcon from "@material-ui/icons/NavigateNext";
 import Fab from "@material-ui/core/Fab";
-import { useHistory } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
     overflowY: "visible",
     height: "fit-content",
-    overflow:"initial"
+    overflow: "initial",
   },
   content: {
     width: "97%",
@@ -35,28 +35,34 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Arcos=[
-    "Columna cervical",
-    "Columna dorsal",
-    "Columna lumbar",
-    "Hombro",
-    "Codo",
-    "Muñeca",
-    "Mano",
-    "Cadera",
-    "Rodilla",
-    "Tobillo",
-    "Pie"
-]
+const Arcos = [
+  "Columna cervical",
+  "Columna dorsal",
+  "Columna lumbar",
+  "Hombro",
+  "Codo",
+  "Muñeca",
+  "Mano",
+  "Cadera",
+  "Rodilla",
+  "Tobillo",
+  "Pie",
+];
 
 export default function MoveArch() {
+  const { id } = useParams();
   const classes = useStyles();
   const history = useHistory();
   const handleNext = () => {
     history.push("/Patients/Notas de valoracion");
   };
   return (
-    <Content nombre="Pacientes" select="amovimiento">
+    <Content
+      nombre="Pacientes"
+      edit={id ? true : false}
+      id={id}
+      select="amovimiento"
+    >
       <div
         style={{
           width: "100%",
@@ -67,8 +73,8 @@ export default function MoveArch() {
         }}
       >
         <Typography className={classes.title}>Arcos de movimiento</Typography>
-        {Arcos.map(arco=>(
-            <Archcard key={arco}titulo={arco}/>
+        {Arcos.map((arco) => (
+          <Archcard key={arco} titulo={arco} id={id} />
         ))}
         <Fab
           color="primary"

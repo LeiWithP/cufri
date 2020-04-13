@@ -4,9 +4,12 @@ import Content from "../../Components/ContentExp";
 import { Typography, Card, TextField } from "@material-ui/core";
 import NavigateNextIcon from "@material-ui/icons/NavigateNext";
 import Fab from "@material-ui/core/Fab";
-import { useHistory } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import { connect } from "react-redux";
-import {addDiagnosticoAction} from '../../store/actions/Diagnostico'
+import { addDiagnosticoAction } from "../../store/actions/Diagnostico";
+import { useEffect } from "react";
+
+const urlBack = "http://localhost:4433/umarista-back/";
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -22,61 +25,106 @@ const useStyles = makeStyles((theme) => ({
     width: "85%",
     alignSelf: "center",
     alignItems: "center",
-    height:"fit-content",
-    marginTop:"5%",
-    overflow:"visible",
+    height: "fit-content",
+    marginTop: "5%",
+    overflow: "visible",
   },
   tf: {
     width: "90%",
     marginTop: "1.5%",
   },
 }));
-const planes=["Diagnóstico fisioterapéutico","Pronostico","Objetivos","Plan fisioterapéutico"]
-function Diagnostico({addDiagnostico}) {
+const planes = [
+  "Diagnóstico fisioterapéutico",
+  "Pronostico",
+  "Objetivos",
+  "Plan fisioterapéutico",
+];
+function Diagnostico({ addDiagnostico }) {
+  useEffect(() => {
+    async function fetchData() {
+      const formData = new FormData();
+      formData.append("id", id);
+      const response = await fetch(urlBack + "pac_diag_plan.php", {
+        method: "POST",
+        body: formData,
+      })
+        .then((response) => response.json())
+        .then((posts) => {
+          setMap(Object.values(posts));
+        });
+    }
+
+    if (id) {
+      fetchData();
+    }
+  }, []);
+
+  function setMap(dat) {
+    dat.map((item, index) => {
+      setDetalles({
+        "Diagnóstico fisioterapéutico": item.diagnostico_fisioterapeutico,
+        Pronostico: item.pronostico,
+        Objetivos: item.objetivos,
+        "Plan fisioterapéutico": item.plan_fisioterapeutico,
+      });
+    });
+  }
+
+  const { id } = useParams();
   const classes = useStyles();
   const history = useHistory();
   const [detalles, setDetalles] = React.useState({
-    "Diagnóstico fisioterapéutico":"",
-    "Pronostico":"",
-    "Objetivos":"",
-    "Plan fisioterapéutico":""
+    "Diagnóstico fisioterapéutico": "",
+    Pronostico: "",
+    Objetivos: "",
+    "Plan fisioterapéutico": "",
   });
   const handleNext = () => {
     addDiagnostico(detalles);
     history.push("/Patients/Mapa del dolor");
   };
   return (
-    <Content nombre="Pacientes" select="diagnostico">
+    <Content
+      nombre="Pacientes"
+      edit={id ? true : false}
+      id={id}
+      select="diagnostico"
+    >
       <div
         style={{
           width: "100%",
           backgroundColor: "#F4F4F4",
           display: "flex",
           flexDirection: "column",
-          justifyContent:"space-between",
+          justifyContent: "space-between",
           overflowY: "scroll",
         }}
       >
-        <Typography className={classes.title}>Dermatomas, mitomas y pares craneales</Typography>
-        {planes.map(plan=>(
-            <Card className={classes.Card}>
+        <Typography className={classes.title}>
+          Dermatomas, mitomas y pares craneales
+        </Typography>
+        {planes.map((plan) => (
+          <Card className={classes.Card}>
             <Typography className={classes.title}>{plan}</Typography>
             <TextField
-            rows ="8"
-            variant="filled"
-            multiline
-            className={classes.tf}
-            label={"Diagnóstico fisioterapéutico"}
-            helperText="Escribe los detalles"
-            onChange={e=>{setDetalles({...detalles,[plan]:e.target.value})}}
+              rows="8"
+              variant="filled"
+              multiline
+              className={classes.tf}
+              label={"Diagnóstico fisioterapéutico"}
+              helperText="Escribe los detalles"
+              onChange={(e) => {
+                setDetalles({ ...detalles, [plan]: e.target.value });
+              }}
+              value={detalles[plan] === "" ? "" : detalles[plan]}
             />
-        </Card>))}
+          </Card>
+        ))}
         <Fab
           color="primary"
           aria-label="next"
-          disabled={
-            detalles===""
-          }
+          disabled={detalles === ""}
           onClick={handleNext}
           style={{
             alignSelf: "flex-end",
@@ -92,12 +140,8 @@ function Diagnostico({addDiagnostico}) {
     </Content>
   );
 }
-const mapStateToProps = state => ({});
-const mapDispatchToProps = dispatch => ({
-addDiagnostico: addDiagnosticoAction(dispatch)
+const mapStateToProps = (state) => ({});
+const mapDispatchToProps = (dispatch) => ({
+  addDiagnostico: addDiagnosticoAction(dispatch),
 });
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Diagnostico);
-
+export default connect(mapStateToProps, mapDispatchToProps)(Diagnostico);

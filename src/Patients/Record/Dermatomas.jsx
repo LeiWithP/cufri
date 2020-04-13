@@ -5,9 +5,12 @@ import { Typography, Card, TextField } from "@material-ui/core";
 import NavigateNextIcon from "@material-ui/icons/NavigateNext";
 import Fab from "@material-ui/core/Fab";
 import Dermatomas from "../../Images/Drematomas.jpg";
-import { useHistory } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import { connect } from "react-redux";
-import {addDermatomasAction} from '../../store/actions/Dermatomas'
+import { addDermatomasAction } from "../../store/actions/Dermatomas";
+import { useEffect } from "react";
+
+const urlBack = "http://localhost:4433/umarista-back/";
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -23,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
     width: "95%",
     alignSelf: "center",
     alignItems: "center",
-    height:"80%"
+    height: "80%",
   },
   tf: {
     width: "70%",
@@ -31,16 +34,47 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function Dermatomasform({addDermatomas}) {
+function Dermatomasform({ addDermatomas }) {
+  useEffect(() => {
+    async function fetchData() {
+      const formData = new FormData();
+      formData.append("id", id);
+      const response = await fetch(urlBack + "pac_dermatomas.php", {
+        method: "POST",
+        body: formData,
+      })
+        .then((response) => response.json())
+        .then((posts) => {
+          setMap(Object.values(posts));
+        });
+    }
+
+    if (id) {
+      fetchData();
+    }
+  }, []);
+
+  function setMap(dat) {
+    dat.map((item, index) => {
+      setDetalles(item.zonas_dermatomas);
+    });
+  }
+
+  const { id } = useParams();
   const classes = useStyles();
   const history = useHistory();
   const [detalles, setDetalles] = React.useState("");
   const handleNext = () => {
-    addDermatomas(detalles)
+    addDermatomas(detalles);
     history.push("/Patients/Diagnóstico y plan fisioterapéutico");
   };
   return (
-    <Content nombre="Pacientes" select="dermatomas">
+    <Content
+      nombre="Pacientes"
+      edit={id ? true : false}
+      id={id}
+      select="dermatomas"
+    >
       <div
         style={{
           width: "100%",
@@ -50,7 +84,9 @@ function Dermatomasform({addDermatomas}) {
           overflowY: "scroll",
         }}
       >
-        <Typography className={classes.title}>Dermatomas, mitomas y pares craneales</Typography>
+        <Typography className={classes.title}>
+          Dermatomas, mitomas y pares craneales
+        </Typography>
         <Card className={classes.Card}>
           <img src={Dermatomas} alt="" width="50%" style={{ height: "65%" }} />
           <TextField
@@ -63,14 +99,13 @@ function Dermatomasform({addDermatomas}) {
             onChange={(e) => {
               setDetalles(e.target.value);
             }}
+            value={detalles === "" ? "" : detalles}
           />
         </Card>
         <Fab
           color="primary"
           aria-label="next"
-          disabled={
-            detalles===""
-          }
+          disabled={detalles === ""}
           onClick={handleNext}
           style={{
             alignSelf: "flex-end",
@@ -86,11 +121,8 @@ function Dermatomasform({addDermatomas}) {
     </Content>
   );
 }
-const mapStateToProps = state => ({});
-const mapDispatchToProps = dispatch => ({
-addDermatomas: addDermatomasAction(dispatch)
+const mapStateToProps = (state) => ({});
+const mapDispatchToProps = (dispatch) => ({
+  addDermatomas: addDermatomasAction(dispatch),
 });
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Dermatomasform);
+export default connect(mapStateToProps, mapDispatchToProps)(Dermatomasform);

@@ -5,9 +5,12 @@ import { Typography, Card, TextField } from "@material-ui/core";
 import NavigateNextIcon from "@material-ui/icons/NavigateNext";
 import Fab from "@material-ui/core/Fab";
 import Postura from "../../Images/postura.jpg";
-import { useHistory } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import { connect } from "react-redux";
-import {addPosturaAction} from '../../store/actions/Postura'
+import { addPosturaAction } from "../../store/actions/Postura";
+import { useEffect } from "react";
+
+const urlBack = "http://localhost:4433/umarista-back/";
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -23,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
     width: "95%",
     alignSelf: "center",
     alignItems: "center",
-    height:"80%"
+    height: "80%",
   },
   tf: {
     width: "70%",
@@ -31,7 +34,38 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function Posturaform({addPostura}) {
+function Posturaform({ addPostura }) {
+  useEffect(() => {
+    async function fetchData() {
+      const formData = new FormData();
+      formData.append("id", id);
+      const response = await fetch(urlBack + "pac_postura.php", {
+        method: "POST",
+        body: formData,
+      })
+        .then((response) => response.json())
+        .then((posts) => {
+          console.log(Object.values(posts));
+          setMap(Object.values(posts));
+        });
+    }
+
+    if (id) {
+      fetchData();
+    }
+  }, []);
+
+  function setMap(dat) {
+    dat.map((item, index) => {
+      setValues({
+        Anterior: item.anterior,
+        Lateral: item.lateral,
+        Posterior: item.posterior,
+      });
+    });
+  }
+
+  const { id } = useParams();
   const classes = useStyles();
   const history = useHistory();
   const [values, setValues] = React.useState({
@@ -44,7 +78,12 @@ function Posturaform({addPostura}) {
     history.push("/Patients/Dermatomas mitomas y pares craneales");
   };
   return (
-    <Content nombre="Pacientes" select="postura">
+    <Content
+      nombre="Pacientes"
+      edit={id ? true : false}
+      id={id}
+      select="postura"
+    >
       <div
         style={{
           width: "100%",
@@ -57,34 +96,47 @@ function Posturaform({addPostura}) {
         <Typography className={classes.title}>Postura</Typography>
         <Card className={classes.Card}>
           <img src={Postura} alt="" width="50%" style={{ height: "50%" }} />
-          <form id="formulario" name="formulario" onSubmit={handleNext} style={{width:"100%",display:"flex",flexDirection:"column",alignItems:"center" }}>
-          <TextField
-            variant="filled"
-            className={classes.tf}
-            label="Anterior"
-            helperText="Escriba los detalles"
-            onChange={(e) => {
-              setValues({ ...values, Anterior: e.target.value });
+          <form
+            id="formulario"
+            name="formulario"
+            onSubmit={handleNext}
+            style={{
+              width: "100%",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
             }}
-          />
-          <TextField
-            variant="filled"
-            className={classes.tf}
-            label="Lateral"
-            helperText="Escriba los detalles"
-            onChange={(e) => {
-              setValues({ ...values, Lateral: e.target.value });
-            }}
-          />
-          <TextField
-            variant="filled"
-            className={classes.tf}
-            label="Posterior"
-            helperText="Escriba los detalles"
-            onChange={(e) => {
-              setValues({ ...values, Posterior: e.target.value });
-            }}
-          />
+          >
+            <TextField
+              variant="filled"
+              className={classes.tf}
+              label="Anterior"
+              helperText="Escriba los detalles"
+              onChange={(e) => {
+                setValues({ ...values, Anterior: e.target.value });
+              }}
+              value={values.Anterior === "" ? "" : values.Anterior}
+            />
+            <TextField
+              variant="filled"
+              className={classes.tf}
+              label="Lateral"
+              helperText="Escriba los detalles"
+              onChange={(e) => {
+                setValues({ ...values, Lateral: e.target.value });
+              }}
+              value={values.Lateral === "" ? "" : values.Lateral}
+            />
+            <TextField
+              variant="filled"
+              className={classes.tf}
+              label="Posterior"
+              helperText="Escriba los detalles"
+              onChange={(e) => {
+                setValues({ ...values, Posterior: e.target.value });
+              }}
+              value={values.Posterior === "" ? "" : values.Posterior}
+            />
           </form>
         </Card>
         <Fab
@@ -111,12 +163,8 @@ function Posturaform({addPostura}) {
     </Content>
   );
 }
-const mapStateToProps = state => ({});
-const mapDispatchToProps = dispatch => ({
-addPostura: addPosturaAction(dispatch)
+const mapStateToProps = (state) => ({});
+const mapDispatchToProps = (dispatch) => ({
+  addPostura: addPosturaAction(dispatch),
 });
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Posturaform);
-
+export default connect(mapStateToProps, mapDispatchToProps)(Posturaform);
