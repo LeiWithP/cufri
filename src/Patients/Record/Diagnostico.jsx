@@ -8,6 +8,7 @@ import { useHistory, useParams } from "react-router-dom";
 import { connect } from "react-redux";
 import { addDiagnosticoAction } from "../../store/actions/Diagnostico";
 import { useEffect } from "react";
+import SaveIcon from "@material-ui/icons/Save";
 
 const urlBack = "http://localhost:4433/umarista-back/";
 
@@ -80,9 +81,28 @@ function Diagnostico({ addDiagnostico }) {
     Objetivos: "",
     "Plan fisioterapéutico": "",
   });
-  const handleNext = () => {
-    addDiagnostico(detalles);
-    history.push("/Patients/Mapa del dolor");
+  const handleNext = async (e) => {
+    e.preventDefault();
+    if (id) {
+      const formData = new FormData();
+      formData.append("id", id);
+      formData.append("diagnostico", JSON.stringify(detalles));
+      const response = await fetch(urlBack + "update_diag.php", {
+        method: "POST",
+        body: formData,
+      });
+      const res = await response.json();
+
+      if (res["status"] === "1") {
+        console.log("Se modificó con exito");
+        window.location.reload();
+      } else {
+        console.log("ERROR");
+      }
+    } else {
+      addDiagnostico(detalles);
+      history.push("/Patients/Mapa del dolor");
+    }
   };
   return (
     <Content
@@ -134,7 +154,7 @@ function Diagnostico({ addDiagnostico }) {
             right: 10,
           }}
         >
-          <NavigateNextIcon />
+          {id != null ? <SaveIcon /> : <NavigateNextIcon />}
         </Fab>
       </div>
     </Content>

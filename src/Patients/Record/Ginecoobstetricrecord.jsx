@@ -6,6 +6,10 @@ import NavigateNextIcon from "@material-ui/icons/NavigateNext";
 import Fab from "@material-ui/core/Fab";
 import Cardgineco from "../../Components/Cardgineco";
 import { useHistory, useParams } from "react-router-dom";
+import SaveIcon from "@material-ui/icons/Save";
+import { connect } from "react-redux";
+
+const urlBack = "http://localhost:4433/umarista-back/";
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -33,12 +37,31 @@ const Padecimientos = [
   "Cesáreas",
   "Métodos Anticonceptivos",
 ];
-export default function Genecorecord() {
+function Genecorecord({ ago }) {
   const classes = useStyles();
   const history = useHistory();
   const { id } = useParams();
-  const handleNext = () => {
-    history.push("/Patients/Aspectos generales");
+  const handleNext = async (e) => {
+    if (id) {
+      const formData = new FormData();
+      formData.append("id", id);
+      formData.append("ant_gin_obs", JSON.stringify(ago));
+      const response = await fetch(urlBack + "update_ant_gin.php", {
+        method: "POST",
+        body: formData,
+      });
+
+      const res = await response.json();
+
+      if (res["status"] === "1") {
+        console.log("Se modificó con exito");
+        window.location.reload();
+      } else {
+        console.log("ERROR");
+      }
+    } else {
+      history.push("/Patients/Aspectos generales");
+    }
   };
   return (
     <Content
@@ -75,9 +98,14 @@ export default function Genecorecord() {
             right: 10,
           }}
         >
-          <NavigateNextIcon />
+          {id != null ? <SaveIcon /> : <NavigateNextIcon />}
         </Fab>
       </div>
     </Content>
   );
 }
+const mapStateToProps = (state) => ({
+  ago: state.Cardgineco,
+});
+const mapDispatchToProps = (state) => ({});
+export default connect(mapStateToProps, mapDispatchToProps)(Genecorecord);

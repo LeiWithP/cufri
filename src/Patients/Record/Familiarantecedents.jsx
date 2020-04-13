@@ -4,8 +4,13 @@ import Content from "../../Components/ContentExp";
 import { Typography } from "@material-ui/core";
 import Cardexp from "../../Components/Cardrecord";
 import NavigateNextIcon from "@material-ui/icons/NavigateNext";
+import SaveIcon from "@material-ui/icons/Save";
 import Fab from "@material-ui/core/Fab";
 import { useHistory, useParams } from "react-router-dom";
+import { connect } from "react-redux";
+import { useEffect } from "react";
+
+const urlBack = "http://localhost:4433/umarista-back/";
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -47,33 +52,33 @@ const Padecimientos = [
   "Otras",
 ];
 
-export default function Antecedentes() {
-  /*useEffect(() => {
-    async function fetchData() {
-      const formData = new FormData();
-      formData.append("id", id);
-      const response = await fetch(urlBack + "pac_ant_her_fam.php", {
-        method: "POST",
-        body: formData,
-      })
-        .then((response) => response.json())
-        .then((posts) => {
-          console.log(Object.values(posts));
-          setDatos(Object.values(posts));
-        });
-    }
-
-    if (id) {
-      fetchData();
-    }
-  }, []);
-*/
-  const [datos, setDatos] = React.useState([]);
+function Antecedentes({ ahf }) {
   const { id } = useParams();
   const classes = useStyles();
   const history = useHistory();
-  const handleNext = () => {
-    history.push("/Patients/Antecedentes no patologicos");
+  const handleNext = async (e) => {
+    e.preventDefault();
+    if (id) {
+      //console.log(JSON.stringify(ahf));
+      const formData = new FormData();
+      formData.append("id", id);
+      formData.append("ant_her_fam", JSON.stringify(ahf));
+      const response = await fetch(urlBack + "update_ant_her_fam.php", {
+        method: "POST",
+        body: formData,
+      });
+
+      const res = await response.json();
+
+      if (res["status"] === "1") {
+        console.log("Se modificó con exito");
+        window.location.reload();
+      } else {
+        console.log("ERROR");
+      }
+    } else {
+      history.push("/Patients/Antecedentes no patologicos");
+    }
   };
   return (
     <Content
@@ -110,9 +115,14 @@ export default function Antecedentes() {
             right: 10,
           }}
         >
-          <NavigateNextIcon />
+          {id != null ? <SaveIcon /> : <NavigateNextIcon />}
         </Fab>
       </div>
     </Content>
   );
 }
+const mapStateToProps = (state) => ({
+  ahf: state.AHeredofamiliares,
+});
+const mapDispatchToProps = (state) => ({});
+export default connect(mapStateToProps, mapDispatchToProps)(Antecedentes);

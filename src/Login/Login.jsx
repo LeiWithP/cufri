@@ -16,10 +16,11 @@ import FormControl from "@material-ui/core/FormControl";
 import FormHelperText from "@material-ui/core/FormHelperText";
 import clsx from "clsx";
 import Logo from "../Images/logoOffGrandeBlanco.png";
+import { setDayWithOptions } from "date-fns/fp";
 
 const urlBack = "http://localhost:4433/umarista-back/";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     minWidth: 275,
     margin: "auto",
@@ -27,41 +28,41 @@ const useStyles = makeStyles(theme => ({
     width: "32% !important",
     marginTop: "6vh",
     [theme.breakpoints.down(990)]: {
-      width: "60% !important"
+      width: "60% !important",
     },
     [theme.breakpoints.between(1000, 1300)]: {
-      width: "52% !important"
-    }
+      width: "52% !important",
+    },
   },
   margin: {
     margin: "auto",
     width: "100%",
-    marginTop: "4%"
+    marginTop: "4%",
   },
   withoutLabel: {
-    marginTop: theme.spacing(3)
+    marginTop: theme.spacing(3),
   },
   image: {
     margin: "auto",
     float: "inherit",
     marginTop: "10vh",
     [theme.breakpoints.down(900)]: {
-      width: "60% !important"
+      width: "60% !important",
     },
     [theme.breakpoints.between(901, 1300)]: {
-      width: "40% !important"
-    }
-  }
+      width: "40% !important",
+    },
+  },
 }));
 export default function Login() {
   const [values, setValues] = useState({
     password: "",
     username: "",
-    showPassword: false
+    showPassword: false,
   });
   const history = useHistory();
   const classes = useStyles();
-  const handleChange = prop => event => {
+  const handleChange = (prop) => (event) => {
     setValues({ ...values, [prop]: event.target.value });
   };
 
@@ -69,30 +70,43 @@ export default function Login() {
     setValues({ ...values, showPassword: !values.showPassword });
   };
 
-  const handleMouseDownPassword = event => {
+  const handleMouseDownPassword = (event) => {
     event.preventDefault();
   };
-  
- const handleSubmit = async e => { 
-  console.log(values);
-  e.preventDefault();
-  const formData = new FormData();
-  formData.append("username",values["username"]);
-  formData.append("password",values["password"]);
-  const response = await fetch(urlBack + "login.php", {
-    method: 'POST',
-    //headers: {'Content-Type':'application/json', 'Accept': 'application/json'},
-    body: formData,
-  })
 
+  const handleSubmit = async (e) => {
+    //console.log(values);
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append("username", values["username"]);
+    formData.append("password", values["password"]);
+    const response = await fetch(urlBack + "login.php", {
+      method: "POST",
+      body: formData,
+    })
+      .then((response) => response.json())
+      .then((posts) => {
+        setLogIn(Object.values(posts));
+      });
+    /*
   const res = await response.json();
   if(res["status"]==="1"){
     console.log("LOGIN EXITOSO");
     history.push("/Home");
   }else{
     console.log("ERROR");
+  }*/
+  };
+
+  function setLogIn(dat) {
+    console.log(dat);
+    dat.map((item, index) => {
+      const nombre = item.nombre + " " + item.ap_p;
+      localStorage.setItem("nombre_usuario", nombre);
+      localStorage.setItem("tipo_usr", item.rango);
+      history.push("/Home");
+    });
   }
- };
 
   return (
     <div
@@ -102,7 +116,7 @@ export default function Login() {
         float: "inherit",
         backgroundColor: "#003764",
         display: "block",
-        textAlign: "center"
+        textAlign: "center",
       }}
     >
       <img src={Logo} alt="logo" width="20% " className={classes.image} />
@@ -117,7 +131,7 @@ export default function Login() {
               width: "70%",
               margin: "auto",
               float: "inherit",
-              marginTop: "5%"
+              marginTop: "5%",
             }}
             onSubmit={handleSubmit}
             id="login"
@@ -130,13 +144,16 @@ export default function Login() {
               variant="filled"
               required
               onChange={handleChange("username")}
-              error={values.username===''}
+              error={values.username === ""}
             />
             <FormControl
               className={clsx(classes.margin, classes.textField)}
               variant="filled"
             >
-              <InputLabel htmlFor="filled-adornment-password"  error={values.password===''}>
+              <InputLabel
+                htmlFor="filled-adornment-password"
+                error={values.password === ""}
+              >
                 Password
               </InputLabel>
               <FilledInput
@@ -145,7 +162,7 @@ export default function Login() {
                 value={values.password}
                 onChange={handleChange("password")}
                 required={true}
-                error={values.password===''}
+                error={values.password === ""}
                 endAdornment={
                   <InputAdornment position="end">
                     <IconButton
@@ -159,7 +176,10 @@ export default function Login() {
                   </InputAdornment>
                 }
               />
-              <FormHelperText id="standard-weight-helper-text" error={values.password===''}>
+              <FormHelperText
+                id="standard-weight-helper-text"
+                error={values.password === ""}
+              >
                 Ingresa la contraseña
               </FormHelperText>
             </FormControl>
@@ -174,7 +194,7 @@ export default function Login() {
               marginTop: "3%",
               float: "right",
               padding: "2%",
-              marginBottom: "3%"
+              marginBottom: "3%",
             }}
           >
             Iniciar sesión

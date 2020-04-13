@@ -3,6 +3,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Content from "../../Components/ContentExp";
 import { Typography, Card, TextField } from "@material-ui/core";
 import NavigateNextIcon from "@material-ui/icons/NavigateNext";
+import SaveIcon from "@material-ui/icons/Save";
 import Fab from "@material-ui/core/Fab";
 import Dermatomas from "../../Images/Drematomas.jpg";
 import { useHistory, useParams } from "react-router-dom";
@@ -64,9 +65,29 @@ function Dermatomasform({ addDermatomas }) {
   const classes = useStyles();
   const history = useHistory();
   const [detalles, setDetalles] = React.useState("");
-  const handleNext = () => {
-    addDermatomas(detalles);
-    history.push("/Patients/Diagnóstico y plan fisioterapéutico");
+  const handleNext = async (e) => {
+    e.preventDefault();
+    if (id) {
+      const formData = new FormData();
+      formData.append("id", id);
+      formData.append("dermatomas", detalles);
+      const response = await fetch(urlBack + "update_derm.php", {
+        method: "POST",
+        body: formData,
+      });
+
+      const res = await response.json();
+
+      if (res["status"] === "1") {
+        console.log("Se modificó con exito");
+        window.location.reload();
+      } else {
+        console.log("ERROR");
+      }
+    } else {
+      addDermatomas(detalles);
+      history.push("/Patients/Diagnóstico y plan fisioterapéutico");
+    }
   };
   return (
     <Content
@@ -115,7 +136,7 @@ function Dermatomasform({ addDermatomas }) {
             right: 10,
           }}
         >
-          <NavigateNextIcon />
+          {id != null ? <SaveIcon /> : <NavigateNextIcon />}
         </Fab>
       </div>
     </Content>

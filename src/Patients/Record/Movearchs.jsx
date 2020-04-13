@@ -4,8 +4,12 @@ import Content from "../../Components/ContentExp";
 import { Typography } from "@material-ui/core";
 import Archcard from "../../Components/Movearchcard";
 import NavigateNextIcon from "@material-ui/icons/NavigateNext";
+import SaveIcon from "@material-ui/icons/Save";
 import Fab from "@material-ui/core/Fab";
 import { useHistory, useParams } from "react-router-dom";
+import { connect } from "react-redux";
+
+const urlBack = "http://localhost:4433/umarista-back/";
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -49,12 +53,32 @@ const Arcos = [
   "Pie",
 ];
 
-export default function MoveArch() {
+function MoveArch({ arcmov }) {
   const { id } = useParams();
   const classes = useStyles();
   const history = useHistory();
-  const handleNext = () => {
-    history.push("/Patients/Notas de valoracion");
+  const handleNext = async (e) => {
+    e.preventDefault();
+    if (id) {
+      console.log(JSON.stringify(arcmov));
+      const formData = new FormData();
+      formData.append("id", id);
+      formData.append("arc_mov", JSON.stringify(arcmov));
+      const response = await fetch(urlBack + "update_arc_mov.php", {
+        method: "POST",
+        body: formData,
+      });
+      const res = await response.json();
+
+      if (res["status"] === "1") {
+        console.log("Se modificó con exito");
+        window.location.reload();
+      } else {
+        console.log("ERROR");
+      }
+    } else {
+      history.push("/Patients/Notas de valoracion");
+    }
   };
   return (
     <Content
@@ -88,9 +112,14 @@ export default function MoveArch() {
             right: 10,
           }}
         >
-          <NavigateNextIcon />
+          {id != null ? <SaveIcon /> : <NavigateNextIcon />}
         </Fab>
       </div>
     </Content>
   );
 }
+const mapStateToProps = (state) => ({
+  arcmov: state.Movearch,
+});
+const mapDispatchToProps = (state) => ({});
+export default connect(mapStateToProps, mapDispatchToProps)(MoveArch);

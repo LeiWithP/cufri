@@ -3,6 +3,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Content from "../../Components/ContentExp";
 import { Card, Typography, CardContent, TextField } from "@material-ui/core";
 import NavigateNextIcon from "@material-ui/icons/NavigateNext";
+import SaveIcon from "@material-ui/icons/Save";
 import Fab from "@material-ui/core/Fab";
 import Select from "@material-ui/core/Select";
 import FormControl from "@material-ui/core/FormControl";
@@ -131,9 +132,31 @@ function Fichaidentificacion({ addFicha }) {
   const handleChange = (prop) => (event) => {
     setValues({ ...values, [prop]: event.target.value });
   };
-  const handleSubmit = () => {
-    addFicha(values);
-    history.push("/Patients/Antecedentes familiares");
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (id) {
+      //console.log(JSON.stringify(values));
+
+      const formData = new FormData();
+      formData.append("id", id);
+      formData.append("ficha_id", JSON.stringify(values));
+      const response = await fetch(urlBack + "update_f_ident.php", {
+        method: "POST",
+        body: formData,
+      });
+
+      const res = await response.json();
+
+      if (res["status"] === "1") {
+        console.log("Se modificó con exito");
+        window.location.reload();
+      } else {
+        console.log("ERROR");
+      }
+    } else {
+      addFicha(values);
+      history.push("/Patients/Antecedentes familiares");
+    }
   };
   return (
     <Content
@@ -620,7 +643,7 @@ function Fichaidentificacion({ addFicha }) {
             right: 10,
           }}
         >
-          <NavigateNextIcon />
+          {id != null ? <SaveIcon /> : <NavigateNextIcon />}
         </Fab>
       </div>
     </Content>

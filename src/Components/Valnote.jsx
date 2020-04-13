@@ -8,7 +8,7 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: "bold",
     fontSize: "larger",
     marginTop: "3vh",
-    marginLeft:"1.5%"
+    marginLeft: "1.5%",
   },
   Card: {
     display: "flex",
@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
     overflowY: "visible",
     height: "fit-content",
-    marginTop:"2%"
+    marginTop: "2%",
   },
   content: {
     width: "97%",
@@ -41,36 +41,36 @@ export default function Valnoterealized(props) {
           variant="standard"
           label="EVA"
           disabled
-          style={{ width: "40%",marginBottom:"2%" }}
-          value={props.data.EVA}
+          style={{ width: "40%", marginBottom: "2%" }}
+          value={props.data.eva}
         />
         <TextField
           variant="standard"
           label="Pruebas funcionales"
           disabled
-          style={{ width: "40%",marginBottom:"2%" }}
-          value={props.data.Pfuncionales}
+          style={{ width: "40%", marginBottom: "2%" }}
+          value={props.data.pruebas_funcionales}
         />
         <TextField
           variant="standard"
           label="Actividad funcional"
           disabled
-          style={{ width: "30%",marginBottom:"2%" }}
-          value={props.data.Afuncional}
+          style={{ width: "30%", marginBottom: "2%" }}
+          value={props.data.actividad_funcional}
         />
         <TextField
           variant="standard"
           label="Fuerza"
           disabled
-          style={{ width: "30%",marginBottom:"2%" }}
-          value={props.data.Fuerza}
+          style={{ width: "30%", marginBottom: "2%" }}
+          value={props.data.fuerza}
         />
         <TextField
           variant="standard"
           label="ROM"
           disabled
-          style={{ width: "30%",marginBottom:"2%" }}
-          value={props.data.ROM}
+          style={{ width: "30%", marginBottom: "2%" }}
+          value={props.data.rom}
         />
       </div>
     </Card>

@@ -164,6 +164,7 @@ function Cardgineco({ name, addCardgineco, id }) {
             });
           }}
           variant="filled"
+          value={values[name].detalles === "" ? "" : values[name].detalles}
         />
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
           <KeyboardDatePicker

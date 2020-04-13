@@ -9,6 +9,7 @@ import { useHistory, useParams } from "react-router-dom";
 import { connect } from "react-redux";
 import { addMapadolorAction } from "../../store/actions/Mapadolor";
 import { useEffect } from "react";
+import SaveIcon from "@material-ui/icons/Save";
 
 const urlBack = "http://localhost:4433/umarista-back/";
 
@@ -64,9 +65,28 @@ function Mapadolorform({ addMapadolor }) {
   const classes = useStyles();
   const history = useHistory();
   const [detalles, setDetalles] = React.useState("");
-  const handleNext = () => {
-    addMapadolor(detalles);
-    history.push("/Patients/Arcos de movimiento");
+  const handleNext = async (e) => {
+    e.preventDefault();
+    if (id) {
+      const formData = new FormData();
+      formData.append("id", id);
+      formData.append("mapa_dolor", detalles);
+      const response = await fetch(urlBack + "update_map_dol.php", {
+        method: "POST",
+        body: formData,
+      });
+      const res = await response.json();
+
+      if (res["status"] === "1") {
+        console.log("Se modificó con exito");
+        window.location.reload();
+      } else {
+        console.log("ERROR");
+      }
+    } else {
+      addMapadolor(detalles);
+      history.push("/Patients/Arcos de movimiento");
+    }
   };
   return (
     <Content
@@ -113,7 +133,7 @@ function Mapadolorform({ addMapadolor }) {
             right: 10,
           }}
         >
-          <NavigateNextIcon />
+          {id != null ? <SaveIcon /> : <NavigateNextIcon />}
         </Fab>
       </div>
     </Content>

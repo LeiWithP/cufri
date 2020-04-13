@@ -3,6 +3,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import { Typography, Card, TextField } from "@material-ui/core";
 import Content from "../../Components/ContentExp";
 import NavigateNextIcon from "@material-ui/icons/NavigateNext";
+import SaveIcon from "@material-ui/icons/Save";
 import Fab from "@material-ui/core/Fab";
 import { useHistory, useParams } from "react-router-dom";
 import { connect } from "react-redux";
@@ -185,9 +186,28 @@ function Pysicalexam({ addPhysicale }) {
     Tobillo: "",
     "Pie(Pie equino, plano, cavo)": "",
   });
-  const handleNext = () => {
-    addPhysicale(values);
-    history.push("/patients/Postura");
+  const handleNext = async (e) => {
+    e.preventDefault();
+    if (id) {
+      const formData = new FormData();
+      formData.append("id", id);
+      formData.append("explor_fis", JSON.stringify(values));
+      const response = await fetch(urlBack + "update_expl_fis.php", {
+        method: "POST",
+        body: formData,
+      });
+      const res = await response.json();
+
+      if (res["status"] === "1") {
+        console.log("Se modificó con exito");
+        window.location.reload();
+      } else {
+        console.log("ERROR");
+      }
+    } else {
+      addPhysicale(values);
+      history.push("/patients/Postura");
+    }
   };
   return (
     <Content
@@ -340,7 +360,7 @@ function Pysicalexam({ addPhysicale }) {
             right: 10,
           }}
         >
-          <NavigateNextIcon />
+          {id != null ? <SaveIcon /> : <NavigateNextIcon />}
         </Fab>
       </div>
     </Content>

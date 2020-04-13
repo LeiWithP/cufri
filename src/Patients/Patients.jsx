@@ -95,6 +95,22 @@ export default function Pacientes() {
     history.push(url);
   }
 
+  async function deletePac(id) {
+    const formData = new FormData();
+    formData.append("id", id);
+    const response = await fetch(urlBack + "pacientes_delete.php", {
+      method: "POST",
+      body: formData,
+    });
+    const res = await response.json();
+
+    if (res["status"] === "1") {
+      window.location.reload();
+    } else {
+      console.log("ERROR");
+    }
+  }
+
   const [datos, setDatos] = React.useState([]);
   const classes = useStyles();
   const history = useHistory();
@@ -211,7 +227,7 @@ export default function Pacientes() {
                         </TableCell>
                         <TableCell>{item.sexo}</TableCell>
                         <TableCell>{item.edad + " años"}</TableCell>
-                        <TableCell>{item.telefono_pac}</TableCell>
+                        <TableCell>{item.celular}</TableCell>
                         <TableCell>
                           <IconButton
                             color="inherit"
@@ -225,6 +241,7 @@ export default function Pacientes() {
                             color="inherit"
                             aria-label="edit"
                             style={{ padding: 0, marginRight: "13%" }}
+                            onClick={() => deletePac(item.id_f_identificacion)}
                           >
                             <DeleteForeverIcon />
                           </IconButton>

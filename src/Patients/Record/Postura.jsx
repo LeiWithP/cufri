@@ -3,6 +3,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Content from "../../Components/ContentExp";
 import { Typography, Card, TextField } from "@material-ui/core";
 import NavigateNextIcon from "@material-ui/icons/NavigateNext";
+import SaveIcon from "@material-ui/icons/Save";
 import Fab from "@material-ui/core/Fab";
 import Postura from "../../Images/postura.jpg";
 import { useHistory, useParams } from "react-router-dom";
@@ -73,9 +74,31 @@ function Posturaform({ addPostura }) {
     Lateral: "",
     Posterior: "",
   });
-  const handleNext = () => {
-    addPostura(values);
-    history.push("/Patients/Dermatomas mitomas y pares craneales");
+  const handleNext = async (e) => {
+    e.preventDefault();
+    if (id) {
+      console.log(JSON.stringify(values));
+
+      const formData = new FormData();
+      formData.append("id", id);
+      formData.append("postura", JSON.stringify(values));
+      const response = await fetch(urlBack + "update_post.php", {
+        method: "POST",
+        body: formData,
+      });
+
+      const res = await response.json();
+
+      if (res["status"] === "1") {
+        console.log("Se modificó con exito");
+        window.location.reload();
+      } else {
+        console.log("ERROR");
+      }
+    } else {
+      addPostura(values);
+      history.push("/Patients/Dermatomas mitomas y pares craneales");
+    }
   };
   return (
     <Content
@@ -157,7 +180,7 @@ function Posturaform({ addPostura }) {
             right: 10,
           }}
         >
-          <NavigateNextIcon />
+          {id != null ? <SaveIcon /> : <NavigateNextIcon />}
         </Fab>
       </div>
     </Content>

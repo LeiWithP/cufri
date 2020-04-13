@@ -9,10 +9,11 @@ import {
 import DateFnsUtils from "@date-io/date-fns";
 import NavigateNextIcon from "@material-ui/icons/NavigateNext";
 import Fab from "@material-ui/core/Fab";
-import Evolnote from '../../Components/Evolnote';
-import { useHistory, useParams  } from "react-router-dom";
+import Evolnote from "../../Components/Evolnote";
+import { useHistory, useParams } from "react-router-dom";
 import { connect } from "react-redux";
 import { useEffect } from "react";
+import { format } from "date-fns";
 
 const urlBack = "http://localhost:4433/umarista-back/";
 
@@ -69,11 +70,12 @@ function Valnotes({
 }) {
   const classes = useStyles();
   const history = useHistory();
-  const {id} = useParams();
+  const { id } = useParams();
   const [values, setValues] = React.useState({
     fecha: new Date(),
     Nevolucion: "",
   });
+  const [datos, setDatos] = React.useState([]);
   const handleChange = (props) => (e) => {
     setValues({ ...values, [props]: e.target.value });
   };
@@ -97,28 +99,53 @@ function Valnotes({
       body: formData,
     });
 
-    console.log(await response.text());
+    const res = await response.json();
+
+    if (res["status"] === "1") {
+      history.push("/Patients");
+    } else {
+      console.log("ERROR");
+    }
   };
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(values);
+    const formData = new FormData();
+    formData.append("id", id);
+    formData.append("fecha", format(values.fecha, "yyyy-MM-dd"));
+    formData.append("evolucion", values.Nevolucion);
+    const response = await fetch(urlBack + "notas_evolucion_cargar.php", {
+      method: "POST",
+      body: formData,
+    });
+
+    const res = await response.json();
+
+    if (res["status"] === "1") {
+      window.location.reload();
+    } else {
+      console.log("ERROR");
+    }
   };
   useEffect(() => {
-    console.log({ ficha });
-    console.log(JSON.stringify(ficha));
-    console.log(JSON.stringify(ahf));
-    console.log(JSON.stringify(anp));
-    console.log({ ago });
-    console.log({ pad });
-    console.log({ expf });
-    console.log({ post });
-    console.log({ derm });
-    console.log({ diag });
-    console.log({ mapdol });
-    console.log({ arcmov });
-  });
+    //console.log(format(calendarDate, "HH:mm"));
+    async function fetchData() {
+      const formData = new FormData();
+      formData.append("id", id);
+      const response = await fetch(urlBack + "pac_not_evo.php", {
+        method: "POST",
+        body: formData,
+      })
+        .then((response) => response.json())
+        .then((posts) => {
+          console.log(Object.values(posts));
+          setDatos(Object.values(posts));
+        });
+    }
+
+    fetchData();
+  }, []);
   return (
-    <Content nombre="Pacientes" select="nevol">
+    <Content nombre="Pacientes" edit={id ? true : false} id={id} select="nevol">
       <div
         style={{
           width: "100%",
@@ -166,7 +193,7 @@ function Valnotes({
             />
           </form>
           <Button
-          disabled={!id}
+            disabled={!id}
             style={{
               alignSelf: "flex-end",
               backgroundColor: "#FFB700",
@@ -183,10 +210,11 @@ function Valnotes({
         <Typography className={classes.title}>
           Notas de evolución anotadas
         </Typography>
-        {data.map((datos) => (
-          <Evolnote data={datos} />
+        {datos.map((item, index) => (
+          <Evolnote data={item} />
         ))}
         <Fab
+          disabled={id}
           color="primary"
           aria-label="next"
           onClick={handleNext}

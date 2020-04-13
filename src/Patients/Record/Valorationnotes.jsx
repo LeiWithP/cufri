@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Content from "../../Components/ContentExp";
 import { Typography, Card, TextField, Button } from "@material-ui/core";
@@ -9,8 +9,11 @@ import {
 import DateFnsUtils from "@date-io/date-fns";
 import NavigateNextIcon from "@material-ui/icons/NavigateNext";
 import Fab from "@material-ui/core/Fab";
-import Valnote from '../../Components/Valnote';
+import Valnote from "../../Components/Valnote";
 import { useHistory, useParams } from "react-router-dom";
+import { format } from "date-fns";
+
+const urlBack = "http://localhost:4433/umarista-back/";
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -39,21 +42,41 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const data =[
-    {
-        fecha:"06/04/2020",
-        EVA:"Nada",
-        Pfuncionales:"Correctas",
-        Afuncional:"Fallas",
-        Fuerza:"Normal",
-        ROM:"Correcto"
-    }
-]
+const data = [
+  {
+    fecha: "06/04/2020",
+    EVA: "Nada",
+    Pfuncionales: "Correctas",
+    Afuncional: "Fallas",
+    Fuerza: "Normal",
+    ROM: "Correcto",
+  },
+];
 
 export default function Valnotes() {
+  useEffect(() => {
+    //console.log(format(calendarDate, "HH:mm"));
+    async function fetchData() {
+      const formData = new FormData();
+      formData.append("id", id);
+      const response = await fetch(urlBack + "pac_not_val.php", {
+        method: "POST",
+        body: formData,
+      })
+        .then((response) => response.json())
+        .then((posts) => {
+          console.log(Object.values(posts));
+          setDatos(Object.values(posts));
+        });
+    }
+
+    fetchData();
+  }, []);
+
   const classes = useStyles();
   const history = useHistory();
-  const {id} = useParams();
+  const { id } = useParams();
+  const [datos, setDatos] = React.useState([]);
   const [values, setValues] = React.useState({
     fecha: new Date(),
     EVA: "",
@@ -68,12 +91,32 @@ export default function Valnotes() {
   const handleNext = () => {
     history.push("/Patients/Notas de evolucion");
   };
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     console.log(values);
+    console.log(format(values.fecha, "yyyy-MM-dd"));
+    const formData = new FormData();
+    formData.append("id", id);
+    formData.append("fecha", format(values.fecha, "yyyy-MM-dd"));
+    formData.append("eva", values.EVA);
+    formData.append("pruebas_func", values.Pfuncionales);
+    formData.append("act_func", values.Afuncional);
+    formData.append("fuerza", values.Fuerza);
+    formData.append("rom", values.ROM);
+    const response = await fetch(urlBack + "notas_valoracion_cargar.php", {
+      method: "POST",
+      body: formData,
+    });
+    const res = await response.json();
+
+    if (res["status"] === "1") {
+      window.location.reload();
+    } else {
+      console.log("ERROR");
+    }
   };
   return (
-    <Content nombre="Pacientes" select="nval">
+    <Content nombre="Pacientes" edit={id ? true : false} id={id} select="nval">
       <div
         style={{
           width: "100%",
@@ -85,7 +128,12 @@ export default function Valnotes() {
       >
         <Typography className={classes.title}>Notas de Valoración</Typography>
         <Card className={classes.Card}>
-          <form id="formulario" name="formulario" onSubmit={handleSubmit} className={classes.content}>
+          <form
+            id="formulario"
+            name="formulario"
+            onSubmit={handleSubmit}
+            className={classes.content}
+          >
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
               <KeyboardDatePicker
                 disableToolbar
@@ -137,7 +185,7 @@ export default function Valnotes() {
             />
           </form>
           <Button
-          disabled={!id}
+            disabled={!id}
             style={{
               alignSelf: "flex-end",
               backgroundColor: "#FFB700",
@@ -151,9 +199,11 @@ export default function Valnotes() {
             Agregar nota de valoración
           </Button>
         </Card>
-        <Typography className={classes.title}>Notas de valoración anotadas</Typography>
-        {data.map(datos=>(
-            <Valnote data={datos}/>
+        <Typography className={classes.title}>
+          Notas de valoración anotadas
+        </Typography>
+        {datos.map((item, index) => (
+          <Valnote data={item} />
         ))}
         <Fab
           color="primary"
