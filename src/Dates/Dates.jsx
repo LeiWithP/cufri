@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState, Component } from "react";
 import Content from "../Components/Content";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
@@ -14,7 +14,7 @@ import Select from "@material-ui/core/Select";
 import {
   KeyboardDatePicker,
   KeyboardTimePicker,
-  MuiPickersUtilsProvider
+  MuiPickersUtilsProvider,
 } from "@material-ui/pickers";
 import Dialog from "@material-ui/core/Dialog";
 import DialogContent from "@material-ui/core/DialogContent";
@@ -44,39 +44,39 @@ function getSteps() {
     "Seleccionar una fecha",
     "Seleccionar hora disponible",
     "Seleccionar paciente",
-    "Definir padecimiento"
+    "Definir padecimiento",
   ];
 }
 
 /**
  * se definen los estilos aplicados a la interfaz
  */
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     width: "97%",
-    alignSelf: "center"
+    alignSelf: "center",
   },
   container: {
-    maxHeight: 587
+    maxHeight: 587,
   },
   menuButton: {
-    marginRight: theme.spacing(2)
+    marginRight: theme.spacing(2),
   },
   title: {
-    flexGrow: 1
+    flexGrow: 1,
   },
   Icon: {
-    color: "#FFB700 !important"
+    color: "#FFB700 !important",
   },
   calendar: {
     boxShadow: "10px 1px 60px -15px #111",
     border: "none",
     width: "100%",
-    height: ""
+    height: "",
   },
   tarjeta: {
     width: "auto",
-    marginTop: "5%"
+    marginTop: "5%",
   },
   left: {
     marginLeft: "3%",
@@ -84,22 +84,22 @@ const useStyles = makeStyles(theme => ({
     display: "flex",
     flexDirection: "column",
     justifyContent: "space-between",
-    width: "30%"
+    width: "30%",
   },
   alert: {
     position: "absolute",
     bottom: 0,
     right: 0,
     transition: ".5s",
-    cursor: "pointer"
+    cursor: "pointer",
   },
   alertclose: {
     position: "absolute",
     bottom: 0,
     right: 0,
     visibility: "hidden",
-    transition: ".5s"
-  }
+    transition: ".5s",
+  },
 }));
 function addZero(i) {
   if (i < 10) {
@@ -115,7 +115,7 @@ const citas = [
     telefono: "443-165-3698",
     tipoconsulta: " Fisioterapia",
     fecha: "2020-04-01",
-    hora: "12:00"
+    hora: "12:00",
   },
   {
     paciente: "Gustavo García Sánchez",
@@ -123,74 +123,85 @@ const citas = [
     telefono: "443-165-3698",
     tipoconsulta: " Fisioterapia",
     fecha: "2020-04-01",
-    hora: "16:00"
-  }
+    hora: "16:00",
+  },
 ];
 /**
  * función principal del componente
  */
 export default function Dates() {
-  useEffect(() => {
+  /*useEffect(() => {
     //console.log(format(calendarDate, "HH:mm"));
     async function fetchData() {
       const formData = new FormData();
       formData.append("fecha", format(calendarDate, "yyyy-MM-dd"));
       const response = await fetch(urlBack + "citas_cargar.php", {
         method: "POST",
-        body: formData
+        body: formData,
       })
-        .then(response => response.json())
-        .then(posts => {
+        .then((response) => response.json())
+        .then((posts) => {
           console.log(Object.values(posts));
-          setDatos(Object.values(posts));
+          //setDatos(Object.values(posts));
         });
     }
 
     fetchData();
   }, []);
-
+  */
   const classes = useStyles();
   const [values, setValues] = React.useState({
     fecha: new Date(),
     time: new Date(),
     paciente: "",
     tipoconsulta: "",
-    telefono: ""
+    telefono: "",
   });
-
-  const [modificar, setModificar] = React.useState(true);
-  const [datos, setDatos] = React.useState([]);
+  const [id_item, setId_item] = React.useState();
   const [calendarDate, setCalendardate] = React.useState(new Date());
+  const [modificar, setModificar] = React.useState(false);
+  const [datos, setDatos] = React.useState([]);
   const [activeStep, setActiveStep] = React.useState(0);
   const [error, setError] = React.useState(false);
   const [success, setSuccess] = React.useState(false);
   const steps = getSteps();
   const [open, setOpen] = React.useState(false);
-  const handleChange = prop => event => {
+  const handleChange = (prop) => (event) => {
     setValues({ ...values, [prop]: event.target.value });
   };
   /**
    *handles para el siguiente paso y el paso anterior en el dialog
    */
   const handleNext = () => {
-    setActiveStep(prevActiveStep => prevActiveStep + 1);
+    setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
 
   const handleBack = () => {
-    setActiveStep(prevActiveStep => prevActiveStep - 1);
+    setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
   /**
    *
-   * @param {fecha} date
    * handle para definir la fecha de la cita en el dialog
    */
-  const handleDateChange = date => {
-    setValues({ fecha: date });
+  const handleDateChange = (date) => {
+    setValues({
+      fecha: date,
+      time: new Date(),
+      time: values.time,
+      paciente: values.paciente,
+      tipoconsulta: values.tipoconsulta,
+      telefono: values.telefono,
+    });
   };
   /**
    * handle para el cierre del dialog
    */
+  const handleCloseOut = () => {
+    setOpen(false);
+    setActiveStep(0);
+  };
+
   const handleClose = () => {
     setOpen(false);
     setActiveStep(0);
@@ -218,7 +229,7 @@ export default function Dates() {
     formData.append("id_cita", item.id_citas);
     const response = await fetch(urlBack + "citas_estado.php", {
       method: "POST",
-      body: formData
+      body: formData,
     });
 
     const res = await response.json();
@@ -237,7 +248,7 @@ export default function Dates() {
     formData.append("id_cita", item.id_citas);
     const response = await fetch(urlBack + "citas_estado.php", {
       method: "POST",
-      body: formData
+      body: formData,
     });
 
     const res = await response.json();
@@ -251,17 +262,32 @@ export default function Dates() {
   }
 
   function reagendarCita(item) {
-    console.log(new Date(item.fecha).toLocaleString());
-    values.fecha = new Date(item.fecha).getUTCDate().toLocaleString();
-    //values.time = item.hora;
-    values.paciente = item.nombre_paciente;
-    values.telefono = item.telefono;
-    values.tipoconsulta = item.padecimiento;
+    setModificar(true);
+    setId_item(item.id_citas);
+    setValues({
+      fecha: new Date(item.fecha),
+      time: new Date(item.hora),
+      paciente: item.nombre_paciente,
+      telefono: item.telefono,
+      tipoconsulta: item.padecimiento,
+    });
+    setOpen(true);
+  }
+
+  function nuevaCita() {
+    setModificar(false);
+    setValues({
+      fecha: new Date(),
+      time: new Date(),
+      paciente: "",
+      telefono: "",
+      tipoconsulta: "",
+    });
     setOpen(true);
   }
 
   async function agendar() {
-    if (modificar === true) {
+    if (modificar === false) {
       const formData = new FormData();
       formData.append("fecha", format(values["fecha"], "yyyy-MM-dd"));
       formData.append("hora", format(values["time"], "HH:mm"));
@@ -270,9 +296,30 @@ export default function Dates() {
       formData.append("padecimiento", values["tipoconsulta"]);
       const response = await fetch(urlBack + "citas_agendar.php", {
         method: "POST",
-        body: formData
+        body: formData,
       });
 
+      const res = await response.json();
+
+      if (res["status"] === "1") {
+        setSuccess(true);
+        window.location.reload();
+      } else {
+        console.log("ERROR");
+        setError(true);
+      }
+    } else {
+      const formData = new FormData();
+      formData.append("fecha", format(values["fecha"], "yyyy-MM-dd"));
+      formData.append("hora", format(values["time"], "HH:mm"));
+      formData.append("nombre_paciente", values["paciente"]);
+      formData.append("telefono", values["telefono"]);
+      formData.append("padecimiento", values["tipoconsulta"]);
+      formData.append("id_citas", id_item);
+      const response = await fetch(urlBack + "citas_reagendar.php", {
+        method: "POST",
+        body: formData,
+      });
       const res = await response.json();
 
       if (res["status"] === "1") {
@@ -286,24 +333,24 @@ export default function Dates() {
   }
   /**
    *
-   * @param {evento} e
+   *
    * handle para guardar la fecha seleccionada en el calendario
    */
-  const handleDate = async e => {
-    setCalendardate(e);
-    console.log(calendarDate);
+
+  async function handleDate(value) {
+    setCalendardate(value);
     const formData = new FormData();
-    formData.append("fecha", format(calendarDate, "yyyy-MM-dd"));
+    formData.append("fecha", format(value, "yyyy-MM-dd"));
     const response = await fetch(urlBack + "citas_cargar.php", {
       method: "POST",
-      body: formData
+      body: formData,
     })
-      .then(response => response.json())
-      .then(posts => {
-        console.log(Object.values(posts));
+      .then((response) => response.json())
+      .then((posts) => {
         setDatos(Object.values(posts));
       });
-  };
+  }
+
   return (
     <Content nombre="Citas" select="citas">
       <div
@@ -311,7 +358,7 @@ export default function Dates() {
           width: "100%",
           backgroundColor: "#F4F4F4",
           display: "flex",
-          flexDirection: "row"
+          flexDirection: "row",
         }}
       >
         {/**
@@ -323,6 +370,7 @@ export default function Dates() {
               onChange={handleDate}
               value={calendarDate}
               className={classes.calendar}
+              selectRange={false}
               minDetail="month"
             />
           </CardContent>
@@ -332,7 +380,7 @@ export default function Dates() {
                 display: "flex",
                 flexDirection: "row",
                 justifyContent: "space-between",
-                width: "100%"
+                width: "100%",
               }}
             >
               <Typography style={{ fontSize: "small", fontWeight: "bold" }}>
@@ -341,7 +389,8 @@ export default function Dates() {
               <AddIcon
                 style={{ cursor: "pointer" }}
                 onClick={() => {
-                  setOpen(true);
+                  nuevaCita();
+                  //setOpen(true);
                 }}
               />
             </div>
@@ -356,7 +405,7 @@ export default function Dates() {
             marginTop: "2%",
             display: "flex",
             flexDirection: "column",
-            width: "65%"
+            width: "65%",
           }}
         >
           <Typography
@@ -364,7 +413,7 @@ export default function Dates() {
               fontSize: "20px",
               fontWeight: "bold",
               fontFamily: "Roboto",
-              margin: "2%"
+              margin: "2%",
             }}
           >
             Citas de hoy
@@ -384,7 +433,7 @@ export default function Dates() {
                         style={{
                           color: "white",
                           fontSize: "Large",
-                          fontWeight: "bolder"
+                          fontWeight: "bolder",
                         }}
                       >
                         {item.nombre_paciente}
@@ -397,13 +446,16 @@ export default function Dates() {
                       <Typography style={{ color: "white", fontSize: "small" }}>
                         Tipo de Consulta: {item.padecimiento}
                       </Typography>
+                      <Typography style={{ color: "white", fontSize: "small" }}>
+                        Estado de la consulta: {item.estado}
+                      </Typography>
                     </CardContent>
                     <CardActions
                       style={{
                         backgroundColor: "#003764",
                         display: "flex",
                         flexDirection: "row",
-                        justifyContent: "space-between"
+                        justifyContent: "space-between",
                       }}
                     >
                       <div style={{ display: "flex", width: "50%" }}>
@@ -413,7 +465,7 @@ export default function Dates() {
                             color: "white",
                             fontSize: "small",
                             alignSelf: "center",
-                            marginLeft: "3%"
+                            marginLeft: "3%",
                           }}
                         >
                           {new Date("1970-01-01T" + item.hora).getHours()}:
@@ -430,14 +482,14 @@ export default function Dates() {
                         style={{
                           display: "flex",
                           width: "40%",
-                          justifyContent: "flex-end"
+                          justifyContent: "flex-end",
                         }}
                       >
                         <CheckCircleIcon
                           style={{
                             color: "white",
                             paddingRight: "5%",
-                            cursor: "pointer"
+                            cursor: "pointer",
                           }}
                           onClick={() => atenderCita(item)}
                         />
@@ -445,7 +497,7 @@ export default function Dates() {
                           style={{
                             color: "white",
                             paddingRight: "5%",
-                            cursor: "pointer"
+                            cursor: "pointer",
                           }}
                           onClick={() => reagendarCita(item)}
                         />
@@ -453,7 +505,7 @@ export default function Dates() {
                           style={{
                             color: "white",
                             paddingRight: "5%",
-                            cursor: "pointer"
+                            cursor: "pointer",
                           }}
                           onClick={() => cancelarCita(item)}
                         />
@@ -472,7 +524,7 @@ export default function Dates() {
          */}
         <Dialog
           open={open}
-          onClose={handleClose}
+          onClose={handleCloseOut}
           aria-labelledby="alert-dialog-title"
           aria-describedby="alert-dialog-description"
         >
@@ -482,21 +534,21 @@ export default function Dates() {
               fontSize: "25px",
               fontWeight: "bolder",
               fontFamily: "Roboto",
-              textAlign: "center"
+              textAlign: "center",
             }}
           >
             Agendar Cita
           </DialogTitle>
           <DialogContent>
             <Stepper activeStep={activeStep} alternativeLabel>
-              {steps.map(label => (
+              {steps.map((label) => (
                 <Step key={label}>
                   <StepLabel
                     StepIconProps={{
                       classes: {
                         completed: classes.Icon,
-                        active: classes.Icon
-                      }
+                        active: classes.Icon,
+                      },
                     }}
                   >
                     {label}
@@ -521,7 +573,7 @@ export default function Dates() {
                               fontSize: "20px",
                               fontWeight: "bold",
                               fontFamily: "Roboto",
-                              margin: "3%"
+                              margin: "3%",
                             }}
                           >
                             Fecha
@@ -534,16 +586,20 @@ export default function Dates() {
                               margin="normal"
                               id="date-picker-inline"
                               label="Fecha"
-                              value={values.fecha}
+                              value={
+                                values.fecha === ""
+                                  ? new Date()
+                                  : new Date(values.fecha)
+                              }
                               onChange={handleDateChange}
                               KeyboardButtonProps={{
-                                "aria-label": "change date"
+                                "aria-label": "change date",
                               }}
                               style={{
                                 marginLeft: "6%",
                                 marginBottom: "6%",
                                 alignSelf: "center",
-                                width: "100%"
+                                width: "100%",
                               }}
                               disablePast="true"
                             />
@@ -560,7 +616,7 @@ export default function Dates() {
                               fontSize: "20px",
                               fontWeight: "bold",
                               fontFamily: "Roboto",
-                              margin: "3%"
+                              margin: "3%",
                             }}
                           >
                             Horas disponibles
@@ -570,18 +626,22 @@ export default function Dates() {
                               margin="normal"
                               id="time-picker"
                               label="Time picker"
-                              value={values.time}
-                              onChange={e => {
+                              value={
+                                values.time === new Date()
+                                  ? new Date()
+                                  : values.time
+                              }
+                              onChange={(e) => {
                                 setValues({ ...values, time: e });
                               }}
                               KeyboardButtonProps={{
-                                "aria-label": "change time"
+                                "aria-label": "change time",
                               }}
                               style={{
                                 marginLeft: "6%",
                                 marginBottom: "6%",
                                 alignSelf: "center",
-                                width: "100%"
+                                width: "100%",
                               }}
                             />
                           </MuiPickersUtilsProvider>
@@ -597,7 +657,7 @@ export default function Dates() {
                               fontSize: "20px",
                               fontWeight: "bold",
                               fontFamily: "Roboto",
-                              margin: "3%"
+                              margin: "3%",
                             }}
                           >
                             Paciente
@@ -623,8 +683,11 @@ export default function Dates() {
                               marginLeft: "6%",
                               marginBottom: "6%",
                               alignSelf: "center",
-                              width: "100%"
+                              width: "100%",
                             }}
+                            value={
+                              values.paciente === "" ? "" : values.paciente
+                            }
                           />
                           <TextField
                             label="Teléfono del paciente"
@@ -643,8 +706,11 @@ export default function Dates() {
                               marginLeft: "6%",
                               marginBottom: "6%",
                               alignSelf: "center",
-                              width: "100%"
+                              width: "100%",
                             }}
+                            value={
+                              values.telefono === "" ? "" : values.telefono
+                            }
                           />
                         </div>
                       );
@@ -658,7 +724,7 @@ export default function Dates() {
                               fontSize: "20px",
                               fontWeight: "bold",
                               fontFamily: "Roboto",
-                              margin: "3%"
+                              margin: "3%",
                             }}
                           >
                             Tipo de consulta

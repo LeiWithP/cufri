@@ -17,6 +17,7 @@ import FormHelperText from "@material-ui/core/FormHelperText";
 import clsx from "clsx";
 import Logo from "../Images/logoOffGrandeBlanco.png";
 import { setDayWithOptions } from "date-fns/fp";
+import { Alert, AlertTitle } from "@material-ui/lab";
 
 const urlBack = "http://localhost:4433/umarista-back/";
 
@@ -53,6 +54,20 @@ const useStyles = makeStyles((theme) => ({
       width: "40% !important",
     },
   },
+  alert: {
+    position: "absolute",
+    bottom: 0,
+    right: 0,
+    transition: ".5s",
+    cursor: "pointer",
+  },
+  alertclose: {
+    position: "absolute",
+    bottom: 0,
+    right: 0,
+    visibility: "hidden",
+    transition: ".5s",
+  },
 }));
 export default function Login() {
   const [values, setValues] = useState({
@@ -60,6 +75,7 @@ export default function Login() {
     username: "",
     showPassword: false,
   });
+  const [error, setError] = React.useState(false);
   const history = useHistory();
   const classes = useStyles();
   const handleChange = (prop) => (event) => {
@@ -99,13 +115,14 @@ export default function Login() {
   };
 
   function setLogIn(dat) {
-    console.log(dat);
     dat.map((item, index) => {
       const nombre = item.nombre + " " + item.ap_p;
       localStorage.setItem("nombre_usuario", nombre);
       localStorage.setItem("tipo_usr", item.rango);
       history.push("/Home");
     });
+    //console.log("ERROR");
+    setError(true);
   }
 
   return (
@@ -201,6 +218,16 @@ export default function Login() {
           </Button>
         </CardContent>
       </Card>
+      <Alert
+        severity="error"
+        onClick={() => {
+          setError(false);
+        }}
+        className={error === true ? classes.alert : classes.alertclose}
+      >
+        <AlertTitle>Error</AlertTitle>
+        Las credenciales no son las correctas, vuelva a intentarlo
+      </Alert>
     </div>
   );
 }

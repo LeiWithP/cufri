@@ -40,7 +40,7 @@ const columns = [
     id: "Nombre de Usuario",
     label: "Nombre de  Usuario",
     minWidth: 170,
-    align: "left"
+    align: "left",
   },
   { id: "Nombre", label: "Nombre", minWidth: 170, align: "left" },
   {
@@ -48,33 +48,33 @@ const columns = [
     label: "Rango",
     minWidth: 170,
     align: "left",
-    format: value => value.toLocaleString()
+    format: (value) => value.toLocaleString(),
   },
   {
     id: "Acciones",
     label: "Acciones",
     minWidth: 170,
     align: "left",
-    format: value => value.toLocaleString()
-  }
+    format: (value) => value.toLocaleString(),
+  },
 ];
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     width: "60%",
-    alignSelf: "center"
+    alignSelf: "center",
   },
   container: {
-    maxHeight: 587
+    maxHeight: 587,
   },
   title: {
-    flexGrow: 1
+    flexGrow: 1,
   },
   formulario: {
     display: "flex",
     flexDirection: "column",
-    alignSelf: "center"
-  }
+    alignSelf: "center",
+  },
 }));
 
 export default function Users() {
@@ -87,7 +87,7 @@ export default function Users() {
     createData("Medico", "Adrián García Sánchez", "Medico"),
     createData("admin", "Gustavo García Sánchez", "Medico"),
     createData("admin", "Gustavo García Sánchez", "Pasante"),
-    createData("admin", "Gustavo García Sánchez", "Pasante")
+    createData("admin", "Gustavo García Sánchez", "Pasante"),
   ];
 
   useEffect(() => {
@@ -96,10 +96,10 @@ export default function Users() {
       //const json = await response.json();
       //setData(json);
       const response = await fetch(urlBack + "usrs_cargar.php", {
-        method: "GET"
+        method: "GET",
       })
-        .then(response => response.json())
-        .then(posts => {
+        .then((response) => response.json())
+        .then((posts) => {
           setDatos(Object.values(posts));
         });
     }
@@ -143,7 +143,7 @@ export default function Users() {
     sexo: "",
     password: "",
     rango: "",
-    showPassword: false
+    showPassword: false,
   });
   const [id_item, setId_item] = React.useState();
   const [modificar, setModificar] = React.useState();
@@ -154,27 +154,27 @@ export default function Users() {
   const [open, setOpen] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [borrar, setBorrar] = React.useState(false);
-  const handleSearch = event => {
+  const handleSearch = (event) => {
     event.preventDefault();
     setSearch(event.target.value);
   };
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
-  const handleChange = prop => event => {
+  const handleChange = (prop) => (event) => {
     setValues({ ...values, [prop]: event.target.value });
   };
 
   const handleClickShowPassword = () => {
     setValues({ ...values, showPassword: !values.showPassword });
   };
-  const handleClose = e => {
+  const handleClose = (e) => {
     setOpen(false);
   };
-  const handleMouseDownPassword = event => {
+  const handleMouseDownPassword = (event) => {
     event.preventDefault();
   };
-  const handleChangeRowsPerPage = event => {
+  const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(+event.target.value);
     setPage(0);
   };
@@ -182,7 +182,7 @@ export default function Users() {
     dialogNuevo();
     setOpen(true);
   };
-  const handleClear = e => {
+  const handleClear = (e) => {
     console.log(search);
     setSearch("");
   };
@@ -190,9 +190,9 @@ export default function Users() {
     setBorrar(false);
     deleteItem();
   };
-  const handleSubmit = async e => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(modificar);
+    //console.log(modificar);
     if (modificar === true) {
       console.log("modificar");
       const formData = new FormData(e.target);
@@ -210,7 +210,7 @@ export default function Users() {
           "Content-Type": "application/json",
           Accept: "application/json"
         },*/
-        body: formData
+        body: formData,
       });
 
       const res = await response.json();
@@ -223,7 +223,7 @@ export default function Users() {
         console.log("ERROR");
       }
     } else {
-      console.log("agregar");
+      //console.log("agregar");
       const formData = new FormData(e.target);
       formData.append("username", values["nombre_usuario"]);
       formData.append("nombre", values["nombre"]);
@@ -238,7 +238,7 @@ export default function Users() {
           "Content-Type": "application/json",
           Accept: "application/json"
         },*/
-        body: formData
+        body: formData,
       });
 
       const res = await response.json();
@@ -263,7 +263,7 @@ export default function Users() {
           display: "flex",
           flexDirection: "column",
           justifyContent: "center",
-          overflowX:"auto"
+          overflowX: "auto",
         }}
       >
         <Paper className={classes.root}>
@@ -272,7 +272,7 @@ export default function Users() {
               width: "100%",
               display: "flex",
               flexDirection: "row",
-              justifyContent: "space-between"
+              justifyContent: "space-between",
             }}
           >
             <Typography
@@ -280,7 +280,7 @@ export default function Users() {
                 fontSize: "25px",
                 fontWeight: "bolder",
                 fontFamily: "Roboto",
-                margin: "3%"
+                margin: "3%",
               }}
             >
               Usuarios
@@ -305,13 +305,13 @@ export default function Users() {
                   >
                     <ClearIcon />
                   </InputAdornment>
-                )
+                ),
               }}
               style={{
                 color: "#e0e0e0",
                 alignSelf: "center",
                 marginRight: "3%",
-                width: "35%"
+                width: "35%",
               }}
             />
           </span>
@@ -319,13 +319,13 @@ export default function Users() {
             <Table stickyHeader aria-label="sticky table">
               <TableHead>
                 <TableRow>
-                  {columns.map(column => (
+                  {columns.map((column) => (
                     <TableCell
                       key={column.id}
                       align={column.align}
                       style={{
                         minWidth: column.minWidth,
-                        fontWeight: "bold"
+                        fontWeight: "bold",
                       }}
                     >
                       {column.label}
@@ -388,7 +388,7 @@ export default function Users() {
             marginRight: "1%",
             marginBottom: "1%",
             position: "absolute",
-            bottom: 0
+            bottom: 0,
           }}
         >
           <AddIcon />
@@ -405,7 +405,7 @@ export default function Users() {
               style={{
                 display: "flex",
                 justifyContent: "flex-end",
-                width: "70%"
+                width: "70%",
               }}
             >
               <Button
@@ -414,7 +414,7 @@ export default function Users() {
                   backgroundColor: "#FFC107",
                   color: "white",
                   marginTop: "1vh",
-                  alignSelf: "center"
+                  alignSelf: "center",
                 }}
               >
                 Si
@@ -423,7 +423,7 @@ export default function Users() {
                 onClick={() => {
                   setBorrar(false);
                 }}
-                style={{color:"black"}}
+                style={{ color: "black" }}
               >
                 No
               </Button>
@@ -446,7 +446,7 @@ export default function Users() {
                 style={{
                   fontWeight: "bold",
                   fontSize: "larger",
-                  textAlign: "center"
+                  textAlign: "center",
                 }}
               >
                 Registro
@@ -456,7 +456,7 @@ export default function Users() {
               style={{
                 fontSize: "large",
                 textAlign: "center",
-                marginBottom: "4vh"
+                marginBottom: "4vh",
               }}
             >
               Complete el formulario para registrar
@@ -480,7 +480,7 @@ export default function Users() {
                   style={{
                     width: "100%",
                     alignSelf: "center",
-                    marginBottom: "2%"
+                    marginBottom: "2%",
                   }}
                   error={values.nombre_usuario === ""}
                   onChange={handleChange("nombre_usuario")}
@@ -503,7 +503,7 @@ export default function Users() {
                   style={{
                     width: "100%",
                     alignSelf: "center",
-                    marginBottom: "2%"
+                    marginBottom: "2%",
                   }}
                   error={
                     /^(?=.{3,15}$)[A-ZÁÉÍÓÚ][a-zñáéíóú]+(?: [A-ZÁÉÍÓÚ][a-zñáéíóú]+)?$/.test(
@@ -522,7 +522,7 @@ export default function Users() {
                     width: "50%",
                     display: "flex",
                     flexDirection: "column",
-                    marginRight: "2%"
+                    marginRight: "2%",
                   }}
                 >
                   <TextField
@@ -547,7 +547,7 @@ export default function Users() {
                     style={{
                       width: "100%",
                       alignSelf: "center",
-                      marginBottom: "2%"
+                      marginBottom: "2%",
                     }}
                     onChange={handleChange("apaterno")}
                     value={values.apaterno === "" ? "" : values.apaterno}
@@ -612,7 +612,7 @@ export default function Users() {
                           : true
                       }
                       type={values.showPassword ? "text" : "password"}
-                      onChange={e => setPw1(e.target.value)}
+                      onChange={(e) => setPw1(e.target.value)}
                       endAdornment={
                         <InputAdornment position="end">
                           <IconButton
@@ -652,7 +652,7 @@ export default function Users() {
                   style={{
                     width: "50%",
                     display: "flex",
-                    flexDirection: "column"
+                    flexDirection: "column",
                   }}
                 >
                   <TextField
@@ -669,7 +669,7 @@ export default function Users() {
                     style={{
                       width: "100%",
                       alignSelf: "center",
-                      marginBottom: "2%"
+                      marginBottom: "2%",
                     }}
                     error={
                       /^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]{0,40}$/.test(
@@ -729,7 +729,7 @@ export default function Users() {
                     </InputLabel>
                     <FilledInput
                       type={values.showPassword ? "text" : "password"}
-                      onChange={e => {
+                      onChange={(e) => {
                         if (e.target.value === pw1) {
                           setValues({ ...values, password: e.target.value });
                         } else {
@@ -781,7 +781,7 @@ export default function Users() {
                   backgroundColor: "#FFC107",
                   color: "white",
                   marginTop: "1vh",
-                  alignSelf: "center"
+                  alignSelf: "center",
                 }}
                 disabled={
                   values.nombre_usuario === "" ||

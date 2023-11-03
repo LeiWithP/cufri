@@ -206,8 +206,13 @@ function Cardrecord({ name, addAHF, id }) {
   });
   const [datos, setDatos] = React.useState([]);
   const handleChange = (prop) => (e) => {
-    e.preventDefault();
-    setEr({ ...er, [name]: { ...er[name], [prop]: e.target.value } });
+    //e.preventDefault();
+    console.log(e.target.checked);
+    if (e.target.checked) {
+      setEr({ ...er, [name]: { ...er[name], [prop]: e.target.value } });
+    } else {
+      setEr({ ...er, [name]: { ...er[name], [prop]: "" } });
+    }
   };
   useEffect(() => {
     addAHF(er[name], name);
@@ -333,7 +338,7 @@ function Cardrecord({ name, addAHF, id }) {
                   }
                   color="primary"
                   onChange={handleChange("madre")}
-                  checked={er[name].madre === "" ? false : true}
+                  checked={er[name].madre}
                 />
               }
               label="Madre"
